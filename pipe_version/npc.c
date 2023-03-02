@@ -1,6 +1,7 @@
 #include "gestione_grafica.h"
 #include "npc.h"
 #define TIME 0
+// porcodio
 
 void wasd_rana(int fd_rana, int fd_trasporto_rana)
 {
