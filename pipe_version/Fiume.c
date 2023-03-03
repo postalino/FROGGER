@@ -1,4 +1,4 @@
-#include "gestione_grafica.h"
+#include "Frogger.h"
 #define TIME 170000
 
 void gestione_tronco(int fd_tronco, int corsia)
@@ -136,19 +136,6 @@ void gestione_tronco(int fd_tronco, int corsia)
     }
 }
 
-void generazione_processi_tronco(int fd_tronchi[N_CORSIE_FIUME][2], pid_t processo_tronco[N_CORSIE_FIUME])
-{
-    for (int i = 0; i < N_CORSIE_FIUME; i++)
-    {
-        CHECK_PIPE(fd_tronchi[i]);//verifica se la pipe e' stata creata correttamente
-        CHECK_PID(processo_tronco[i]);//creo processo figlio tronco
-        if(!processo_tronco[i])
-        {  
-            close(fd_tronchi[i][0]);
-            gestione_tronco(fd_tronchi[i][1], i);
-        }
-    }
-}
 
 void lettura_pipe_tronchi(oggetto_tronco tronchi[N_CORSIE_FIUME], int fd_tronco[N_CORSIE_FIUME][2])
 {

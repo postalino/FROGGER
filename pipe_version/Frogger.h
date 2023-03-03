@@ -179,3 +179,9 @@ int abilita_movimento_confini_tane(oggetto_rana npc, int direzione);
 
 //funzione stampa pianta mappa gioco
 void mappa_gioco();
+
+#include "Fiume.h"
+#include "Strada.h"
+#include "Collisioni.h"
+#include "NPC.h"
+#include "Stampa.h"

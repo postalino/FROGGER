@@ -5,8 +5,8 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "gestione_grafica.h"
-#include "strada.h"
+#include "Frogger.h"
+#include "Strada.h"
 
 void genera_coord_veicolo_right(int fd,int x,int y)
 {
