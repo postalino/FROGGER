@@ -1,23 +1,23 @@
-Frogger: main.o collisioni.o fiume.o NPC.o stampa.o strada.o
-	gcc main.o collisioni.o fiume.o NPC.o stampa.o strada.o -lncurses
+Frogger: main.o Collisioni.o Fiume.o NPC.o Stampa.o Strada.o
+	gcc main.o Collisioni.o Fiume.o NPC.o Stampa.o Strada.o -lncurses
 
 main.o: main.c Frogger.h
 	gcc -c main.c 
 
-collisioni.o: collisioni.c collisioni.h Frogger.h
-	gcc -c collisioni.c
+collisioni.o: Collisioni.c Collisioni.h Frogger.h
+	gcc -c Collisioni.c
 
-fiume.o: fiume.c fiume.h Frogger.h
-	gcc -c fiume.c
+fiume.o: Fiume.c Fiume.h Frogger.h
+	gcc -c Fiume.c
 
 NPC.o: NPC.c NPC.h Frogger.h
 	gcc -c NPC.c 
 
-stampa.o: stampa.c stampa.h Frogger.h
-	gcc -c stampa.c 
+stampa.o: Stampa.c Stampa.h Frogger.h
+	gcc -c Stampa.c 
 
-strada.o: strada.c strada.h Frogger.h
-	gcc -c strada.c
+strada.o: Strada.c Strada.h Frogger.h
+	gcc -c Strada.c
 
 clean: 
 	rm *.o
