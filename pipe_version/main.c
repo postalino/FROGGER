@@ -2,12 +2,8 @@
 
 void frogger(int fd_rana, int fd_tronco[N_CORSIE_FIUME][2], int fd_trasporto_rana,int fd_veicolo[N_VEICOLI][2], int fd_proiettili_alleati [MAX_PROIETTILI][2]);
 
-WINDOW *wtime;
-
 int main()
 {
-    wtime=newwin(4,10,MAXY+4, 0);
-    box(wtime, ACS_VLINE, ACS_HLINE);
     
     pid_t p_rana, p_tronco[N_CORSIE_FIUME], p_time,p_veicoli[N_VEICOLI];
     int fd_rana[2];
