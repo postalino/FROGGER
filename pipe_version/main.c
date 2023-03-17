@@ -13,7 +13,7 @@ int main()
     keypad(stdscr, true);
     start_color();
     curs_set(0);
-
+    play_frogger();
     //CHECK_PIPE(fd_rana);//verifica se la pipe e' stata creata correttamente
     //CHECK_PID(p_rana);//creo processo figlio rana
 

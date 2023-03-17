@@ -105,7 +105,7 @@ static const char *TRUNK_X3[] =
 #define ID_TRUNK_X3 8
 
 //dimensioni mappa
-#define MAXX 99
+#define MAXX 159
 #define MAXY 40
 
 //dimesioni rana
