@@ -85,14 +85,6 @@ static const char *TRUNK_X3[] =
         " \\_/_____________________/ "
 };
 
-//macro calcolo dimensione sprite
-#define DIM_FROGGER sizeof(FROGGER)/8 //dimensione sprite CAR_LEFT e CAR_RIGHT
-#define DIM_CAR sizeof(CAR_RIGHT)/8 //dimensione sprite CAR_LEFT e CAR_RIGHT
-#define DIM_BUS sizeof(BUS_RIGHT)/8 //dimensione sprite BUS_LEFT e BUS_RIGHT
-#define DIM_TRUCK sizeof(TRUCK_RIGHT)/8 //dimensione sprite TRUCK_LEFT e TRUCK_RIGHT
-#define DIM_TRUNK_X2 sizeof(TRUNK_X2)/8 //dimensione sprite TRUNK da 2 spazi
-#define DIM_TRUNK_X3 sizeof(TRUNK_X3)/8 //dimensione sprite TRUNK da tre spazi 
-
 //ID sprite
 #define ID_FROGGER 0
 #define ID_CAR_RIGHT 1

@@ -1,24 +1,27 @@
 #include "Stampa.h"
 
+WINDOW *win_mappa;
+
 void play_frogger()
 {
-    WINDOW *win_mappa = crea_finestra(); 
-    
+    // creazione finestra principale centrata
+    win_mappa = crea_finestra();
+
+    init_pair(5, COLOR_WHITE, COLOR_GREEN); // strada
+
     while (true)
     {
         wclear(win_mappa);
-        box(win_mappa, ACS_VLINE, ACS_HLINE);
+
         mappa_frogger(win_mappa);
-    
+
         usleep(200000);
-        
+
         wrefresh(win_mappa);
-
-
     }
 }
 
-WINDOW* crea_finestra()
+WINDOW *crea_finestra()
 {
     WINDOW *win;
 
@@ -35,31 +38,31 @@ WINDOW* crea_finestra()
 
 int abilita_movimento_confini_tane(oggetto_rana npc, int direzione)
 {
-    if((npc.y <9 && !((npc.x/9)%2)) && direzione ==KEY_UP)
+    if ((npc.y < 9 && !((npc.x / 9) % 2)) && direzione == KEY_UP)
         return 0;
-    if((npc.y == 4 && ((npc.x/9)%2)) && direzione != KEY_DOWN)
+    if ((npc.y == 4 && ((npc.x / 9) % 2)) && direzione != KEY_DOWN)
         return 0;
     else
         return 1;
 }
 
-int calcola_background(int x , int y)
+int calcola_background(int x, int y)
 {
-    if(y >= MAX_PRATO && y <= MAX_FIUME)
+    if (y >= MAX_PRATO && y <= MAX_FIUME)
         return COLOR_BLUE;
-    if(y > MAX_FIUME && y < MIN_STRADA)
+    if (y > MAX_FIUME && y < MIN_STRADA)
         return COLOR_MAGENTA;
-    if(y >= MIN_STRADA && y <= MAX_STRADA)
+    if (y >= MIN_STRADA && y <= MAX_STRADA)
         return COLOR_BLACK;
-    if(y>MAX_STRADA)
+    if (y > MAX_STRADA)
         return COLOR_MAGENTA;
 }
 
-void print_sprite(int x,int y,const char *sprite[], int size)
+void print_sprite(int x, int y, const char *sprite[])
 {
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < H_FROGGER; i++)
     {
-        mvprintw(y+i, x, sprite[i]);
+        mvwprintw(win_mappa,y + i, x, sprite[i]);
     }
 }
 
@@ -72,90 +75,90 @@ void mappa_frogger(WINDOW *win_mappa)
     init_pair(3, COLOR_MAGENTA, COLOR_MAGENTA); // prato viola
     init_pair(4, COLOR_BLACK, COLOR_BLACK);     // strada
 
-
     for (unsigned i = 0; i < H_FROGGER; i++) // generazione prato
     {
-        
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
+
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
         for (size_t i = 0; i < MAXX - 60; i++)
         {
-            wattron(win_mappa,COLOR_PAIR(1));
-            wprintw(win_mappa," ");
+            wattron(win_mappa, COLOR_PAIR(1));
+            wprintw(win_mappa, " ");
         }
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
     }
 
     for (unsigned i = 0; i < H_FROGGER; i++) // generazione tane
     {
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
         for (size_t i = 0; i < 11; i++)
         {
-            if(i%2 == 0){
+            if (i % 2 == 0)
+            {
                 wattron(win_mappa, COLOR_PAIR(1));
-                wprintw(win_mappa,"         ");
+                wprintw(win_mappa, "         ");
             }
-            else{
-                wattron(win_mappa,COLOR_PAIR(2));
-                wprintw(win_mappa,"         ");
+            else
+            {
+                wattron(win_mappa, COLOR_PAIR(2));
+                wprintw(win_mappa, "         ");
             }
-            
         }
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
     }
 
     for (unsigned i = 0; i < H_FROGGER * N_CORSIE_FIUME; i++) // generazione fiume
     {
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
-        wattron(win_mappa,COLOR_PAIR(2));
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
+        wattron(win_mappa, COLOR_PAIR(2));
         for (size_t i = 0; i < MAXX - 60; i++)
         {
-            wprintw(win_mappa," ");
+            wprintw(win_mappa, " ");
         }
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
     }
 
     for (unsigned i = 0; i < H_FROGGER; i++) // generazione marciapiede
     {
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
-        wattron(win_mappa,COLOR_PAIR(3));
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
+        wattron(win_mappa, COLOR_PAIR(3));
         for (size_t i = 0; i < MAXX - 60; i++)
         {
-            wprintw(win_mappa," ");
+            wprintw(win_mappa, " ");
         }
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
     }
 
     for (unsigned i = 0; i < H_FROGGER * N_CORSIE_STRADA; i++) // generazione strada
     {
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
-        wattron(win_mappa,COLOR_PAIR(4));
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
+        wattron(win_mappa, COLOR_PAIR(4));
         for (size_t i = 0; i < MAXX - 60; i++)
         {
-            wprintw(win_mappa," ");
+            wprintw(win_mappa, " ");
         }
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
     }
 
     for (unsigned i = 0; i < H_FROGGER; i++) // generazione marciapiede
     {
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
-        wattron(win_mappa,COLOR_PAIR(3));
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
+        wattron(win_mappa, COLOR_PAIR(3));
         for (size_t i = 0; i < MAXX - 60; i++)
         {
-            wprintw(win_mappa," ");
+            wprintw(win_mappa, " ");
         }
-        wattron(win_mappa,COLOR_PAIR(4));
-        wprintw(win_mappa,"                              ");
+        wattron(win_mappa, COLOR_PAIR(4));
+        wprintw(win_mappa, "                              ");
     }
 }
