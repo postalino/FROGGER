@@ -3,6 +3,7 @@
 
 #include "Frogger.h"
 
-//funzioni
+void wasd_rana(int fd_rana);
+void update_position_frogger(int spostamento, oggetto_rana* npc);
 
 #endif

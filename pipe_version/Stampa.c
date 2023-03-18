@@ -1,18 +1,29 @@
 #include "Stampa.h"
 
-int max_time = 60;
+int max_time = 60, vite = 3;
 
-void play_frogger(int fd_time)
+void play_frogger(int fd_time,int fd_rana)
 {
-    // creazione finestra principale centrata
-    win_mappa = crea_finestra();
+    oggetto_rana player = {X_START , Y_START, ID_FROGGER, false};
+    int movimento_rana = 0;
 
     while (true)
     {
         wclear(win_mappa);
+
+        read(fd_rana, &movimento_rana, sizeof(movimento_rana));
+        init_pair(20,COLOR_WHITE,calcola_background(player.x,player.y));
         
         mappa_frogger(fd_time);
+    
+        if(abilita_movimento_confini_mappa(player, movimento_rana))
+            update_position_frogger(movimento_rana,&player);
+        movimento_rana = 0;
 
+        wattron(win_mappa,COLOR_PAIR(20));
+        print_sprite(player.x, player.y, FROGGER);
+        wattroff(win_mappa,COLOR_PAIR(20));
+        
         usleep(100000);
         wrefresh(win_mappa);
     }
@@ -33,11 +44,17 @@ WINDOW *crea_finestra()
     return win;
 }
 
-int abilita_movimento_confini_tane(oggetto_rana npc, int direzione)
+int abilita_movimento_confini_mappa(oggetto_rana npc, int direzione)
 {
-    if ((npc.y < 9 && !((npc.x / 9) % 2)) && direzione == KEY_UP)
+    if(direzione == -L_FROGGER && (npc.x - L_FROGGER) < 30)
         return 0;
-    if ((npc.y == 4 && ((npc.x / 9) % 2)) && direzione != KEY_DOWN)
+    if(direzione == L_FROGGER && (npc.x + L_FROGGER) >= MAXX - 30)
+        return 0;
+    if(direzione == H_FROGGER && (npc.y + L_FROGGER) > MAXY)
+        return 0;
+    if ((npc.y == MAX_PRATO && !((npc.x / L_FROGGER) % 2)) && direzione != H_FROGGER)
+        return 0;
+    if ((npc.y == MIN_FIUME && ((npc.x / L_FROGGER) % 2)) && direzione == -H_FROGGER)
         return 0;
     else
         return 1;
@@ -231,4 +248,5 @@ void mappa_frogger(int fd_time)
     }
 
     print_barra_tempo(fd_time); //stampa barra del tempo di gioco
+    mvwprintw(win_mappa,MAXY-1,MAXX - 37,"VITE: %d",vite);
 }

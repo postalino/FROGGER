@@ -96,9 +96,16 @@ WINDOW *win_mappa;
 #define ID_TRUNK_X2 7
 #define ID_TRUNK_X3 8
 
-//dimensioni mappa
+//dimensioni mappa totale
 #define MAXX 159
 #define MAXY 42
+
+//dimensione mappa visiva
+/*se utili si aggiungono*/
+
+//posizione default rana
+#define X_START 30 + L_FROGGER*5 
+#define Y_START (MAXY -2) - H_FROGGER
 
 //dimesioni rana
 #define H_FROGGER 4
@@ -125,6 +132,7 @@ WINDOW *win_mappa;
 //macro per la creazione di un processo o una pipe
 #define CHECK_PIPE(x) {if(pipe(x)== -1) {perror("pipe call"); _exit(1);} }
 #define CHECK_PID(x) {x= fork(); if(x < 0) {perror("fork call");_exit(2);}}
+#define CHECK_WINDOW(x) {if (x == NULL) { fprintf(stderr, "Errore creazione finestra!\n");exit(EXIT_FAILURE);}} 
 
 typedef struct tronco
 {

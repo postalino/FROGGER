@@ -3,6 +3,7 @@
         "fiume.h": "c",
         "stampa.h": "c",
         "frogger.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "npc.h": "c"
     }
 }
