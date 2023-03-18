@@ -85,6 +85,8 @@ static const char *TRUNK_X3[] =
         " \\_/_____________________/ "
 };
 
+WINDOW *win_mappa;
+
 //ID sprite
 #define ID_FROGGER 0
 #define ID_CAR_RIGHT 1
@@ -98,7 +100,7 @@ static const char *TRUNK_X3[] =
 
 //dimensioni mappa
 #define MAXX 159
-#define MAXY 40
+#define MAXY 42
 
 //dimesioni rana
 #define H_FROGGER 4

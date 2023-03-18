@@ -2,6 +2,7 @@
     "files.associations": {
         "fiume.h": "c",
         "stampa.h": "c",
-        "frogger.h": "c"
+        "frogger.h": "c",
+        "unistd.h": "c"
     }
 }
