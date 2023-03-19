@@ -231,3 +231,56 @@ void tronco_taxi(oggetto_rana *npc_rana, oggetto_tronco npc_tronco, int spostame
         }
     }
 }
+
+void inizializza_posizione_tane(oggetto_tana tane[N_TANE])
+{
+    int indice_cella=0;
+    for (size_t i = 39; i < MAXX -30; i+=18)
+    {
+        tane[indice_cella].x = i;
+        tane[indice_cella].y = MAX_PRATO;
+        tane[indice_cella].id_sprite = ID_TANA;
+        tane[indice_cella].occupata = false;
+        indice_cella++;   
+    }
+    
+}
+
+void tana_occupata(oggetto_rana * player, oggetto_tana tane[N_TANE])
+{
+    int backup_x, backup_y;
+    
+    if(player->y == MAX_PRATO && !((player->x / L_FROGGER) % 2)){
+        for (size_t i = 0; i < N_TANE; i++)
+        {
+            if(tane[i].x == player->x)
+                tane[i].occupata = true;
+        }
+
+        player->x = X_START;
+        player->y = Y_START;
+    }
+}
+
+void print_tane_occupate(oggetto_tana tana[N_TANE])
+{
+    init_color(100, 0, 128, 0); // definizione del nuovo colore verde scuro
+    init_pair(TANA_OCCUPATA, 100, COLOR_BLUE); // palette simbolo tana occupata con il nuovo colore verde scuro
+    for (size_t i = 0; i < N_TANE; i++)
+    {
+        if(tana[i].occupata){
+            wattron(win_mappa,COLOR_PAIR(TANA_OCCUPATA));
+            print_sprite(tana[i].x, tana[i].y,TANA);
+        }
+    }
+}
+
+int check_tana(int x, int y)
+{
+    for (size_t i = 0; i < N_TANE; i++)
+    {
+        if(tane_gioco[i].x == x && (tane_gioco[i].y + H_FROGGER) == y  && tane_gioco[i].occupata)
+            return 1;
+    }
+    return 0;
+}

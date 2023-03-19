@@ -84,6 +84,14 @@ static const char *TRUNK_X3[] =
         " \\_/_____________________/ "
 };
 
+static const char *TANA[] = 
+{
+        " /\\  /\\  ",
+        "/  \\/  \\",
+        "\\      /",
+        " \\____/  "
+};
+
 //ID sprite
 #define ID_FROGGER 0
 #define ID_CAR_RIGHT 1
@@ -94,6 +102,7 @@ static const char *TRUNK_X3[] =
 #define ID_TRUCK_LEFT 6
 #define ID_TRUNK_X2 7
 #define ID_TRUNK_X3 8
+#define ID_TANA 9
 
 //dimensioni mappa totale
 #define MAXX 159
@@ -155,9 +164,7 @@ typedef struct rana
 {
     int x;
     int y;
-    int id_sprite;
-    _Bool sentinella_trasporto;
-    int verso; 
+    int id_sprite; 
 }oggetto_rana;
 
 typedef struct proiettile
@@ -167,6 +174,14 @@ typedef struct proiettile
     char simbolo;
     int verso_proiettile;
 }oggetto_proiettile;
+
+typedef struct tana
+{
+    int x;
+    int y;
+    int id_sprite;
+    bool occupata;
+}oggetto_tana;
 
 //ID colori oggetti e scenari
 #define PRATO 1
@@ -181,9 +196,11 @@ typedef struct proiettile
 #define T_MAX_BAR 10
 #define T_MIDLE_BAR 11
 #define T_MIN_BAR 12
+#define TANA_OCCUPATA 13
 
 //variabili globali
 oggetto_tronco tronchi[N_CORSIE_FIUME];
+oggetto_tana tane_gioco[N_TANE];
 WINDOW *win_mappa;
 
 
@@ -194,8 +211,3 @@ WINDOW *win_mappa;
 #include "Strada.h"
 
 #endif
-
-
-
-
-

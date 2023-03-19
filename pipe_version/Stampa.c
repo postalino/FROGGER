@@ -4,13 +4,17 @@ int max_time = 60, vite = 3;
 
 void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
 {
-    oggetto_rana player = {X_START , Y_START, ID_FROGGER, false};
+    oggetto_rana player = {X_START , Y_START, ID_FROGGER};
     int movimento_rana = 0;
+
+    inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
 
     while (true)
     {
         //operazioni di aggiornamenti degli oggetti
-        /*   TRONCO    */
+        /*   TANE     */
+        tana_occupata(&player,tane_gioco);
+        /*   TRONCO   */
         lettura_pipe_tronchi(&player,tronchi,fd_tronchi);
         /*   RANA     */
         read(fd_rana, &movimento_rana, sizeof(movimento_rana));
@@ -62,6 +66,8 @@ int abilita_movimento_confini_mappa(oggetto_rana npc, int direzione)
         return 0;
     if ((npc.y == MIN_FIUME && ((npc.x / L_FROGGER) % 2)) && direzione == -H_FROGGER)
         return 0;
+    if (check_tana(npc.x, npc.y) && direzione == -H_FROGGER)      //controlla se la tana è già stata occupata
+        return 0;
     else
         return 1;
 }
@@ -76,14 +82,6 @@ int calcola_background(int x, int y)
         return COLOR_BLACK;
     if (y > MAX_STRADA)
         return COLOR_MAGENTA;
-}
-
-void print_sprite(int x, int y, const char *sprite[])
-{
-    for (int i = 0; i < H_FROGGER; i++)
-    {
-        mvwprintw(win_mappa,y + i, x, sprite[i]);
-    }
 }
 
 void print_barra_tempo(int fd_time)
@@ -112,6 +110,14 @@ void print_barra_tempo(int fd_time)
         else
             wattron(win_mappa,COLOR_PAIR(T_MIN_WORD));
         mvwprintw(win_mappa,MAXY-1,30,"TIME:");
+    
+    //stampa scritta VITE
+        if(vite >= 3)
+            wattron(win_mappa,COLOR_PAIR(T_MAX_WORD));
+        else if(vite == 2)
+            wattron(win_mappa,COLOR_PAIR(T_MIDLE_WORD));
+        else if(vite == 1)
+            wattron(win_mappa,COLOR_PAIR(T_MIN_WORD));
         mvwprintw(win_mappa,MAXY-1,MAXX - 37,"VITE: %d",vite);
 
     //stampa barra
@@ -221,5 +227,13 @@ void mappa_frogger(int fd_time)
         wprintw(win_mappa, "                              ");
     }
 
-    print_barra_tempo(fd_time); //stampa barra del tempo di gioco
+    print_barra_tempo(fd_time); //stampa barra del tempo di gioco più numero vite player
+    print_tane_occupate(tane_gioco);
+}
+void print_sprite(int x, int y, const char *sprite[])
+{
+    for (int i = 0; i < H_FROGGER; i++)
+    {
+        mvwprintw(win_mappa,y + i, x, sprite[i]);
+    }
 }
