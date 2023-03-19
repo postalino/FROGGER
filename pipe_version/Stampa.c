@@ -12,17 +12,20 @@ void play_frogger(int fd_time,int fd_rana)
         wclear(win_mappa);
 
         read(fd_rana, &movimento_rana, sizeof(movimento_rana));
-        init_pair(20,COLOR_WHITE,calcola_background(player.x,player.y));
+        
         
         mappa_frogger(fd_time);
     
         if(abilita_movimento_confini_mappa(player, movimento_rana))
+        {
             update_position_frogger(movimento_rana,&player);
+            init_pair(20,COLOR_WHITE,calcola_background(player.x,player.y));
+        }
+
         movimento_rana = 0;
 
         wattron(win_mappa,COLOR_PAIR(20));
         print_sprite(player.x, player.y, FROGGER);
-        wattroff(win_mappa,COLOR_PAIR(20));
         
         usleep(100000);
         wrefresh(win_mappa);
