@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <ncurses.h>
 #include <stdbool.h>
+#include <time.h>
 #include <fcntl.h>
 
 //sprite personaggi gioco
@@ -82,8 +83,6 @@ static const char *TRUNK_X3[] =
         "| @ | ____@               |",
         " \\_/_____________________/ "
 };
-
-WINDOW *win_mappa;
 
 //ID sprite
 #define ID_FROGGER 0
@@ -168,6 +167,25 @@ typedef struct proiettile
     char simbolo;
     int verso_proiettile;
 }oggetto_proiettile;
+
+//ID colori oggetti e scenari
+#define PRATO 1
+#define FIUME 2
+#define MARCIAPIEDE 3
+#define STRADA 4
+#define RANA 5
+#define TRONCO 6
+#define T_MAX_WORD 7
+#define T_MIDLE_WORD 8
+#define T_MIN_WORD 9
+#define T_MAX_BAR 10
+#define T_MIDLE_BAR 11
+#define T_MIN_BAR 12
+
+//variabili globali
+oggetto_tronco tronchi[N_CORSIE_FIUME];
+WINDOW *win_mappa;
+
 
 #include "Collisioni.h"
 #include "Fiume.h"

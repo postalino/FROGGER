@@ -4,6 +4,8 @@
         "stampa.h": "c",
         "frogger.h": "c",
         "unistd.h": "c",
-        "npc.h": "c"
+        "npc.h": "c",
+        "ncurses.h": "c",
+        "stdlib.h": "c"
     }
 }
