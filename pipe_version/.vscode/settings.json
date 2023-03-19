@@ -6,6 +6,8 @@
         "unistd.h": "c",
         "npc.h": "c",
         "ncurses.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "collisioni.h": "c",
+        "strada.h": "c"
     }
 }

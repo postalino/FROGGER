@@ -203,32 +203,45 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
     }
 }
 
-void lettura_pipe_tronchi(oggetto_rana *npc_rana, oggetto_tronco tronchi[N_CORSIE_FIUME], int fd_tronco[N_CORSIE_FIUME][2])
+void lettura_pipe_tronchi(oggetto_rana *npc_rana, oggetto_tronco tronchi[N_CORSIE_FIUME], int fd_tronco[N_CORSIE_FIUME][2], int *vite)
 {
     int spostamento;
     for (size_t i = 0; i < N_CORSIE_FIUME; i++)
         {
             read(fd_tronco[i][0],&spostamento,sizeof(spostamento));     //leggo il tronco
-            tronco_taxi(npc_rana, tronchi[i], spostamento);     //se la rana è sopra il tronco segue il suo movimento
+            if(tronco_taxi(npc_rana, tronchi[i], spostamento))     //se la rana è sopra il tronco segue il suo movimento
+                (*vite)--;   //la rana è caduta nel fiume
             tronchi[i].x += spostamento;       //aggiorno la x del tronco
         }
 }
 
-void tronco_taxi(oggetto_rana *npc_rana, oggetto_tronco npc_tronco, int spostamento)
+int tronco_taxi(oggetto_rana *npc_rana, oggetto_tronco npc_tronco, int spostamento)
 { 
     if(npc_rana->y == npc_tronco.y){
         if((npc_rana->x == npc_tronco.x)){
             if(abilita_movimento_confini_mappa(*npc_rana, spostamento))
                 npc_rana->x += spostamento;
+            return 0;
         }
         else if((npc_rana->x == npc_tronco.x + L_FROGGER)){
             if(abilita_movimento_confini_mappa(*npc_rana, spostamento))
                 npc_rana->x += spostamento;
+            return 0;
         }
         else if((npc_tronco.id_sprite == ID_TRUNK_X3) && (npc_rana->x == npc_tronco.x + 2*L_FROGGER)){
             if(abilita_movimento_confini_mappa(*npc_rana, spostamento))
                 npc_rana->x += spostamento;
+            return 0;
         }
+        else{                         
+            //se la rana cade nel fiume torna alla posizione di partenza
+            npc_rana->x = X_START;
+            npc_rana->y = Y_START;
+            return 1;
+        }
+    }
+    else{
+        return 0;
     }
 }
 
@@ -246,10 +259,8 @@ void inizializza_posizione_tane(oggetto_tana tane[N_TANE])
     
 }
 
-void tana_occupata(oggetto_rana * player, oggetto_tana tane[N_TANE])
-{
-    int backup_x, backup_y;
-    
+int tana_occupata(oggetto_rana * player, oggetto_tana tane[N_TANE])
+{   
     if(player->y == MAX_PRATO && !((player->x / L_FROGGER) % 2)){
         for (size_t i = 0; i < N_TANE; i++)
         {
@@ -259,7 +270,10 @@ void tana_occupata(oggetto_rana * player, oggetto_tana tane[N_TANE])
 
         player->x = X_START;
         player->y = Y_START;
+
+        return 1;
     }
+    return 0;
 }
 
 void print_tane_occupate(oggetto_tana tana[N_TANE])

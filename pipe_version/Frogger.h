@@ -203,7 +203,6 @@ oggetto_tronco tronchi[N_CORSIE_FIUME];
 oggetto_tana tane_gioco[N_TANE];
 WINDOW *win_mappa;
 
-
 #include "Collisioni.h"
 #include "Fiume.h"
 #include "NPC.h"

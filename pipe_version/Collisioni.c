@@ -4,7 +4,7 @@ void tempoDiGioco(int fd)
 {
     int clock = 0;
     int tempo = 0;
-    while (tempo <= 60)
+    while (true)
     {
         sleep(1);
         clock++;

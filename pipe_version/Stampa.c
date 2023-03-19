@@ -1,6 +1,7 @@
 #include "Stampa.h"
 
-int max_time = 60, vite = 3;
+int max_time = 60;
+int vite = 3;
 
 void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
 {
@@ -13,9 +14,14 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
     {
         //operazioni di aggiornamenti degli oggetti
         /*   TANE     */
-        tana_occupata(&player,tane_gioco);
+        if(tana_occupata(&player,tane_gioco)){
+            //se la tana viene occupata si ripristina il tempo di gioco e si incrementa di 1 unità la vita
+            vite++;
+            max_time = 60;
+        }
+
         /*   TRONCO   */
-        lettura_pipe_tronchi(&player,tronchi,fd_tronchi);
+        lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite);
         /*   RANA     */
         read(fd_rana, &movimento_rana, sizeof(movimento_rana));
         if(abilita_movimento_confini_mappa(player, movimento_rana))
