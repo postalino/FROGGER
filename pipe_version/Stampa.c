@@ -10,6 +10,8 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
     while (true)
     {
         //operazioni di aggiornamenti degli oggetti
+        /*   TRONCO    */
+        lettura_pipe_tronchi(&player,tronchi,fd_tronchi);
         /*   RANA     */
         read(fd_rana, &movimento_rana, sizeof(movimento_rana));
         if(abilita_movimento_confini_mappa(player, movimento_rana))
@@ -18,8 +20,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
             init_pair(RANA,COLOR_WHITE,calcola_background(player.x,player.y));
         }
         movimento_rana = 0;
-        /*   TRONCO    */
-        lettura_pipe_tronchi(tronchi,fd_tronchi);
+        
 
 
         //operazioni di stampa oggetti aggiornati + mappa
