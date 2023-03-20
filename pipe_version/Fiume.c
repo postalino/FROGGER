@@ -161,7 +161,7 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
     //caso patenza sinistra con dimensione x3
     else if(npc_tronco.verso == 1 && npc_tronco.id_sprite == ID_TRUNK_X3)
     {
-        int direzione = +L_FROGGER;
+        int direzione = L_FROGGER;
         int fattore_traslazione= L_FROGGER;
 
         fattore_traslazione += L_FROGGER * rand()%2;
