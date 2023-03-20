@@ -88,11 +88,13 @@ void generazione_processi_tronco(int fd_tronchi[N_CORSIE_FIUME][2], pid_t proces
 
 void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
 { 
+    srand(getpid()); //inizializzo la random dando come seme il PID del processo
+    bool traslazione_iniziale = true; //abilita/disabilita la traslazine iniziale
+
     //caso partanza da destra con dimensione x2
     if(npc_tronco.verso == -1 && npc_tronco.id_sprite == ID_TRUNK_X2)
     {
         int direzione = -L_FROGGER;
-        npc_tronco.verso = -1;
 
         while (true)
         {
@@ -108,11 +110,6 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
                 direzione *= -1;
             }
 
-            if(direzione > 0)
-                npc_tronco.verso = 1;
-            else if(direzione < 0)
-                npc_tronco.verso = -1;
-
             usleep(TIME);
         } 
     }
@@ -121,7 +118,6 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
     else if(npc_tronco.verso == 1 && npc_tronco.id_sprite == ID_TRUNK_X2)
     {
         int direzione = +L_FROGGER;
-        npc_tronco.verso= 1;
 
         while (true)
         {
@@ -135,11 +131,6 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
             {
                 direzione *= -1;
             }
-
-            if(direzione > 0)
-                npc_tronco.verso = 1;
-            else if(direzione < 0)
-                npc_tronco.verso = -1;
             
             usleep(TIME);
         }
@@ -149,7 +140,6 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
     else if(npc_tronco.verso == -1 && npc_tronco.id_sprite == ID_TRUNK_X3)
     {
         int direzione = -L_FROGGER;
-        npc_tronco.verso= -1;
 
         while(true)
         {
@@ -164,11 +154,6 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
                 direzione *= -1;
             }
 
-            if(direzione > 0)
-                npc_tronco.verso = 1;
-            else if(direzione < 0)
-                npc_tronco.verso = -1;
-
             usleep(TIME);
         }
     }
@@ -177,13 +162,22 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
     else if(npc_tronco.verso == 1 && npc_tronco.id_sprite == ID_TRUNK_X3)
     {
         int direzione = +L_FROGGER;
-        npc_tronco.verso = +1;
+        int fattore_traslazione= L_FROGGER;
+
+        fattore_traslazione += L_FROGGER * rand()%2;
 
         while (true)
         {
-            write(fd_tronco, &direzione, sizeof(direzione));//scrittura posizione nella processo_tronco
-            npc_tronco.x += direzione;
-            
+            if(!traslazione_iniziale){
+                write(fd_tronco, &direzione, sizeof(direzione));//scrittura posizione nella processo_tronco
+                npc_tronco.x += direzione;
+            }
+            else{
+                write(fd_tronco, &fattore_traslazione, sizeof(fattore_traslazione));//scrittura posizione nella processo_tronco
+                traslazione_iniziale = false;
+                npc_tronco.x += fattore_traslazione;
+            }
+    
             if(npc_tronco.x + L_TRUNK_X3 >= MAXX - 30) //cambia la direzione del tronco se tocca il bordo destro
             {
                 direzione *= -1;
@@ -192,12 +186,7 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
             {
                 direzione *= -1;
             }
-            
-            if(direzione > 0)
-                npc_tronco.verso = 1;
-            else if(direzione < 0)
-                npc_tronco.verso = -1;
-
+    
             usleep(TIME);
         }
     }
