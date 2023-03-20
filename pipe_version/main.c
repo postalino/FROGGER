@@ -2,10 +2,22 @@
 
 int main()
 {
-    int verso, dimensione_tronco;
-
+    //inizializzo il seme della rand con time
     srand(time(NULL));
 
+    int verso, dimensione_tronco;
+    int traslazioni[N_CORSIE_FIUME];
+
+    //calcolo randomicamente una traslazione iniziale per avere movimenti diversi dei tronchi
+    for (int i = 0; i < N_CORSIE_FIUME; i++) {
+        traslazioni[i] = (L_FROGGER*(rand()%4));  // genero l'incremento casuale [set casuale-->(0,9,18,27)]
+        for (int j = 0; j < i; j++) {
+            if (traslazioni[j] == traslazioni[i]) {  // controllo se l'incremento è gia stato generato
+                i--;  // se sì, decrementa i per ripetere il ciclo e generarne un'altro
+                break;
+            }
+        }
+    }
     //inizializzo le strutture tronchi per avere la stessa coppia sia nel padre sia nel figlio
     for (int i = 0; i < N_CORSIE_FIUME; i++)
     {
@@ -14,9 +26,8 @@ int main()
         //determino randomicamente la dimensione del tronco (0 -. x2 | 1 -. x3)
         dimensione_tronco = rand()%2;
         //inizializza la struttura specifica
-        inizializza_tronco(&tronchi[i], i, verso, dimensione_tronco);
+        inizializza_tronco(&tronchi[i], i, verso, dimensione_tronco, traslazioni[i]);
     }
-
 
     //crea la finestra e attiva/disattiva i comandi richiesti
     initscr();

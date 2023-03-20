@@ -1,13 +1,13 @@
 #include "Fiume.h"
 #define TIME 170000 //temporizzazione scrittura per gestire la velocità del tronco
 
-void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensione_tronco)
+void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensione_tronco, int traslazione_iniziale)
 {    
     //caso partanza da destra con dimensione x2
     if(!verso && !dimensione_tronco)
     {
         //posiziona il tronco nelle rispettive cordinate iniziali della rispettiva corsia
-        npc->x = (MAXX-30) - L_TRUNK_X2;
+        npc->x = (MAXX-30) - (L_TRUNK_X2 + traslazione_iniziale);
         npc->y =H_FROGGER * (2 + corsia);
         npc->id_sprite = ID_TRUNK_X2;
         npc->corsia = corsia;
@@ -18,7 +18,7 @@ void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensio
     else if(verso && !dimensione_tronco)
     {
         //posiziona il tronco nelle rispettive cordinate iniziali della rispettiva corsia
-        npc->x = 30;
+        npc->x = 30 + traslazione_iniziale;
         npc->y =H_FROGGER * (2 + corsia);
         npc->id_sprite = ID_TRUNK_X2;
         npc->corsia = corsia;
@@ -29,7 +29,7 @@ void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensio
     else if(!verso && dimensione_tronco)
     {
         //posiziona il tronco nelle rispettive cordinate iniziali della rispettiva corsia
-        npc->x = (MAXX-30) - L_TRUNK_X3;
+        npc->x = (MAXX-30) - (L_TRUNK_X3 + traslazione_iniziale);
         npc->y =H_FROGGER * (2 + corsia);
         npc->id_sprite = ID_TRUNK_X3;
         npc->corsia = corsia;
@@ -40,13 +40,14 @@ void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensio
     else if(verso && dimensione_tronco)
     {
         //posiziona il tronco nelle rispettive cordinate iniziali della rispettiva corsia
-        npc->x = 30;
+        npc->x = 30 + traslazione_iniziale;
         npc->y =H_FROGGER * (2 + corsia);
         npc->id_sprite = ID_TRUNK_X3;
         npc->corsia = corsia;
         npc->verso = +1;
     }
 }
+
 
 void stampa_tronchi (oggetto_tronco tronchi[N_CORSIE_FIUME])
 {
@@ -88,9 +89,6 @@ void generazione_processi_tronco(int fd_tronchi[N_CORSIE_FIUME][2], pid_t proces
 
 void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
 { 
-    srand(getpid()); //inizializzo la random dando come seme il PID del processo
-    bool traslazione_iniziale = true; //abilita/disabilita la traslazine iniziale
-
     //caso partanza da destra con dimensione x2
     if(npc_tronco.verso == -1 && npc_tronco.id_sprite == ID_TRUNK_X2)
     {
@@ -161,20 +159,12 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
     //caso patenza sinistra con dimensione x3
     else if(npc_tronco.verso == 1 && npc_tronco.id_sprite == ID_TRUNK_X3)
     {
-        int direzione = L_FROGGER;
-        int fattore_traslazione= (L_FROGGER*(rand()%2+1));
+        int direzione = +L_FROGGER;
 
         while (true)
         {
-            if(traslazione_iniziale == false){
-                write(fd_tronco, &direzione, sizeof(direzione));//scrittura posizione nella processo_tronco
-                npc_tronco.x += direzione;
-            }
-            else{
-                write(fd_tronco, &fattore_traslazione, sizeof(fattore_traslazione));//scrittura posizione nella processo_tronco
-                traslazione_iniziale = false;
-                npc_tronco.x += fattore_traslazione;
-            }
+            write(fd_tronco, &direzione, sizeof(direzione));//scrittura posizione nella processo_tronco
+            npc_tronco.x += direzione;
     
             if(npc_tronco.x + L_TRUNK_X3 >= MAXX - 30) //cambia la direzione del tronco se tocca il bordo destro
             {
