@@ -162,13 +162,11 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
     else if(npc_tronco.verso == 1 && npc_tronco.id_sprite == ID_TRUNK_X3)
     {
         int direzione = L_FROGGER;
-        int fattore_traslazione= L_FROGGER;
-
-        fattore_traslazione += L_FROGGER * rand()%2;
+        int fattore_traslazione= (L_FROGGER*(rand()%2+1));
 
         while (true)
         {
-            if(!traslazione_iniziale){
+            if(traslazione_iniziale == false){
                 write(fd_tronco, &direzione, sizeof(direzione));//scrittura posizione nella processo_tronco
                 npc_tronco.x += direzione;
             }
