@@ -19,6 +19,8 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
             vite++;
             max_time = 60;
         }
+        if (player.y == MAX_PRATO && ((player.x / L_FROGGER) % 2)) //se la rana sale sul prato perde una vita
+            vite--;
 
         /*   TRONCO   */
         lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite);
@@ -67,8 +69,6 @@ int abilita_movimento_confini_mappa(oggetto_rana npc, int direzione)
     if(direzione == L_FROGGER && (npc.x + L_FROGGER) >= MAXX - 30)
         return 0;
     if(direzione == H_FROGGER && (npc.y + L_FROGGER) > MAXY)
-        return 0;
-    if ((npc.y == MAX_PRATO && !((npc.x / L_FROGGER) % 2)) && direzione != H_FROGGER)
         return 0;
     if ((npc.y == MIN_FIUME && ((npc.x / L_FROGGER) % 2)) && direzione == -H_FROGGER)
         return 0;
