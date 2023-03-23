@@ -21,6 +21,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
         }
         if (player.y == MAX_PRATO && ((player.x / L_FROGGER) % 2)) //se la rana sale sul prato perde una vita
             vite--;
+    
 
         /*   TRONCO   */
         lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite);
@@ -37,10 +38,9 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
 
         //operazioni di stampa oggetti aggiornati + mappa
         mappa_frogger(fd_time);
-        stampa_tronchi(tronchi);
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
-        
+        stampa_tronchi(tronchi);
         wrefresh(win_mappa);
         usleep(100000);
         wclear(win_mappa);

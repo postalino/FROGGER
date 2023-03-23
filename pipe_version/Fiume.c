@@ -1,5 +1,5 @@
 #include "Fiume.h"
-#define TIME 170000 //temporizzazione scrittura per gestire la velocità del tronco
+#define TIME 100000 //temporizzazione scrittura per gestire la velocità del tronco
 
 void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensione_tronco, int traslazione_iniziale)
 {    
@@ -73,12 +73,12 @@ void generazione_processi_tronco(int fd_tronchi[N_CORSIE_FIUME][2], pid_t proces
     for (int i = 0; i < N_CORSIE_FIUME; i++)
     {
         CHECK_PIPE(fd_tronchi[i]);//verifica se la pipe e' stata creata correttamente
+        fcntl(fd_tronchi[i][0],F_SETFL, O_NONBLOCK);
         CHECK_PID(processo_tronco[i]);//creo processo figlio tronco
         if(!processo_tronco[i])
         {  
             //blocca la lettura nella pipe per il processo figlio
             close(fd_tronchi[i][0]);
-
             //funzione movimento tronco
             gestione_tronco(fd_tronchi[i][1],npc[i]);
         }
@@ -182,7 +182,7 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
 
 void lettura_pipe_tronchi(oggetto_rana *npc_rana, oggetto_tronco tronchi[N_CORSIE_FIUME], int fd_tronco[N_CORSIE_FIUME][2], int *vite)
 {
-    int spostamento;
+    int spostamento = 0;
     for (size_t i = 0; i < N_CORSIE_FIUME; i++)
         {
             read(fd_tronco[i][0],&spostamento,sizeof(spostamento));     //leggo il tronco
@@ -190,6 +190,7 @@ void lettura_pipe_tronchi(oggetto_rana *npc_rana, oggetto_tronco tronchi[N_CORSI
                 (*vite)--;   //la rana è caduta nel fiume
             tronchi[i].x += spostamento;       //aggiorno la x del tronco
         }
+
 }
 
 int tronco_taxi(oggetto_rana *npc_rana, oggetto_tronco npc_tronco, int spostamento)
