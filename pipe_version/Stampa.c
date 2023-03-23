@@ -1,7 +1,8 @@
 #include "Stampa.h"
 
-int max_time = 60;
-int vite = 3;
+int delay_lettura = 0; //serve per gestire il momento della lettura
+int max_time = 60; //tempo max in secondi per raggiungere una tana 
+int vite = 3;   //vite iniziali
 
 void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
 {
@@ -19,30 +20,30 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
             vite++;
             max_time = 60;
         }
-        if (player.y == MAX_PRATO && ((player.x / L_FROGGER) % 2)) //se la rana sale sul prato perde una vita
-            vite--;
-    
+        fuori_area_tane(&player, &vite);
 
-        /*   TRONCO   */
-        lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite);
         /*   RANA     */
         read(fd_rana, &movimento_rana, sizeof(movimento_rana));
-        if(abilita_movimento_confini_mappa(player, movimento_rana))
-        {
+        if(abilita_movimento_confini_mappa(player, movimento_rana)){
             update_position_frogger(movimento_rana,&player);
             init_pair(RANA,COLOR_WHITE,calcola_background(player.x,player.y));
         }
         movimento_rana = 0;
-        
 
+        /*   TRONCO   */
+        delay_lettura++; //sincronizza la lettura del tronco una ogni tempo_tronco/tempo_padre
+        if(delay_lettura == TIME/TIME_MAIN){
+            lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite); // vengono aggiornati i tronchi. Se la rana è sopra uno dei tronchi viene trasportata
+            delay_lettura = 0;
+        }
 
         //operazioni di stampa oggetti aggiornati + mappa
         mappa_frogger(fd_time);
+        stampa_tronchi(tronchi);
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
-        stampa_tronchi(tronchi);
         wrefresh(win_mappa);
-        usleep(100000);
+        usleep(TIME_MAIN);
         wclear(win_mappa);
     }
 }
@@ -70,9 +71,9 @@ int abilita_movimento_confini_mappa(oggetto_rana npc, int direzione)
         return 0;
     if(direzione == H_FROGGER && (npc.y + L_FROGGER) > MAXY)
         return 0;
-    if ((npc.y == MIN_FIUME && ((npc.x / L_FROGGER) % 2)) && direzione == -H_FROGGER)
+    if (npc.y == MAX_PRATO && direzione == -H_FROGGER)
         return 0;
-    if (check_tana(npc.x, npc.y) && direzione == -H_FROGGER)      //controlla se la tana è già stata occupata
+    if (check_tana(npc.x, npc.y) && direzione == -H_FROGGER)//controlla se la tana è già stata occupata
         return 0;
     else
         return 1;
@@ -80,7 +81,7 @@ int abilita_movimento_confini_mappa(oggetto_rana npc, int direzione)
 
 int calcola_background(int x, int y)
 {
-    if (y >= MAX_PRATO && y <= MAX_FIUME)
+    if (y >= MIN_FIUME && y <= MAX_FIUME)
         return COLOR_BLUE;
     if (y > MAX_FIUME && y < MIN_STRADA)
         return COLOR_MAGENTA;
@@ -88,6 +89,11 @@ int calcola_background(int x, int y)
         return COLOR_BLACK;
     if (y > MAX_STRADA)
         return COLOR_MAGENTA;
+    if (y == MAX_PRATO && !((x / L_FROGGER) % 2))
+        return COLOR_BLUE;
+    if (y == MAX_PRATO && ((x / L_FROGGER) % 2))
+        return COLOR_GREEN;
+        
 }
 
 void print_barra_tempo(int fd_time)
@@ -234,8 +240,10 @@ void mappa_frogger(int fd_time)
     }
 
     print_barra_tempo(fd_time); //stampa barra del tempo di gioco più numero vite player
-    print_tane_occupate(tane_gioco);
+    print_tane_occupate(tane_gioco); 
+        
 }
+
 void print_sprite(int x, int y, const char *sprite[])
 {
     for (int i = 0; i < H_FROGGER; i++)

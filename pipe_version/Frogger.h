@@ -198,6 +198,10 @@ typedef struct tana
 #define T_MIN_BAR 12
 #define TANA_OCCUPATA 13
 
+//delay tempi
+#define TIME 400000  //temporizzazione velocità tronchi
+#define TIME_MAIN 100000 //temporizzazione aggiornamento mappa
+
 //variabili globali
 oggetto_tronco tronchi[N_CORSIE_FIUME];
 oggetto_tana tane_gioco[N_TANE];

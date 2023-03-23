@@ -1,5 +1,4 @@
 #include "Fiume.h"
-#define TIME 100000 //temporizzazione scrittura per gestire la velocità del tronco
 
 void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensione_tronco, int traslazione_iniziale)
 {    
@@ -48,7 +47,6 @@ void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensio
     }
 }
 
-
 void stampa_tronchi (oggetto_tronco tronchi[N_CORSIE_FIUME])
 {
     init_pair(TRONCO,COLOR_WHITE,COLOR_BLUE); //palette tronco
@@ -73,8 +71,10 @@ void generazione_processi_tronco(int fd_tronchi[N_CORSIE_FIUME][2], pid_t proces
     for (int i = 0; i < N_CORSIE_FIUME; i++)
     {
         CHECK_PIPE(fd_tronchi[i]);//verifica se la pipe e' stata creata correttamente
-        fcntl(fd_tronchi[i][0],F_SETFL, O_NONBLOCK);
+        fcntl(fd_tronchi[i][0],F_SETFL, O_NONBLOCK); //imposto la pipe come non bloccante
         CHECK_PID(processo_tronco[i]);//creo processo figlio tronco
+        
+
         if(!processo_tronco[i])
         {  
             //blocca la lettura nella pipe per il processo figlio
@@ -83,8 +83,8 @@ void generazione_processi_tronco(int fd_tronchi[N_CORSIE_FIUME][2], pid_t proces
             gestione_tronco(fd_tronchi[i][1],npc[i]);
         }
         close(fd_tronchi[i][1]);//blocca la scrittura nella pipe per il processo padre
+                
     }
-    
 }
 
 void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
@@ -190,6 +190,7 @@ void lettura_pipe_tronchi(oggetto_rana *npc_rana, oggetto_tronco tronchi[N_CORSI
                 (*vite)--;   //la rana è caduta nel fiume
             tronchi[i].x += spostamento;       //aggiorno la x del tronco
         }
+    spostamento = 0;
 
 }
 
@@ -218,9 +219,8 @@ int tronco_taxi(oggetto_rana *npc_rana, oggetto_tronco npc_tronco, int spostamen
             return 1;
         }
     }
-    else{
-        return 0;
-    }
+    
+    return 0;
 }
 
 void inizializza_posizione_tane(oggetto_tana tane[N_TANE])
@@ -275,4 +275,14 @@ int check_tana(int x, int y)
             return 1;
     }
     return 0;
+}
+
+void fuori_area_tane (oggetto_rana * player, int *vite)
+{
+    if(player->y == MAX_PRATO && ((player->x / L_FROGGER) % 2))
+        {
+            (*vite)--; //se in altezza tana non è stata occupata una tana decrementa la vita di 1 (è uscito fuori dalla)
+            player->x = X_START;
+            player->y = Y_START;
+        }
 }
