@@ -13,4 +13,3 @@ void tempoDiGioco(int fd)
         clock--;
     }
 }
-//dio
