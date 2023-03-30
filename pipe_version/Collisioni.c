@@ -13,4 +13,4 @@ void tempoDiGioco(int fd)
         clock--;
     }
 }
-//diocane
+//diocanebastardo
