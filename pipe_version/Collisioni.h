@@ -7,6 +7,7 @@ void tempoDiGioco(int fd);
 void inizializza_proiettili(int fd_proiettile_alleati[N_MAX_P][2]);
 void gestione_processi_proiettili_alleati(pid_t processi[N_MAX_P], int fd_alleati[N_MAX_P][2], oggetto_rana player);
 void gestione_proiettile(int fd_alleati);
+int collisioni_rana_veicoli(oggetto_rana rana,oggetto_veicolo veicolo [N_VEICOLI]);
 void lettura_proiettili_alleati(int fd_alleati[N_MAX_P][2]);
 void stampa_proiettili();
 #endif

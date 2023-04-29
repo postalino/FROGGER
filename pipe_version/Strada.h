@@ -19,6 +19,4 @@ void gestione_veicolo(int fd,int id);
 
 void aggiorna_veicoli(int fd[N_VEICOLI][2]);
 
-int collisioni_rana_veicoli(oggetto_rana rana,oggetto_veicolo veicolo [N_VEICOLI]);
-
 #endif

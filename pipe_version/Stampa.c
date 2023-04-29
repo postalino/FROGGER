@@ -112,13 +112,12 @@ int calcola_background(int x, int y)
         return COLOR_BLACK;
     if (y > MAX_STRADA)
         return COLOR_MAGENTA;
-    if (y == MAX_PRATO && !((x / L_FROGGER) % 2))
+    if ((y >= MAX_PRATO && y < MAX_PRATO +H_FROGGER) && !((x / L_FROGGER) % 2))
         return COLOR_BLUE;
-    if (y == MAX_PRATO && ((x / L_FROGGER) % 2))
+    if ((y >= MAX_PRATO && y < MAX_PRATO +H_FROGGER) && ((x / L_FROGGER) % 2))
         return COLOR_GREEN;
-    if (y < MAX_PRATO )
+    if (y < H_FROGGER)
         return COLOR_GREEN;
-        
 }
 
 void print_barra_tempo(int fd_time)

@@ -212,31 +212,3 @@ void aggiorna_veicoli(int fd[N_VEICOLI][2])
         veicoli[i].y = new.y;
     }
 }
-
-int collisioni_rana_veicoli(oggetto_rana rana,oggetto_veicolo veicolo [N_VEICOLI])
-{
-    for (int i=0;i< N_VEICOLI;i++)
-    {
-        if (veicolo[i].id_sprite == 1 || veicolo[i].id_sprite == 4) //hitbox macchina
-        {
-            for(int j=0;j<14;j++)
-            {
-                if ((rana.x == veicolo[i].x + j && rana.y == veicolo[i].y) || (rana.x + 8 == veicolo[i].x + j && rana.y == veicolo[i].y))
-                {
-                    return 1;
-                }
-            }
-        }else //hitbox camion/pullman
-        {
-            for(int j=0;j<28;j++)
-            {
-                if ((rana.x == veicolo[i].x + j && rana.y == veicolo[i].y) || (rana.x + 8 == veicolo[i].x + j && rana.y == veicolo[i].y))
-                {
-                    return 1;
-                }
-            }
-        }
-    }
-
-    return 0;
-}
