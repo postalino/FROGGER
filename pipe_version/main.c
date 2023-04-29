@@ -44,6 +44,11 @@ int main()
     int fd_rana[2];
     int fd_tronchi[N_CORSIE_FIUME][2];
     int fd_time[2];
+    int fd_proiettile_alleati[N_MAX_P][2];
+    int fd_sparo[2];
+
+    //inizializzo le cordinate dei proiettili fuori mappa e creo le pipe di ogni proiettile
+    inizializza_proiettili(fd_proiettile_alleati);
 
     // creazione finestra principale centrata
     win_mappa = crea_finestra();
@@ -71,6 +76,9 @@ int main()
         break;
     }
 
+    CHECK_PIPE(fd_sparo);    //verifica se la pipe e' stata creata correttamente
+    fcntl(fd_sparo[0],F_SETFL, O_NONBLOCK); //imposto la pipe come non bloccante
+
     CHECK_PIPE(fd_rana);    //verifica se la pipe e' stata creata correttamente
     fcntl(fd_rana[0],F_SETFL, O_NONBLOCK); //imposto la pipe come non bloccante
     CHECK_PID(p_rana);  //creo processo figlio rana
@@ -80,17 +88,19 @@ int main()
     case 0:
         /* processo figlio */
         close(fd_rana[0]);  //chiusura file descriptor in lettura
-        wasd_rana(fd_rana[1]);
+        close(fd_sparo[0]);  //chiusura file descriptor in lettura
+        wasd_rana(fd_rana[1], fd_sparo[1]);
         break;
     
     default:
         /* processo padre */
         close(fd_rana[1]); //chiusura file descriptor in scrittura
+        close(fd_sparo[1]); //chiusura file descriptor in scrittura
         break;
     }
 
     //inizio gioco
-    play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo);
+    play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo, fd_proiettile_alleati, fd_sparo[0]);
 
     delwin(win_mappa);
     endwin();

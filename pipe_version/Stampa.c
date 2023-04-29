@@ -4,16 +4,19 @@ int delay_lettura = 0; //serve per gestire il momento della lettura
 int max_time = 60; //tempo max in secondi per raggiungere una tana 
 int vite = 3;   //vite iniziali
 
-void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2])
+void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo)
 {
     oggetto_rana player = {X_START , Y_START, ID_FROGGER};
     int movimento_rana = 0;
+    int sparo = 0;
+    pid_t p_proiettile_alleati[N_MAX_P] = {0};
 
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
 
     while (true)
     {
         aggiorna_veicoli(fd_veicoli);
+        lettura_proiettili_alleati(fd_proiettile_alleati);
         
         //operazioni di aggiornamenti degli oggetti
         /*   TANE     */
@@ -30,6 +33,9 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
             update_position_frogger(movimento_rana,&player);
             init_pair(RANA,COLOR_WHITE,calcola_background(player.x,player.y));
         }
+
+        read(fd_sparo, &sparo, sizeof(sparo));
+        
         movimento_rana = 0;
 
         /*   TRONCO   */
@@ -46,6 +52,11 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
 
+        if(sparo){
+            gestione_processi_proiettili_alleati(p_proiettile_alleati, fd_proiettile_alleati, player);
+            sparo--;
+        }
+
         /*  COLLISIONI VEICOLO  */
         if (collisioni_rana_veicoli(player, veicoli))
         {
@@ -53,7 +64,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
             player.y = Y_START;
             player.x = X_START;
         }
-        
+        stampa_proiettili();
         wrefresh(win_mappa);
         usleep(TIME_MAIN);
         wclear(win_mappa);

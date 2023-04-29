@@ -5,10 +5,13 @@
 #define SPOSTA_DESTRA +9
 #define SPOSTA_SINISTRA -9
 
-void wasd_rana(int fd_rana)
+#define SPACE 32
+
+void wasd_rana(int fd_rana, int fd_sparo)
 {
     int direzione;
     int incremento;
+    int sparato = 1;
 
     
     while (true)
@@ -33,6 +36,9 @@ void wasd_rana(int fd_rana)
         case KEY_RIGHT:
             incremento = SPOSTA_DESTRA;
             write(fd_rana, &incremento, sizeof(incremento)); // scritture posizione successive
+            break;
+        case SPACE:
+            write(fd_sparo,&sparato, sizeof(sparato));  // segnale di sparo
             break;
         }
 

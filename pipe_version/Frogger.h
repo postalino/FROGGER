@@ -173,7 +173,6 @@ typedef struct proiettile
 {
     int x;
     int y;
-    char simbolo;
     int verso_proiettile;
 }oggetto_proiettile;
 
@@ -206,11 +205,14 @@ typedef struct tana
 #define TIME_MAIN 100000 //temporizzazione aggiornamento mappa
 // numero veicoli
 #define N_VEICOLI 6
+// proiettili massimi
+#define N_MAX_P 15
 
 //variabili globali
 oggetto_tronco tronchi[N_CORSIE_FIUME];
 oggetto_tana tane_gioco[N_TANE];
 oggetto_veicolo veicoli [N_VEICOLI];
+oggetto_proiettile proiettili_alleati[N_MAX_P]; 
 WINDOW *win_mappa;
 
 #include "Collisioni.h"
