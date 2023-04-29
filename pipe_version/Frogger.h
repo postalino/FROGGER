@@ -157,6 +157,8 @@ typedef struct veicolo
     int x;
     int y;
     int id_sprite;
+    int timer;
+    int verso;
     //to be continued...
 }oggetto_veicolo;
 
@@ -197,14 +199,18 @@ typedef struct tana
 #define T_MIDLE_BAR 11
 #define T_MIN_BAR 12
 #define TANA_OCCUPATA 13
+#define VEICOLO 14
 
 //delay tempi
 #define TIME 400000  //temporizzazione velocità tronchi
 #define TIME_MAIN 100000 //temporizzazione aggiornamento mappa
+// numero veicoli
+#define N_VEICOLI 6
 
 //variabili globali
 oggetto_tronco tronchi[N_CORSIE_FIUME];
 oggetto_tana tane_gioco[N_TANE];
+oggetto_veicolo veicoli [N_VEICOLI];
 WINDOW *win_mappa;
 
 #include "Collisioni.h"

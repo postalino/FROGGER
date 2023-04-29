@@ -4,7 +4,7 @@ int delay_lettura = 0; //serve per gestire il momento della lettura
 int max_time = 60; //tempo max in secondi per raggiungere una tana 
 int vite = 3;   //vite iniziali
 
-void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
+void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2])
 {
     oggetto_rana player = {X_START , Y_START, ID_FROGGER};
     int movimento_rana = 0;
@@ -13,6 +13,8 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
 
     while (true)
     {
+        aggiorna_veicoli(fd_veicoli);
+        
         //operazioni di aggiornamenti degli oggetti
         /*   TANE     */
         if(tana_occupata(&player,tane_gioco)){
@@ -37,9 +39,17 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2])
             delay_lettura = 0;
         }
 
+        if (collisioni_rana_veicoli(player, veicoli))
+        {
+            vite--;
+            player.y = Y_START;
+            player.x = X_START;
+        }
+
         //operazioni di stampa oggetti aggiornati + mappa
         mappa_frogger(fd_time);
         stampa_tronchi(tronchi);
+        stampa_veicoli();
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
         wrefresh(win_mappa);

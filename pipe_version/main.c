@@ -28,7 +28,9 @@ int main()
         //inizializza la struttura specifica
         inizializza_tronco(&tronchi[i], i, verso, dimensione_tronco, traslazioni[i]);
     }
-
+    
+    inizializza_veicoli();
+    
     //crea la finestra e attiva/disattiva i comandi richiesti
     initscr();
     noecho();
@@ -88,7 +90,7 @@ int main()
     }
 
     //inizio gioco
-    play_frogger(fd_time[0],fd_rana[0], fd_tronchi);
+    play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo);
 
     delwin(win_mappa);
     endwin();

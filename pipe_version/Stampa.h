@@ -16,6 +16,6 @@ int abilita_movimento_confini_mappa(oggetto_rana npc, int direzione);
 WINDOW* crea_finestra();
 
 //play
-void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2]);
+void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2]);
 
 #endif
