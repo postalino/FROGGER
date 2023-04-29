@@ -129,9 +129,9 @@ void gestione_veicolo(int fd,int id)
                 }
             }else
             {
-                veicoli[id].x = 29;
+                veicoli[id].x = 0;
             }
-        }else if(veicoli[id].x == 29 && veicoli[id].verso == 1)
+        }else if(veicoli[id].x == 0 && veicoli[id].verso == 1)
         {
             veicoli[id].id_sprite = rand()%3+4;
             if (time <= 0)
@@ -192,6 +192,13 @@ void stampa_veicoli()
             break;
         }
     }
+    for (size_t i = 0; i < 12; i++)
+    {
+        wattron(win_mappa,COLOR_PAIR(VEICOLO));
+        mvwprintw(win_mappa,24+i,0,"                              ");
+        mvwprintw(win_mappa,24+i,129,"                               ");
+    }
+    
 }
 void aggiorna_veicoli(int fd[N_VEICOLI][2])
 {
