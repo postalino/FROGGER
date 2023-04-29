@@ -199,6 +199,7 @@ typedef struct tana
 #define T_MIN_BAR 12
 #define TANA_OCCUPATA 13
 #define VEICOLO 14
+#define PROIETTILE 15
 
 //delay tempi
 #define TIME 400000  //temporizzazione velocità tronchi

@@ -116,6 +116,8 @@ int calcola_background(int x, int y)
         return COLOR_BLUE;
     if (y == MAX_PRATO && ((x / L_FROGGER) % 2))
         return COLOR_GREEN;
+    if (y < MAX_PRATO )
+        return COLOR_GREEN;
         
 }
 

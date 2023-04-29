@@ -20,7 +20,6 @@ void inizializza_proiettili(int fd_proiettile_alleati[N_MAX_P][2])
     {
         proiettili_alleati[i].x = -1;
         CHECK_PIPE(fd_proiettile_alleati[i]);    //verifica se la pipe e' stata creata correttamente
-        close(fd_proiettile_alleati[i][1]);
     }
     
 }
@@ -60,6 +59,7 @@ void gestione_processi_proiettili_alleati(pid_t processi[N_MAX_P], int fd_alleat
                 proiettili_alleati[i].x = player.x + 4;
                 proiettili_alleati[i].y = player.y -1;
                 proiettili_alleati[i].verso_proiettile = 1;
+                close(fd_alleati[i][1]);
 
                 i = N_MAX_P; 
             }
@@ -78,19 +78,18 @@ void lettura_proiettili_alleati(int fd_alleati[N_MAX_P][2])
         {
             read(fd_alleati[i][0],&spostamento, sizeof(spostamento));
             proiettili_alleati[i].y += spostamento;
-            mvwprintw(win_mappa, i,0,"X: %d  Y: %d",proiettili_alleati[i].x,proiettili_alleati[i].y);
         }
     }
 }
 
 void stampa_proiettili()
 {
-    //colore scritta TIME
-    init_pair(50, COLOR_RED, COLOR_BLACK); //
-
+    
     for (size_t i = 0; i < N_MAX_P; i++)
     {
-        wattron(win_mappa, COLOR_PAIR(50));
+        init_pair(PROIETTILE,COLOR_RED, calcola_background(proiettili_alleati[i].x, proiettili_alleati[i].y)); //
+        wattron(win_mappa, COLOR_PAIR(PROIETTILE));
         mvwprintw(win_mappa, proiettili_alleati[i].y, proiettili_alleati[i].x, "^");
+        
     }
 }
