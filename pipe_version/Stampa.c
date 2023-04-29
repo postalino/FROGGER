@@ -39,19 +39,21 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
             delay_lettura = 0;
         }
 
-        if (collisioni_rana_veicoli(player, veicoli))
-        {
-            vite--;
-            player.y = Y_START;
-            player.x = X_START;
-        }
-
         //operazioni di stampa oggetti aggiornati + mappa
         mappa_frogger(fd_time);
         stampa_tronchi(tronchi);
         stampa_veicoli();
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
+
+        /*  COLLISIONI VEICOLO  */
+        if (collisioni_rana_veicoli(player, veicoli))
+        {
+            vite--;
+            player.y = Y_START;
+            player.x = X_START;
+        }
+        
         wrefresh(win_mappa);
         usleep(TIME_MAIN);
         wclear(win_mappa);
