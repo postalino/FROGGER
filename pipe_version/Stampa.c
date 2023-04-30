@@ -64,6 +64,9 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
             player.y = Y_START;
             player.x = X_START;
         }
+
+        collisioni_proiettili_bordi(p_proiettile_alleati);
+
         stampa_proiettili();
         wrefresh(win_mappa);
         usleep(TIME_MAIN);

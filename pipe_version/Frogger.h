@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <fcntl.h>
+#include <signal.h>
 
 //sprite personaggi gioco
 static const char *FROGGER[] = 

@@ -92,7 +92,7 @@ void crea_processo_enemy(pid_t processi_enemy[N_MAX_P], int fd_rana_enemy[N_MAX_
 
                 if(processi_enemy[i] == 0){
                     close(fd_rana_enemy[i][0]);
-                    gestione_enemy(fd_rana_enemy[i][1]);
+                    //gestione_enemy(fd_rana_enemy[i][1]);
                 }
                 
                 close(fd_rana_enemy[i][1]);

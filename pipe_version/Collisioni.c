@@ -47,6 +47,7 @@ void inizializza_proiettili(int fd_proiettile_alleati[N_MAX_P][2])
     for (size_t i = 0; i < N_MAX_P; i++)
     {
         proiettili_alleati[i].x = -1;
+        proiettili_alleati[i].y = 1;
         CHECK_PIPE(fd_proiettile_alleati[i]);    //verifica se la pipe e' stata creata correttamente
     }
     
@@ -69,14 +70,8 @@ void gestione_processi_proiettili_alleati(pid_t processi[N_MAX_P], int fd_alleat
 
     for (int i = 0; i < N_MAX_P; i++)
         {
-            if(processi[i] > 0)
+            if(processi[i] == 0)
             {
-                child_pid = waitpid(processi[i], NULL, WNOHANG) ;
-                if (child_pid > 0) {
-                    processi[i] = 0;
-                }
-            }
-            else{
                  //il figlio è morto quindi chiama la funzione per ricrearlo
                 CHECK_PID(processi[i]);
 
@@ -104,6 +99,7 @@ void lettura_proiettili_alleati(int fd_alleati[N_MAX_P][2])
         {
             read(fd_alleati[i][0],&spostamento, sizeof(spostamento));
             proiettili_alleati[i].y += spostamento;
+            spostamento = 0;
         }
     }
 }
@@ -120,4 +116,20 @@ void stampa_proiettili()
             wattroff(win_mappa,COLOR_PAIR(PROIETTILE + i));
         }
     }
+}
+
+void collisioni_proiettili_bordi(pid_t processi_proiettili_alleati[N_MAX_P])
+{
+    for (size_t i = 0; i < N_MAX_P; i++)
+    {
+        if (proiettili_alleati[i].y < 0 && proiettili_alleati[i].x != -1 )
+        {
+            kill(processi_proiettili_alleati[i],SIGTERM);
+            wait(NULL);
+            proiettili_alleati[i].x = -1;
+            proiettili_alleati[i].y = 100;
+            processi_proiettili_alleati[i]=0;
+        }
+    }
+    
 }

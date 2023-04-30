@@ -10,4 +10,5 @@ void gestione_proiettile(int fd_alleati);
 int collisioni_rana_veicoli(oggetto_rana rana,oggetto_veicolo veicolo [N_VEICOLI]);
 void lettura_proiettili_alleati(int fd_alleati[N_MAX_P][2]);
 void stampa_proiettili();
+void collisioni_proiettili_bordi(pid_t processi_proiettili_alleati[N_MAX_P]);
 #endif
