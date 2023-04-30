@@ -91,8 +91,6 @@ void gestione_processi_proiettili_alleati(pid_t processi[N_MAX_P], int fd_alleat
 
                 i = N_MAX_P; 
             }
-            
-
         }
 }
 

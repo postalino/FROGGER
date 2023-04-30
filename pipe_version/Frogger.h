@@ -149,7 +149,6 @@ typedef struct tronco
     int id_sprite;
     int corsia;
     int verso;
-    //to be continued...
 }oggetto_tronco;
 
 typedef struct veicolo
@@ -159,7 +158,6 @@ typedef struct veicolo
     int id_sprite;
     int timer;
     int verso;
-    //to be continued...
 }oggetto_veicolo;
 
 typedef struct rana
@@ -208,12 +206,15 @@ typedef struct tana
 #define N_VEICOLI 6
 // proiettili massimi
 #define N_MAX_P 15
+//nemici massimi
+#define N_MAX_ENEMY 6
 
 //variabili globali
 oggetto_tronco tronchi[N_CORSIE_FIUME];
 oggetto_tana tane_gioco[N_TANE];
 oggetto_veicolo veicoli [N_VEICOLI];
-oggetto_proiettile proiettili_alleati[N_MAX_P]; 
+oggetto_proiettile proiettili_alleati[N_MAX_P];
+oggetto_rana enemy[N_MAX_ENEMY]; 
 WINDOW *win_mappa;
 
 #include "Collisioni.h"
