@@ -39,7 +39,7 @@ int main()
     start_color();
     curs_set(0);
 
-    pid_t p_rana, p_tronco[N_CORSIE_FIUME],p_veicoli[N_VEICOLI], p_time;
+    pid_t p_rana, p_tronco[N_CORSIE_FIUME],p_veicoli[N_VEICOLI], p_time, p_proiettile_alleati[N_MAX_P];
     int fd_veicolo [N_VEICOLI][2];
     int fd_rana[2];
     int fd_tronchi[N_CORSIE_FIUME][2];
@@ -48,7 +48,7 @@ int main()
     int fd_sparo[2];
 
     //inizializzo le cordinate dei proiettili fuori mappa e creo le pipe di ogni proiettile
-    inizializza_proiettili(fd_proiettile_alleati);
+    inizializza_proiettili(fd_proiettile_alleati, p_proiettile_alleati);
 
     // creazione finestra principale centrata
     win_mappa = crea_finestra();

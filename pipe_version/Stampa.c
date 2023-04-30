@@ -9,7 +9,6 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
     oggetto_rana player = {X_START , Y_START, ID_FROGGER};
     int movimento_rana = 0;
     int sparo = 0;
-    pid_t p_proiettile_alleati[N_MAX_P] = {0};
 
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
 
@@ -53,7 +52,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         print_sprite(player.x, player.y, FROGGER);
 
         if(sparo){
-            gestione_processi_proiettili_alleati(p_proiettile_alleati, fd_proiettile_alleati, player);
+            gestione_processi_proiettili_alleati(player);
             sparo--;
         }
 
@@ -65,9 +64,9 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
             player.x = X_START;
         }
 
-        collisioni_proiettili_bordi(p_proiettile_alleati);
-
         stampa_proiettili();
+        
+        collisioni_proiettili_bordi();
         wrefresh(win_mappa);
         usleep(TIME_MAIN);
         wclear(win_mappa);

@@ -42,13 +42,20 @@ int collisioni_rana_veicoli(oggetto_rana rana,oggetto_veicolo veicolo [N_VEICOLI
     return 0;
 }
 
-void inizializza_proiettili(int fd_proiettile_alleati[N_MAX_P][2])
+void inizializza_proiettili(int fd_proiettile_alleati[N_MAX_P][2], pid_t processi[N_MAX_P])
 {
     for (size_t i = 0; i < N_MAX_P; i++)
     {
-        proiettili_alleati[i].x = -1;
-        proiettili_alleati[i].y = 1;
         CHECK_PIPE(fd_proiettile_alleati[i]);    //verifica se la pipe e' stata creata correttamente
+        proiettili_alleati[i].x = -1;
+        CHECK_PID(processi[i]);
+
+        if(processi[i] == 0){
+            close(fd_proiettile_alleati[i][0]);
+            gestione_proiettile(fd_proiettile_alleati[i][1]);
+        }
+        
+        close(fd_proiettile_alleati[i][1]);    
     }
     
 }
@@ -63,29 +70,18 @@ void gestione_proiettile(int fd_alleati)
     }
 }
 
-void gestione_processi_proiettili_alleati(pid_t processi[N_MAX_P], int fd_alleati[N_MAX_P][2], oggetto_rana player)
+void gestione_processi_proiettili_alleati(oggetto_rana player)
 {
-    // Codice del processo padre
-    pid_t child_pid;
 
     for (int i = 0; i < N_MAX_P; i++)
         {
-            if(processi[i] == 0)
-            {
-                 //il figlio è morto quindi chiama la funzione per ricrearlo
-                CHECK_PID(processi[i]);
-
-                if(processi[i] == 0){
-                    close(fd_alleati[i][0]);
-                    gestione_proiettile(fd_alleati[i][1]);
-                }
+            if(proiettili_alleati[i].x  == -1){
                 proiettili_alleati[i].x = player.x + 4;
                 proiettili_alleati[i].y = player.y -1;
                 proiettili_alleati[i].verso_proiettile = 1;
-                close(fd_alleati[i][1]);
-
-                i = N_MAX_P; 
-            }
+            
+                i = N_MAX_P;
+            } 
         }
 }
 
@@ -118,18 +114,14 @@ void stampa_proiettili()
     }
 }
 
-void collisioni_proiettili_bordi(pid_t processi_proiettili_alleati[N_MAX_P])
+void collisioni_proiettili_bordi()
 {
+
     for (size_t i = 0; i < N_MAX_P; i++)
     {
         if (proiettili_alleati[i].y < 0 && proiettili_alleati[i].x != -1 )
         {
-            kill(processi_proiettili_alleati[i],SIGTERM);
-            wait(NULL);
             proiettili_alleati[i].x = -1;
-            proiettili_alleati[i].y = 100;
-            processi_proiettili_alleati[i]=0;
         }
     }
-    
 }
