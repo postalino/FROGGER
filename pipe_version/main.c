@@ -25,10 +25,18 @@ int main()
         verso = rand()%2;
         //determino randomicamente la dimensione del tronco (0 -. x2 | 1 -. x3)
         dimensione_tronco = rand()%2;
+        if(dimensione_tronco == 0){
+            max_enemy_reali+=2;
+        }
+        else if(dimensione_tronco == 1){
+            max_enemy_reali += 3;
+        }
         //inizializza la struttura specifica
         inizializza_tronco(&tronchi[i], i, verso, dimensione_tronco, traslazioni[i]);
     }
     
+    
+
     inizializza_veicoli();
     
     //crea la finestra e attiva/disattiva i comandi richiesti
@@ -39,22 +47,27 @@ int main()
     start_color();
     curs_set(0);
 
-    pid_t p_rana, p_tronco[N_CORSIE_FIUME],p_veicoli[N_VEICOLI], p_time, p_proiettile_alleati[N_MAX_P];
+    pid_t p_rana, p_tronco[N_CORSIE_FIUME],p_veicoli[N_VEICOLI], p_time, p_proiettile_alleati[N_MAX_P], p_enemy[N_MAX_ENEMY], p_proiettile_nemici[N_MAX_P];
     int fd_veicolo [N_VEICOLI][2];
     int fd_rana[2];
     int fd_tronchi[N_CORSIE_FIUME][2];
     int fd_time[2];
     int fd_proiettile_alleati[N_MAX_P][2];
+    int fd_proiettile_nemici[N_MAX_P][2];
     int fd_sparo[2];
-
-    //inizializzo le cordinate dei proiettili fuori mappa e creo le pipe di ogni proiettile
-    inizializza_proiettili(fd_proiettile_alleati, p_proiettile_alleati);
+    int fd_enemy[N_MAX_ENEMY][2];
 
     // creazione finestra principale centrata
     win_mappa = crea_finestra();
     CHECK_WINDOW(win_mappa); //verifica se a finestra e' stata creata correttamente
 
     genera_processi_veicoli(fd_veicolo,p_veicoli);
+
+    inizializza_enemy(fd_enemy, p_enemy);
+
+    //inizializzo le cordinate dei proiettili fuori mappa e creo le pipe di ogni proiettile
+    inizializza_proiettili(fd_proiettile_alleati, p_proiettile_alleati, proiettili_alleati);
+    inizializza_proiettili(fd_proiettile_nemici, p_proiettile_nemici, proiettili_nemici);
 
     generazione_processi_tronco(fd_tronchi,p_tronco,tronchi);
 
@@ -100,7 +113,7 @@ int main()
     }
 
     //inizio gioco
-    play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo, fd_proiettile_alleati, fd_sparo[0]);
+    play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo, fd_proiettile_alleati, fd_sparo[0], fd_enemy);
 
     delwin(win_mappa);
     endwin();

@@ -42,12 +42,12 @@ int collisioni_rana_veicoli(oggetto_rana rana,oggetto_veicolo veicolo [N_VEICOLI
     return 0;
 }
 
-void inizializza_proiettili(int fd_proiettile_alleati[N_MAX_P][2], pid_t processi[N_MAX_P])
+void inizializza_proiettili(int fd_proiettile_alleati[N_MAX_P][2], pid_t processi[N_MAX_P], oggetto_proiettile proiettili[N_MAX_P])
 {
     for (size_t i = 0; i < N_MAX_P; i++)
     {
         CHECK_PIPE(fd_proiettile_alleati[i]);    //verifica se la pipe e' stata creata correttamente
-        proiettili_alleati[i].x = -1;
+        proiettili[i].x = -1;
         CHECK_PID(processi[i]);
 
         if(processi[i] == 0){
@@ -70,10 +70,10 @@ void gestione_proiettile(int fd_alleati)
     }
 }
 
-void gestione_processi_proiettili_alleati(oggetto_rana player)
+void gestione_processi_proiettili(oggetto_rana player)
 {
-
-    for (int i = 0; i < N_MAX_P; i++)
+    if(player.id_sprite == ID_FROGGER){
+        for (int i = 0; i < N_MAX_P; i++)
         {
             if(proiettili_alleati[i].x  == -1){
                 proiettili_alleati[i].x = player.x + 4;
@@ -83,18 +83,32 @@ void gestione_processi_proiettili_alleati(oggetto_rana player)
                 i = N_MAX_P;
             } 
         }
+    }
+    else if(player.id_sprite == ID_ENEMY){
+        for (int i = 0; i < N_MAX_P; i++)
+        {
+            if(proiettili_nemici[i].x  == -1){
+                proiettili_nemici[i].x = player.x + 4;
+                proiettili_nemici[i].y = player.y + H_FROGGER;
+                proiettili_nemici[i].verso_proiettile = -1;
+            
+                i = N_MAX_P;
+            } 
+        }
+    }
+    
 }
 
-void lettura_proiettili_alleati(int fd_alleati[N_MAX_P][2])
+void lettura_proiettili(int fd_alleati[N_MAX_P][2], oggetto_proiettile proiettili[N_MAX_P])
 {
     int spostamento = 0;
 
     for (size_t i = 0; i < N_MAX_P; i++)
     {
-        if(proiettili_alleati[i].x != -1)
+        if(proiettili[i].x != -1)
         {
             read(fd_alleati[i][0],&spostamento, sizeof(spostamento));
-            proiettili_alleati[i].y += spostamento;
+            proiettili[i].y += spostamento*proiettili[i].verso_proiettile;
             spostamento = 0;
         }
     }
@@ -106,12 +120,36 @@ void stampa_proiettili()
     {
         if(proiettili_alleati[i].x != -1)
         {
-            init_pair(PROIETTILE + i,COLOR_RED, calcola_background(proiettili_alleati[i].x, proiettili_alleati[i].y)); //
+            init_pair(PROIETTILE + i,COLOR_RED, calcola_background(proiettili_alleati[i].x, proiettili_alleati[i].y));
             wattron(win_mappa, COLOR_PAIR(PROIETTILE + i));
             mvwprintw(win_mappa, proiettili_alleati[i].y, proiettili_alleati[i].x, "^");
             wattroff(win_mappa,COLOR_PAIR(PROIETTILE + i));
         }
+        if(proiettili_nemici[i].x != -1){
+            init_pair(PROIETTILE + N_MAX_P + i,COLOR_RED, calcola_background(proiettili_nemici[i].x, proiettili_nemici[i].y)); 
+            wattron(win_mappa, COLOR_PAIR(PROIETTILE + N_MAX_P + i));
+            mvwprintw(win_mappa, proiettili_nemici[i].y, proiettili_nemici[i].x, "v");
+            wattroff(win_mappa,COLOR_PAIR(PROIETTILE + N_MAX_P + i));
+        }
     }
+}
+
+void collisioni_proiettile_enemy()
+{
+    for (size_t i = 0; i < max_enemy_reali; i++)
+    {
+        if(enemy[i].x != -1){
+            for (size_t j = 0; j < N_MAX_P; j++)
+            {
+                if((proiettili_alleati[j].x == enemy[i].x +H_FROGGER) && (proiettili_alleati[j].y >= enemy[i].y && proiettili_alleati[j].y <= enemy[i].y +H_FROGGER ) )
+                {
+                    enemy[i].x = -1;
+                    proiettili_alleati[j].x = -1;
+                }
+            }
+        }
+    }
+    
 }
 
 void collisioni_proiettili_bordi()
@@ -124,4 +162,75 @@ void collisioni_proiettili_bordi()
             proiettili_alleati[i].x = -1;
         }
     }
+
+    for (size_t i = 0; i < N_MAX_P; i++)
+    {
+        if (proiettili_nemici[i].y > (Y_START + H_FROGGER -2) && proiettili_nemici[i].x != -1 )
+        {
+            proiettili_nemici[i].x = -1;
+        }
+    }
+}
+
+void collisioni_proiettiliA_proiettiliN()
+{
+    for (size_t i = 0; i < N_MAX_P; i++)
+    {
+        if(proiettili_nemici[i].x != -1){
+            for (size_t j = 0; j < N_MAX_P; j++)
+            {
+                if((proiettili_alleati[j].x == proiettili_nemici[i].x) && (proiettili_alleati[j].y == proiettili_nemici[i].y))
+                {
+                    proiettili_nemici[i].x = -1;
+                    proiettili_alleati[j].x = -1;
+                }
+            }
+        }
+    }
+}
+
+void collisione_player_enemy(oggetto_rana *player, int* vite)
+{
+    for (size_t i = 0; i < max_enemy_reali; i++)
+    {
+        if(enemy[i].x!= -1){
+            if(enemy[i].x == player->x && enemy[i].y == player->y)
+            {
+                player->x = X_START;
+                player->y = Y_START;
+                (*vite)--;
+            }
+        }
+    }
+}
+
+void collisione_player_proiettileN(oggetto_rana *player, int *vite)
+{
+    for (size_t i = 0; i < max_enemy_reali; i++)
+    {
+        if(proiettili_nemici[i].x!= -1){
+            if((proiettili_nemici[i].x == player->x +H_FROGGER) && (proiettili_nemici[i].y >= player->y && proiettili_nemici[i].y <= player->y +H_FROGGER ))
+            {
+                player->x = X_START;
+                player->y = Y_START;
+                proiettili_nemici[i].x = -1;
+                (*vite)--;
+            }
+        }
+    }
+}
+
+void collisioni_game(oggetto_rana *player, int* vite)
+{
+    collisioni_proiettile_enemy();
+    collisioni_proiettili_bordi();
+    collisioni_proiettiliA_proiettiliN();
+    collisione_player_enemy(player, vite);
+    collisione_player_proiettileN(player, vite);
+    if (collisioni_rana_veicoli(*player, veicoli))
+        {
+           (*vite)--;
+            player->y = Y_START;
+            player->x = X_START;
+        }
 }

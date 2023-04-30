@@ -104,6 +104,7 @@ static const char *TANA[] =
 #define ID_TRUNK_X2 7
 #define ID_TRUNK_X3 8
 #define ID_TANA 9
+#define ID_ENEMY 10
 
 //dimensioni mappa totale
 #define MAXX 159
@@ -198,8 +199,8 @@ typedef struct tana
 #define T_MIN_BAR 12
 #define TANA_OCCUPATA 13
 #define VEICOLO 14
-#define PROIETTILE 15
-
+#define ENEMY 15
+#define PROIETTILE 16
 //delay tempi
 #define TIME 400000  //temporizzazione velocità tronchi
 #define TIME_MAIN 100000 //temporizzazione aggiornamento mappa
@@ -208,13 +209,16 @@ typedef struct tana
 // proiettili massimi
 #define N_MAX_P 15
 //nemici massimi
-#define N_MAX_ENEMY 6
+#define N_MAX_ENEMY 9
 
 //variabili globali
+int max_enemy_reali;
+
 oggetto_tronco tronchi[N_CORSIE_FIUME];
 oggetto_tana tane_gioco[N_TANE];
 oggetto_veicolo veicoli [N_VEICOLI];
 oggetto_proiettile proiettili_alleati[N_MAX_P];
+oggetto_proiettile proiettili_nemici[N_MAX_P];
 oggetto_rana enemy[N_MAX_ENEMY]; 
 WINDOW *win_mappa;
 

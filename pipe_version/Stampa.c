@@ -4,20 +4,26 @@ int delay_lettura = 0; //serve per gestire il momento della lettura
 int max_time = 60; //tempo max in secondi per raggiungere una tana 
 int vite = 3;   //vite iniziali
 
-void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo)
+void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo, int fd_enemy[N_MAX_ENEMY][2])
 {
     oggetto_rana player = {X_START , Y_START, ID_FROGGER};
     int movimento_rana = 0;
     int sparo = 0;
 
+    enemy[0].x = tronchi[0].x;
+    enemy[0].y = tronchi[0].y;
+
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
 
     while (true)
     {
-        aggiorna_veicoli(fd_veicoli);
-        lettura_proiettili_alleati(fd_proiettile_alleati);
-        
         //operazioni di aggiornamenti degli oggetti
+        /*   VEICOLI     */
+        aggiorna_veicoli(fd_veicoli);
+        /*   PROIETTILI     */
+        lettura_proiettili(fd_proiettile_alleati, proiettili_alleati);
+        lettura_proiettili(fd_proiettile_alleati, proiettili_nemici);
+        
         /*   TANE     */
         if(tana_occupata(&player,tane_gioco)){
             //se la tana viene occupata si ripristina il tempo di gioco e si incrementa di 1 unità la vita
@@ -40,9 +46,13 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         /*   TRONCO   */
         delay_lettura++; //sincronizza la lettura del tronco una ogni tempo_tronco/tempo_padre
         if(delay_lettura == TIME/TIME_MAIN){
-            lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite); // vengono aggiornati i tronchi. Se la rana è sopra uno dei tronchi viene trasportata
+            lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite, enemy); // vengono aggiornati i tronchi. Se la rana è sopra uno dei tronchi viene trasportata
             delay_lettura = 0;
         }
+
+        /*   ENEMY     */
+        //genera_enemy();
+        lettura_enemy(fd_enemy);
 
         //operazioni di stampa oggetti aggiornati + mappa
         mappa_frogger(fd_time);
@@ -50,23 +60,21 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         stampa_veicoli();
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
+        stampa_enemy();
 
         if(sparo){
-            gestione_processi_proiettili_alleati(player);
+            gestione_processi_proiettili(player);
             sparo--;
-        }
-
-        /*  COLLISIONI VEICOLO  */
-        if (collisioni_rana_veicoli(player, veicoli))
-        {
-            vite--;
-            player.y = Y_START;
-            player.x = X_START;
-        }
+        }        
 
         stampa_proiettili();
+        collisioni_game(&player, &vite);
+        for (size_t i = 0; i < max_enemy_reali; i++)
+        {
+            mvwprintw(win_mappa, 0 +i, 0, "%d) X: %d Y: %d", i+1,enemy[i].x, enemy[i].y ); 
+        }
         
-        collisioni_proiettili_bordi();
+
         wrefresh(win_mappa);
         usleep(TIME_MAIN);
         wclear(win_mappa);
