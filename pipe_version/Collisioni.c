@@ -227,9 +227,7 @@ void collisioni_proiettiliN_macchine()
 }
 void collisioni_game(oggetto_rana *player, int* vite)
 {
-    collisioni_proiettiliA_proiettiliN();
     collisioni_proiettile_enemy();
     collisione_player_proiettileN(player, vite);
     collisioni_proiettili_bordi();
-    
 }

@@ -6,7 +6,7 @@
 #define SPOSTA_SINISTRA -9
 #define SPACE 32
 
-#define TIME_SPARO 1500000
+#define TIME_SPARO 2500000
 
 void wasd_rana(int fd_rana, int fd_sparo)
 {

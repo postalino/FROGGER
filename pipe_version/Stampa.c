@@ -19,9 +19,6 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         //operazioni di aggiornamenti degli oggetti
         /*   VEICOLI     */
         aggiorna_veicoli(fd_veicoli);
-        /*   PROIETTILI     */
-        lettura_proiettili(fd_proiettile_alleati, proiettili_alleati);
-        lettura_proiettili(fd_proiettile_alleati, proiettili_nemici);
         
         /*   TANE     */
         if(tana_occupata(&player,tane_gioco)){
@@ -44,11 +41,21 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
             update_position_frogger(movimento_rana,&player);
             init_pair(RANA,COLOR_WHITE,calcola_background(player.x,player.y));
         }
-
-        read(fd_sparo, &sparo, sizeof(sparo));
-        
         movimento_rana = 0;
 
+        collisioni_proiettiliA_proiettiliN();
+
+        read(fd_sparo, &sparo, sizeof(sparo));
+        if(sparo){
+            gestione_processi_proiettili(player);
+            sparo--;
+        } 
+
+        /*   PROIETTILI     */
+        lettura_proiettili(fd_proiettile_alleati, proiettili_alleati);
+        lettura_proiettili(fd_proiettile_alleati, proiettili_nemici);
+        collisione_player_enemy(&player, &vite);
+        
         /*   TRONCO   */
         delay_lettura++; //sincronizza la lettura del tronco una ogni tempo_tronco/tempo_padre
         if(delay_lettura == TIME/TIME_MAIN){
@@ -78,12 +85,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         stampa_veicoli();
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
-        stampa_enemy();
-
-        if(sparo){
-            gestione_processi_proiettili(player);
-            sparo--;
-        }   
+        stampa_enemy();  
              
         stampa_proiettili();
 
@@ -94,7 +96,6 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
             player.x = X_START;
             player.y = Y_START;
         }
-        collisione_player_enemy(&player, &vite);
         collisioni_tane_occupate(&player, &vite);
 
         if(max_time == 0 || vite<1 || vittoria())
