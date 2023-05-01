@@ -9,13 +9,13 @@
 #define STRADA_3 32
 
 //prototipo funzione per generare i 6 diversi processi dei 6 veicoli
-void genera_processi_veicoli(int[N_VEICOLI][2],pid_t[N_VEICOLI]);
+void genera_processi_veicoli(int[N_VEICOLI][2],pid_t[N_VEICOLI],int fd_fine_manche[N_VEICOLI][2]);
 
 void inizializza_veicoli();
 
 void stampa_veicoli();
 
-void gestione_veicolo(int fd,int id);
+void gestione_veicolo(int fd,int id,int fd_fine_manche);
 
 void aggiorna_veicoli(int fd[N_VEICOLI][2]);
 

@@ -50,12 +50,13 @@ int main()
     int fd_proiettile_nemici[N_MAX_P][2];
     int fd_sparo[2];
     int fd_enemy[N_MAX_ENEMY][2];
+    int fd_fine_manche[N_VEICOLI][2];
 
     // creazione finestra principale centrata
     win_mappa = crea_finestra();
     CHECK_WINDOW(win_mappa); //verifica se a finestra e' stata creata correttamente
 
-    genera_processi_veicoli(fd_veicolo,p_veicoli);
+    genera_processi_veicoli(fd_veicolo,p_veicoli,fd_fine_manche);
 
     inizializza_enemy(fd_enemy, p_enemy);
 
@@ -107,7 +108,7 @@ int main()
     }
 
     //inizio gioco
-    play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo, fd_proiettile_alleati, fd_sparo[0], fd_enemy);
+    play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo, fd_proiettile_alleati, fd_sparo[0], fd_enemy,fd_fine_manche);
 
     delwin(win_mappa);
     endwin();

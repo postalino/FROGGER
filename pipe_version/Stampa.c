@@ -4,11 +4,13 @@ int delay_lettura = 0; //serve per gestire il momento della lettura
 int max_time = 60; //tempo max in secondi per raggiungere una tana 
 int vite = 3;   //vite iniziali
 
-void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo, int fd_enemy[N_MAX_ENEMY][2])
+void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo, int fd_enemy[N_MAX_ENEMY][2],int fd_fine_manche[N_VEICOLI][2])
 {
     oggetto_rana player = {X_START , Y_START, ID_FROGGER};
     int movimento_rana = 0;
     int sparo = 0;
+    int backup_vite=3;
+    int finemanche = 0;
 
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
 
@@ -23,6 +25,14 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         
         /*   TANE     */
         if(tana_occupata(&player,tane_gioco)){
+
+            finemanche = 1;
+            for (size_t i = 0; i < N_VEICOLI; i++)
+            {
+                write(fd_fine_manche[i][1],&finemanche,sizeof(finemanche));
+            }
+            finemanche = 0;
+            
             //se la tana viene occupata si ripristina il tempo di gioco
             max_time = 60;
         }
@@ -71,6 +81,16 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
             mvwprintw(win_mappa, 0 +i, 0, "%d) X: %d Y: %d", i+1,enemy[i].x, enemy[i].y ); 
         }
         
+        if (backup_vite != vite)
+        {
+            finemanche = 1;
+            for (size_t i = 0; i < N_VEICOLI; i++)
+            {
+                write(fd_fine_manche[i][1],&finemanche,sizeof(finemanche));
+            }
+            finemanche = 0;
+            backup_vite--;
+        }
 
         wrefresh(win_mappa);
         usleep(TIME_MAIN);

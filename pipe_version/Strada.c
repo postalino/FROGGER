@@ -73,28 +73,61 @@ void inizializza_veicoli()
     }
 }
 
-void genera_processi_veicoli(int fd_veicolo[N_VEICOLI][2],pid_t pid_veicoli[N_VEICOLI])
+void genera_processi_veicoli(int fd_veicolo[N_VEICOLI][2],pid_t pid_veicoli[N_VEICOLI], int fd_fine_manche[N_VEICOLI][2])
 {
     for(int i =0;i<N_VEICOLI;i++)
     {
         CHECK_PIPE(fd_veicolo[i]);
+        CHECK_PIPE(fd_fine_manche[i]);
         CHECK_PID(pid_veicoli[i]);
         if(!pid_veicoli[i])
         {   
             close(fd_veicolo[i][0]); // chiusura in lettura
-            gestione_veicolo(fd_veicolo[i][1],i);
+            close(fd_fine_manche[i][1]);
+            fcntl(fd_fine_manche[i][0],F_SETFL, O_NONBLOCK);
+            gestione_veicolo(fd_veicolo[i][1],i,fd_fine_manche[i][0]);
         }
         close(fd_veicolo[i][1]);
+        close(fd_fine_manche[i][0]);
 
     }
 }
 
-void gestione_veicolo(int fd,int id)
+void gestione_veicolo(int fd,int id,int fd_fine_manche)
 {
     srand(getpid());
     int time = veicoli[id].timer;
+    int finemanche=0;
     while (true)
     {
+        usleep(TIME_MAIN);
+        read(fd_fine_manche,&finemanche,sizeof(finemanche));
+        if (finemanche == 1)
+        {
+            veicoli[id].verso *= -1;
+            switch (veicoli[id].id_sprite)
+            {
+            case 1:
+                veicoli[id].id_sprite=4;
+                break;
+            case 2:
+                veicoli[id].id_sprite=5;
+                break;
+            case 3:
+                veicoli[id].id_sprite=6;
+                break;
+            case 4:
+                veicoli[id].id_sprite=1;
+                break;
+            case 5:
+                veicoli[id].id_sprite=2;
+                break;
+            case 6:
+                veicoli[id].id_sprite=3;
+                break;
+            }
+            finemanche =0;
+        }
         time--;
 
         if (veicoli[id].verso == -1)
