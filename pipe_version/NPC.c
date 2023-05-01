@@ -117,19 +117,21 @@ void lettura_enemy(int fd_enemy[N_MAX_ENEMY][2])
 
 void genera_enemy()
 {
-    int tronco_idx;
-    int traslazione;
+    int tronco_idx = -1;
+    int traslazione = -1;
     for (size_t i = 0; i < 1000; i++)
     {
-        srand(i);
-        if((rand()%1000) <= 1000){
+        srand(getpid() + i);
+        if((rand()%1000) <= 500){
+            srand(getpid() + i+1);
             tronco_idx = rand()%3;
+            srand(getpid() + i+2);
             traslazione = rand()%3;
 
             if(traslazione < 2){
                 for (size_t j = 0; j < max_enemy_reali; j++)
                 {
-                    if(enemy[j].x != -1){
+                    if(enemy[j].x == -1){
                         enemy[j].x = tronchi[tronco_idx].x * traslazione;
                         enemy[j].y = tronchi[tronco_idx].y;
 
@@ -152,7 +154,7 @@ void genera_enemy()
             else{
                 for (size_t j = 0; j < max_enemy_reali; j++)
                 {
-                    if(enemy[j].x != -1 && tronchi[tronco_idx].id_sprite == ID_TRUNK_X3){
+                    if(enemy[j].x == -1 && tronchi[tronco_idx].id_sprite == ID_TRUNK_X3){
                         enemy[j].x = tronchi[tronco_idx].x * traslazione;
                         enemy[j].y = tronchi[tronco_idx].y;
 
