@@ -121,21 +121,15 @@ int main()
         wattron(win_mappa, COLOR_PAIR(PLAY_AGAIN));
         if(risultato_partita){
             wclear(win_mappa);
-            mvwprintw(win_mappa, MAXY/2, MAXX/2, "YOU WIN!");
-            wrefresh(win_mappa);
-            sleep(3);
+            print_sprite(MAXX/10, MAXY/10, WIN);
         }
         else{
             wclear(win_mappa);
-            mvwprintw(win_mappa, MAXY/2, MAXX/2, "YOU LOSE!");
-            wrefresh(win_mappa);
-            sleep(3);
+            print_sprite(MAXX/10, MAXY/10, LOSE);
         }
 
-
-        wclear(win_mappa);
-        wattron(win_mappa, COLOR_PAIR(PLAY_AGAIN));
-        mvwprintw(win_mappa, MAXY/2, MAXX/2, "PREMI Y PER GIOCARE ANCORA!");
+        //wattron(win_mappa, COLOR_PAIR(PLAY_AGAIN));
+        mvwprintw(win_mappa, MAXY/2, MAXX/2-13, "PREMI Y PER GIOCARE ANCORA!");
         wrefresh(win_mappa);
 
         play_again = getchar();

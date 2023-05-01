@@ -308,9 +308,10 @@ void mappa_frogger(int fd_time)
 
 void print_sprite(int x, int y, const char *sprite[])
 {
-    for (int i = 0; i < H_FROGGER; i++)
-    {
-        mvwprintw(win_mappa,y + i, x, sprite[i]);
+    int i = 0;
+    while (sprite[i] != NULL) {  // scorri l'array finché non raggiungi la fine
+        mvwprintw(win_mappa, y + i, x, sprite[i]);
+        i++;
     }
 }
 
