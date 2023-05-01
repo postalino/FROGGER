@@ -48,7 +48,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
 
         /*   ENEMY     */
         //wattron(win_mappa,COLOR_PAIR(RANA));
-        genera_enemy();
+        genera_enemy(player);
         lettura_enemy(fd_enemy);
 
         //operazioni di stampa oggetti aggiornati + mappa
@@ -66,7 +66,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
 
         stampa_proiettili();
         collisioni_game(&player, &vite, &max_time);
-        for (size_t i = 0; i < max_enemy_reali; i++)
+        for (size_t i = 0; i < N_MAX_ENEMY; i++)
         {
             mvwprintw(win_mappa, 0 +i, 0, "%d) X: %d Y: %d", i+1,enemy[i].x, enemy[i].y ); 
         }

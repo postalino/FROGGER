@@ -12,6 +12,6 @@ void inizializza_enemy(int fd_enemy[N_MAX_ENEMY][2], pid_t processi_enemy[N_MAX_
 void gestione_enemy(int fd_rana_enemy);
 void stampa_enemy();
 void lettura_enemy(int fd_enemy[N_MAX_ENEMY][2]);
-void genera_enemy();
+void genera_enemy(oggetto_rana player);
 
 #endif

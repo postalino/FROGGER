@@ -136,7 +136,7 @@ void stampa_proiettili()
 
 void collisioni_proiettile_enemy()
 {
-    for (size_t i = 0; i < max_enemy_reali; i++)
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
         if(enemy[i].x != -1){
             for (size_t j = 0; j < N_MAX_P; j++)
@@ -191,7 +191,7 @@ void collisioni_proiettiliA_proiettiliN()
 
 void collisione_player_enemy(oggetto_rana *player, int* vite)
 {
-    for (size_t i = 0; i < max_enemy_reali; i++)
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
         if(enemy[i].x!= -1){
             if(enemy[i].x == player->x && enemy[i].y == player->y)
@@ -206,7 +206,7 @@ void collisione_player_enemy(oggetto_rana *player, int* vite)
 
 void collisione_player_proiettileN(oggetto_rana *player, int *vite)
 {
-    for (size_t i = 0; i < max_enemy_reali; i++)
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
         if(proiettili_nemici[i].x!= -1){
             if((proiettili_nemici[i].x == player->x +H_FROGGER) && (proiettili_nemici[i].y >= player->y && proiettili_nemici[i].y <= player->y +H_FROGGER ))

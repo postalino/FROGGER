@@ -116,7 +116,7 @@ void genera_enemy(oggetto_rana player)
 
         srand(time(NULL)); 
     
-        if((rand()%1000) <= 100){
+        if((rand()%1000) <= 500){
             tronco_idx = rand()%3;
             traslazione = rand()%3;
 
@@ -153,7 +153,7 @@ void genera_enemy(oggetto_rana player)
                         for (size_t k = 0; k < N_MAX_ENEMY; k++)
                         {
                             if(enemy[k].x != -1 && k!=j){
-                                if(enemy[k].x == enemy[j].x && enemy[k].y == enemy[j].y){
+                                if(player.y == enemy[j].y && enemy[k].y == enemy[j].y){
                                     enemy[j].x = -1;
                                     k = N_MAX_ENEMY;
                                 }

@@ -189,7 +189,7 @@ void lettura_pipe_tronchi(oggetto_rana *npc_rana, oggetto_tronco tronchi[N_CORSI
             if(tronco_taxi(npc_rana, tronchi[i], spostamento))     //se la rana è sopra il tronco segue il suo movimento
                 (*vite)--;   //la rana è caduta nel fiume
             
-            for (size_t j = 0; j < max_enemy_reali; j++)
+            for (size_t j = 0; j < N_MAX_ENEMY; j++)
             {
                 if(enemy[j].x != -1)
                 {
