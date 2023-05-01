@@ -115,6 +115,7 @@ void gestione_veicolo(int fd,int id)
                 veicoli[id].x = 129;
                 veicoli[id].verso *= -1;
                 time = veicoli[id].timer;
+                veicoli[id].id_sprite = rand()%3+4;
                 switch (veicoli[id].y)
                 {
                 case STRADA_1:
@@ -139,6 +140,7 @@ void gestione_veicolo(int fd,int id)
                 veicoli[id].x = 29;
                 veicoli[id].verso *= -1;
                 time = veicoli[id].timer;
+                veicoli[id].id_sprite = rand()%3+1;
                 switch (veicoli[id].y)
                 {
                 case STRADA_1:

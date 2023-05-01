@@ -25,12 +25,6 @@ int main()
         verso = rand()%2;
         //determino randomicamente la dimensione del tronco (0 -. x2 | 1 -. x3)
         dimensione_tronco = rand()%2;
-        if(dimensione_tronco == 0){
-            max_enemy_reali+=2;
-        }
-        else if(dimensione_tronco == 1){
-            max_enemy_reali += 3;
-        }
         //inizializza la struttura specifica
         inizializza_tronco(&tronchi[i], i, verso, dimensione_tronco, traslazioni[i]);
     }

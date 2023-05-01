@@ -10,9 +10,6 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
     int movimento_rana = 0;
     int sparo = 0;
 
-    //enemy[0].x = tronchi[0].x;
-    //enemy[0].y = tronchi[0].y;
-
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
 
     while (true)
@@ -26,8 +23,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         
         /*   TANE     */
         if(tana_occupata(&player,tane_gioco)){
-            //se la tana viene occupata si ripristina il tempo di gioco e si incrementa di 1 unità la vita
-            vite++;
+            //se la tana viene occupata si ripristina il tempo di gioco
             max_time = 60;
         }
         fuori_area_tane(&player, &vite);
@@ -51,6 +47,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         }
 
         /*   ENEMY     */
+        //wattron(win_mappa,COLOR_PAIR(RANA));
         genera_enemy();
         lettura_enemy(fd_enemy);
 
@@ -68,7 +65,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         }        
 
         stampa_proiettili();
-        collisioni_game(&player, &vite);
+        collisioni_game(&player, &vite, &max_time);
         for (size_t i = 0; i < max_enemy_reali; i++)
         {
             mvwprintw(win_mappa, 0 +i, 0, "%d) X: %d Y: %d", i+1,enemy[i].x, enemy[i].y ); 

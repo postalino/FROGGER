@@ -220,7 +220,7 @@ void collisione_player_proiettileN(oggetto_rana *player, int *vite)
     }
 }
 
-void collisioni_game(oggetto_rana *player, int* vite)
+void collisioni_game(oggetto_rana *player, int* vite, int* tempo)
 {
     collisioni_proiettile_enemy();
     collisioni_proiettili_bordi();
@@ -230,6 +230,7 @@ void collisioni_game(oggetto_rana *player, int* vite)
     if (collisioni_rana_veicoli(*player, veicoli))
         {
            (*vite)--;
+           (*tempo) = 60;
             player->y = Y_START;
             player->x = X_START;
         }

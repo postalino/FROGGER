@@ -24,5 +24,5 @@ void collisioni_proiettili_bordi();
 void collisioni_proiettiliA_proiettiliN();
 void collisioni_proiettile_enemy();
 void collisione_player_proiettileN(oggetto_rana *player, int *vite);
-void collisioni_game(oggetto_rana *player, int* vite);
+void collisioni_game(oggetto_rana *player, int* vite, int* time);
 #endif

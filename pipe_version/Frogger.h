@@ -209,11 +209,9 @@ typedef struct tana
 // proiettili massimi
 #define N_MAX_P 15
 //nemici massimi
-#define N_MAX_ENEMY 9
+#define N_MAX_ENEMY 3
 
 //variabili globali
-int max_enemy_reali;
-
 oggetto_tronco tronchi[N_CORSIE_FIUME];
 oggetto_tana tane_gioco[N_TANE];
 oggetto_veicolo veicoli [N_VEICOLI];

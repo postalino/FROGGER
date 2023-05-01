@@ -4,8 +4,9 @@
 #define SPOSTA_GIU +4
 #define SPOSTA_DESTRA +9
 #define SPOSTA_SINISTRA -9
-
 #define SPACE 32
+
+#define TIME_SPARO 800000
 
 void wasd_rana(int fd_rana, int fd_sparo)
 {
@@ -63,7 +64,7 @@ void update_position_frogger(int spostamento, oggetto_rana* npc)
 
 void inizializza_enemy(int fd_enemy[N_MAX_ENEMY][2], pid_t processi_enemy[N_MAX_ENEMY])
 {
-    for (size_t i = 0; i < max_enemy_reali; i++)
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
         enemy[i].x = -1;
         enemy[i].id_sprite = ID_ENEMY;
@@ -80,19 +81,12 @@ void inizializza_enemy(int fd_enemy[N_MAX_ENEMY][2], pid_t processi_enemy[N_MAX_
 
 void gestione_enemy(int fd_rana_enemy)
 {
-    int pid_processo = getpid();
-    int i = 0;
     int sparo = 1;
 
     while (true)
-    {
-        srand(pid_processo + i);
-        if((rand()%10000) <= 300){
-            
-            write(fd_rana_enemy,&sparo , sizeof(sparo)); //scrittura spostamento
-        }
-        usleep(TIME_MAIN);
-        i++;
+    {     
+        write(fd_rana_enemy,&sparo , sizeof(sparo)); //scrittura spostamento
+        usleep(TIME_SPARO);
     } 
 }
 
@@ -100,10 +94,10 @@ void lettura_enemy(int fd_enemy[N_MAX_ENEMY][2])
 {
     int sparo_nemico = 0;
 
-    for (size_t i = 0; i < max_enemy_reali; i++)
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
+        read(fd_enemy[i][0], &sparo_nemico, sizeof(sparo_nemico));
         if(enemy[i].x != -1){
-            read(fd_enemy[i][0], &sparo_nemico, sizeof(sparo_nemico));
             if(sparo_nemico)
             {
                 gestione_processi_proiettili(enemy[i]);
@@ -115,7 +109,7 @@ void lettura_enemy(int fd_enemy[N_MAX_ENEMY][2])
 
 }
 
-void genera_enemy()
+void genera_enemy(oggetto_rana player)
 {
     int tronco_idx;
     int traslazione;
@@ -128,44 +122,44 @@ void genera_enemy()
 
             if(traslazione < 2){
 
-                for (size_t j = 0; j < max_enemy_reali; j++)
+                for (size_t j = 0; j < N_MAX_ENEMY; j++)
                 {
                     if(enemy[j].x == -1){
                         enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
                         enemy[j].y = tronchi[tronco_idx].y;
 
-                        for (size_t k = 0; k < max_enemy_reali; k++)
+                        for (size_t k = 0; k < N_MAX_ENEMY; k++)
                         {
                             if(enemy[k].x != -1 && k!=j){
-                                if(enemy[k].x == enemy[j].x && enemy[k].y == enemy[j].y){
+                                if(player.y == enemy[j].y && enemy[k].y == enemy[j].y){
                                     enemy[j].x = -1;
-                                    k = max_enemy_reali;
+                                    k = N_MAX_ENEMY;
                                 }
                             }
                         }
-                        j = max_enemy_reali;
+                        j = N_MAX_ENEMY;
                         
                     }
                 }
                 
             }
             else{
-                for (size_t j = 0; j < max_enemy_reali; j++)
+                for (size_t j = 0; j < N_MAX_ENEMY; j++)
                 {
                     if(enemy[j].x == -1 && tronchi[tronco_idx].id_sprite == ID_TRUNK_X3){
                         enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
                         enemy[j].y = tronchi[tronco_idx].y;
 
-                        for (size_t k = 0; k < max_enemy_reali; k++)
+                        for (size_t k = 0; k < N_MAX_ENEMY; k++)
                         {
                             if(enemy[k].x != -1 && k!=j){
                                 if(enemy[k].x == enemy[j].x && enemy[k].y == enemy[j].y){
                                     enemy[j].x = -1;
-                                    k = max_enemy_reali;
+                                    k = N_MAX_ENEMY;
                                 }
                             }
                         }
-                        j = max_enemy_reali; 
+                        j = N_MAX_ENEMY; 
                     }
                 }
             }
@@ -175,7 +169,7 @@ void genera_enemy()
 void stampa_enemy()
 {   
     init_pair(ENEMY, COLOR_YELLOW, COLOR_BLUE);
-    for (size_t i = 0; i < max_enemy_reali; i++)
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
         if(enemy[i].x != -1)
         {
