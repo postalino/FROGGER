@@ -122,7 +122,7 @@ void genera_enemy()
     for (size_t i = 0; i < 1000; i++)
     {
         srand(i);
-        if((rand()%1000) <= 100){
+        if((rand()%1000) <= 1000){
             tronco_idx = rand()%3;
             traslazione = rand()%3;
 

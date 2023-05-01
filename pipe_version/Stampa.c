@@ -10,8 +10,8 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
     int movimento_rana = 0;
     int sparo = 0;
 
-    enemy[0].x = tronchi[0].x;
-    enemy[0].y = tronchi[0].y;
+    //enemy[0].x = tronchi[0].x;
+    //enemy[0].y = tronchi[0].y;
 
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
 
@@ -51,7 +51,7 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         }
 
         /*   ENEMY     */
-        //genera_enemy();
+        genera_enemy();
         lettura_enemy(fd_enemy);
 
         //operazioni di stampa oggetti aggiornati + mappa
