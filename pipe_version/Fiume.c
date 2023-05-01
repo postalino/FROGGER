@@ -295,3 +295,14 @@ void fuori_area_tane (oggetto_rana * player, int *vite)
             player->y = Y_START;
         }
 }
+
+int vittoria()
+{
+    for (size_t i = 0; i < N_TANE; i++)
+    {
+        if(!tane_gioco[i].occupata)
+            return 0;
+    }
+    return 1;
+    
+}

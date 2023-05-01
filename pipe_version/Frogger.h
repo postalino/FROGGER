@@ -199,15 +199,21 @@ typedef struct tana
 #define T_MIN_BAR 12
 #define TANA_OCCUPATA 13
 #define VEICOLO 14
-#define ENEMY 15
-#define PROIETTILE 16
+#define PLAY_AGAIN 15
+#define ENEMY 16
+#define PROIETTILE 17
+
+
 //delay tempi
 #define TIME 400000  //temporizzazione velocità tronchi
 #define TIME_MAIN 100000 //temporizzazione aggiornamento mappa
+
 // numero veicoli
 #define N_VEICOLI 6
+
 // proiettili massimi
 #define N_MAX_P 15
+
 //nemici massimi
 #define N_MAX_ENEMY 3
 

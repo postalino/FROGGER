@@ -4,17 +4,17 @@ int delay_lettura = 0; //serve per gestire il momento della lettura
 int max_time = 60; //tempo max in secondi per raggiungere una tana 
 int vite = 3;   //vite iniziali
 
-void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo, int fd_enemy[N_MAX_ENEMY][2],int fd_fine_manche[N_VEICOLI][2])
+int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo, int fd_enemy[N_MAX_ENEMY][2],int fd_fine_manche[N_VEICOLI][2])
 {
     oggetto_rana player = {X_START , Y_START, ID_FROGGER};
     int movimento_rana = 0;
     int sparo = 0;
     int backup_vite=3;
     int finemanche = 0;
-
+    bool play = true;
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
 
-    while (true)
+    while (play)
     {
         //operazioni di aggiornamenti degli oggetti
         /*   VEICOLI     */
@@ -57,9 +57,20 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         }
 
         /*   ENEMY     */
-        //wattron(win_mappa,COLOR_PAIR(RANA));
         genera_enemy(player);
         lettura_enemy(fd_enemy);
+        collisioni_game(&player, &vite);
+
+        if (backup_vite != vite)
+        {
+            finemanche = 1;
+            for (size_t i = 0; i < N_VEICOLI; i++)
+            {
+                write(fd_fine_manche[i][1],&finemanche,sizeof(finemanche));
+            }
+            finemanche = 0;
+            backup_vite--;
+        }
 
         //operazioni di stampa oggetti aggiornati + mappa
         mappa_frogger(fd_time);
@@ -72,30 +83,32 @@ void play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int
         if(sparo){
             gestione_processi_proiettili(player);
             sparo--;
-        }        
-
+        }   
+             
         stampa_proiettili();
-        collisioni_game(&player, &vite, &max_time);
-        for (size_t i = 0; i < N_MAX_ENEMY; i++)
+
+        if (collisioni_rana_veicoli(player, veicoli))
         {
-            mvwprintw(win_mappa, 0 +i, 0, "%d) X: %d Y: %d", i+1,enemy[i].x, enemy[i].y ); 
+            vite--;
+            max_time = 60;
+            player.x = X_START;
+            player.y = Y_START;
         }
-        
-        if (backup_vite != vite)
-        {
-            finemanche = 1;
-            for (size_t i = 0; i < N_VEICOLI; i++)
-            {
-                write(fd_fine_manche[i][1],&finemanche,sizeof(finemanche));
-            }
-            finemanche = 0;
-            backup_vite--;
-        }
+        collisione_player_enemy(&player, &vite);
+        collisioni_tane_occupate(&player, &vite);
+
+        if(max_time == 0 || vite<1 || vittoria())
+            play = false;//fine partita
 
         wrefresh(win_mappa);
         usleep(TIME_MAIN);
         wclear(win_mappa);
     }
+
+    vite = 3; //reset vite 
+    max_time = 60; //reset tempo;
+
+    return vittoria();
 }
 
 WINDOW *crea_finestra()
@@ -122,8 +135,6 @@ int abilita_movimento_confini_mappa(oggetto_rana npc, int direzione)
     if(direzione == H_FROGGER && (npc.y + L_FROGGER) > MAXY)
         return 0;
     if (npc.y == MAX_PRATO && direzione == -H_FROGGER)
-        return 0;
-    if (check_tana(npc.x, npc.y) && direzione == -H_FROGGER)//controlla se la tana è già stata occupata
         return 0;
     else
         return 1;
@@ -300,5 +311,17 @@ void print_sprite(int x, int y, const char *sprite[])
     for (int i = 0; i < H_FROGGER; i++)
     {
         mvwprintw(win_mappa,y + i, x, sprite[i]);
+    }
+}
+
+void collisioni_tane_occupate(oggetto_rana *player, int *vite)
+{
+    for (size_t i = 0; i < N_TANE; i++)
+    {
+        if ((player->x == tane_gioco[i].x) &&(player->y == tane_gioco[i].y) && tane_gioco->occupata){
+            player->x = X_START;
+            player->y = Y_START;
+            (*vite)--;
+        }
     }
 }

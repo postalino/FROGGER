@@ -6,7 +6,7 @@
 #define SPOSTA_SINISTRA -9
 #define SPACE 32
 
-#define TIME_SPARO 800000
+#define TIME_SPARO 1500000
 
 void wasd_rana(int fd_rana, int fd_sparo)
 {
@@ -116,7 +116,7 @@ void genera_enemy(oggetto_rana player)
 
         srand(time(NULL)); 
     
-        if((rand()%1000) <= 500){
+        if((rand()%1000) <= 100){
             tronco_idx = rand()%3;
             traslazione = rand()%3;
 
@@ -131,7 +131,7 @@ void genera_enemy(oggetto_rana player)
                         for (size_t k = 0; k < N_MAX_ENEMY; k++)
                         {
                             if(enemy[k].x != -1 && k!=j){
-                                if(player.y == enemy[j].y && enemy[k].y == enemy[j].y){
+                                if(player.y == enemy[j].y || enemy[k].y == enemy[j].y){
                                     enemy[j].x = -1;
                                     k = N_MAX_ENEMY;
                                 }
@@ -153,7 +153,7 @@ void genera_enemy(oggetto_rana player)
                         for (size_t k = 0; k < N_MAX_ENEMY; k++)
                         {
                             if(enemy[k].x != -1 && k!=j){
-                                if(player.y == enemy[j].y && enemy[k].y == enemy[j].y){
+                                if(player.y == enemy[j].y || enemy[k].y == enemy[j].y){
                                     enemy[j].x = -1;
                                     k = N_MAX_ENEMY;
                                 }

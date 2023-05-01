@@ -20,4 +20,6 @@ void print_tane_occupate(oggetto_tana tana[N_TANE]);
 int check_tana(int x, int y);
 void fuori_area_tane (oggetto_rana * player, int *vite);
 
+/*  VITTORIA    */
+int vittoria();
 #endif
