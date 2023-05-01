@@ -117,22 +117,21 @@ void lettura_enemy(int fd_enemy[N_MAX_ENEMY][2])
 
 void genera_enemy()
 {
-    int tronco_idx = -1;
-    int traslazione = -1;
-    for (size_t i = 0; i < 1000; i++)
-    {
-        srand(getpid() + i);
-        if((rand()%1000) <= 500){
-            srand(getpid() + i+1);
+    int tronco_idx;
+    int traslazione;
+
+        srand(time(NULL)); 
+    
+        if((rand()%1000) <= 100){
             tronco_idx = rand()%3;
-            srand(getpid() + i+2);
             traslazione = rand()%3;
 
             if(traslazione < 2){
+
                 for (size_t j = 0; j < max_enemy_reali; j++)
                 {
                     if(enemy[j].x == -1){
-                        enemy[j].x = tronchi[tronco_idx].x * traslazione;
+                        enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
                         enemy[j].y = tronchi[tronco_idx].y;
 
                         for (size_t k = 0; k < max_enemy_reali; k++)
@@ -145,7 +144,6 @@ void genera_enemy()
                             }
                         }
                         j = max_enemy_reali;
-                        i = 1000;
                         
                     }
                 }
@@ -155,7 +153,7 @@ void genera_enemy()
                 for (size_t j = 0; j < max_enemy_reali; j++)
                 {
                     if(enemy[j].x == -1 && tronchi[tronco_idx].id_sprite == ID_TRUNK_X3){
-                        enemy[j].x = tronchi[tronco_idx].x * traslazione;
+                        enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
                         enemy[j].y = tronchi[tronco_idx].y;
 
                         for (size_t k = 0; k < max_enemy_reali; k++)
@@ -167,13 +165,11 @@ void genera_enemy()
                                 }
                             }
                         }
-                        j = max_enemy_reali;
-                        i = 1000;  
+                        j = max_enemy_reali; 
                     }
                 }
             }
         }
-    }
 }
 
 void stampa_enemy()
