@@ -23,7 +23,7 @@ void stampa_proiettili();
 void collisioni_proiettili_bordi();
 void collisioni_proiettiliA_proiettiliN();
 void collisioni_proiettile_enemy();
-void collisioni_proiettiliN_macchine();
+void collisioni_proiettili_macchine();
 void collisione_player_proiettileN(oggetto_rana *player, int *vite);
 void collisioni_game(oggetto_rana *player, int* vite);
 #endif

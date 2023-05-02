@@ -88,6 +88,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         stampa_enemy();  
              
         stampa_proiettili();
+        collisioni_proiettili_macchine();
 
         if (collisioni_rana_veicoli(player, veicoli))
         {
