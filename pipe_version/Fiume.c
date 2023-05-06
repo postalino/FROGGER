@@ -1,5 +1,6 @@
 #include "Fiume.h"
 
+#define COLORE_MARRONE 8
 void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensione_tronco, int traslazione_iniziale)
 {    
     //caso partanza da destra con dimensione x2
@@ -49,7 +50,10 @@ void inizializza_tronco(oggetto_tronco *npc, int corsia, int verso, int dimensio
 
 void stampa_tronchi (oggetto_tronco tronchi[N_CORSIE_FIUME])
 {
-    init_pair(TRONCO,COLOR_WHITE,COLOR_BLUE); //palette tronco
+    // definisci un nuovo colore personalizzato per il marrone
+    init_color(COLORE_MARRONE,139, 69, 19); // Inizializza il colore 8 come RGB (100, 200, 300)
+
+    init_pair(TRONCO,COLORE_MARRONE,COLOR_BLUE); //palette tronco
 
     for (size_t i = 0; i < N_CORSIE_FIUME; i++)
         {

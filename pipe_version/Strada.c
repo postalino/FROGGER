@@ -2,7 +2,6 @@
 
 void inizializza_veicoli()
 {
-    srand(getpid());
     int primastrada=rand()%2;
     int cambio_corsia= ((rand()%1000)+1000);
   
@@ -19,12 +18,12 @@ void inizializza_veicoli()
             {
                 //corsia centrale sinistra
                 veicoli[i].verso = 1;
-                veicoli[i].id_sprite = rand()%3+4;
+                veicoli[i].id_sprite = ID_CAR_LEFT;
             }else
             {   
                 //corsie laterali destra
                 veicoli[i].verso = -1;
-                veicoli[i].id_sprite = rand()%3+1;
+                veicoli[i].id_sprite = ID_CAR_RIGHT;
             }
         }else
         {
@@ -32,12 +31,12 @@ void inizializza_veicoli()
             {
                 //corsia centrale destra
                 veicoli[i].verso = -1;
-                veicoli[i].id_sprite = rand()%3+1;
+                veicoli[i].id_sprite = ID_CAR_RIGHT;
             }else
             {   
                 //corsie laterali sinistra
                 veicoli[i].verso = 1;
-                veicoli[i].id_sprite = rand()%3+4;
+                veicoli[i].id_sprite = ID_CAR_LEFT;
             }
         }
         // do una x iniziale a tutti i veicoli

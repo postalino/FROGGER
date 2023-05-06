@@ -43,8 +43,6 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         }
         movimento_rana = 0;
 
-        collisioni_proiettiliA_proiettiliN();
-
         read(fd_sparo, &sparo, sizeof(sparo));
         if(sparo){
             gestione_processi_proiettili(player);
@@ -54,7 +52,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         /*   PROIETTILI     */
         lettura_proiettili(fd_proiettile_alleati, proiettili_alleati);
         lettura_proiettili(fd_proiettile_alleati, proiettili_nemici);
-        collisione_player_enemy(&player, &vite);
+        collisioni_proiettiliA_proiettiliN();
         
         /*   TRONCO   */
         delay_lettura++; //sincronizza la lettura del tronco una ogni tempo_tronco/tempo_padre
@@ -88,7 +86,6 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         stampa_enemy();  
              
         stampa_proiettili();
-        collisioni_proiettili_macchine();
 
         if (collisioni_rana_veicoli(player, veicoli))
         {

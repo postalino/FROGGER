@@ -11,15 +11,12 @@ int fd_sparo[2];
 int fd_enemy[N_MAX_ENEMY][2];
 int fd_fine_manche[N_VEICOLI][2];
 
-void handle_signal(int sig);
-void cleanup();
 void close_all_pipes();
+void close_all_child();
+void cleanup();
 
 int main()
 {
-    // installa il gestore di segnali
-    signal(SIGINT, handle_signal);
-
     //inizializzo il seme della rand con time
     srand(time(NULL));
     int risultato_partita;
@@ -27,15 +24,20 @@ int main()
     int verso, dimensione_tronco;
     int traslazioni[N_CORSIE_FIUME];
 
-    //crea la finestra e attiva/disattiva i comandi richiesti
-    initscr();
-    noecho();
-    cbreak();
-    keypad(stdscr, true);
-    start_color();
-    curs_set(0);
-
     do{
+        //crea la finestra e attiva/disattiva i comandi richiesti
+        initscr();
+        noecho();
+        cbreak();
+        keypad(stdscr, true);
+        start_color();
+        curs_set(0);
+
+    
+        // creazione finestra principale centrata
+        win_mappa = crea_finestra();
+        CHECK_WINDOW(win_mappa); //verifica se a finestra e' stata creata correttamente
+    
         //calcolo randomicamente una traslazione iniziale per avere movimenti diversi dei tronchi
         for (int i = 0; i < N_CORSIE_FIUME; i++) {
             traslazioni[i] = (L_FROGGER*(rand()%4));  // genero l'incremento casuale [set casuale-->(0,9,18,27)]
@@ -58,10 +60,6 @@ int main()
         }
         
         inizializza_veicoli();
-
-        // creazione finestra principale centrata
-        win_mappa = crea_finestra();
-        CHECK_WINDOW(win_mappa); //verifica se a finestra e' stata creata correttamente
 
         genera_processi_veicoli(fd_veicolo,p_veicoli,fd_fine_manche);
 
@@ -126,32 +124,36 @@ int main()
         else{
             wclear(win_mappa);
             print_sprite(MAXX/10, MAXY/10, LOSE);
+            print_sprite(MAXX/2 -35,MAXY/2 -2, R_LEFT_LOSE);
+            print_sprite(MAXX/2 + 15,MAXY/2 -1, R_RIGHT_LOSE);
         }
 
         //wattron(win_mappa, COLOR_PAIR(PLAY_AGAIN));
-        mvwprintw(win_mappa, MAXY/2, MAXX/2-13, "PREMI Y PER GIOCARE ANCORA!");
+        mvwprintw(win_mappa, MAXY/2, MAXX/2-9, "MENU' PRINCIPALE");
+        mvwprintw(win_mappa, MAXY/2+2, MAXX/2-7,"GIOCA ANCORA");
         wrefresh(win_mappa);
 
         play_again = getchar();
+        
+        // quando il gioco è finito, chiamare la funzione di pulizia
+        cleanup();
 
-    }while(play_again == 'y' || play_again == 'Y');
+        endwin();
+        }while(play_again == 'y' || play_again == 'Y');
 
-    // quando il gioco è finito, chiamare la funzione di pulizia
-    cleanup();
-    delwin(win_mappa);
-    endwin();
-    return 0;
+    exit(0);
 }
 
 void cleanup()
 {
     // chiudi tutti i processi figli in modo pulito
-    kill(0, SIGTERM);
-    
+    close_all_child();
+
     // chiudi tutte le pipe aperte
     close_all_pipes();
 
-    exit(0); // termina il processo corrente
+    //chiudo la finestra
+    delwin(win_mappa);
 }
 
 //funzione per chiudere tutte le pipe aperte
@@ -187,7 +189,24 @@ void close_all_pipes() {
     close(fd_sparo[1]);
 }
 
-void handle_signal(int sig) {
-    cleanup();
+
+void close_all_child()
+{
+    for (int i = 0; i < N_VEICOLI; i++) {
+        kill(p_veicoli[i], SIGTERM);
+    }
+
+    for (int i = 0; i < N_CORSIE_FIUME; i++) {
+        kill(p_tronco[i], SIGTERM);
+        kill(p_enemy[i], SIGTERM);
+    }
+
+    for (int i = 0; i < N_MAX_P; i++) {
+        kill(p_proiettile_alleati[i], SIGTERM);
+        kill(p_proiettile_nemici[i], SIGTERM);
+    }
+
+    kill(p_rana, SIGTERM);
+    kill(p_time, SIGTERM);
 }
 

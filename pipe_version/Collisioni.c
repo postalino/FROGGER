@@ -180,7 +180,7 @@ void collisioni_proiettiliA_proiettiliN()
             for (size_t j = 0; j < N_MAX_P; j++)
             {
                if(proiettili_nemici[j].x != -1){
-                    if((proiettili_alleati[i].x == proiettili_nemici[j].x) && (proiettili_alleati[i].y == proiettili_nemici[j].y)){
+                    if((proiettili_alleati[i].x == proiettili_nemici[j].x) && ((proiettili_alleati[i].y - proiettili_nemici[j].y) < 2)){
                         proiettili_nemici[j].x = -1;
                         proiettili_alleati[i].x = -1;
                     }
@@ -190,36 +190,6 @@ void collisioni_proiettiliA_proiettiliN()
     }
 }
 
-void collisione_player_enemy(oggetto_rana *player, int* vite)
-{
-    for (size_t i = 0; i < N_MAX_ENEMY; i++)
-    {
-        if(enemy[i].x!= -1){
-            if(enemy[i].y == player->y)
-            {
-                player->x = X_START;
-                player->y = Y_START;
-                (*vite)--;
-            }
-        }
-    }
-}
-
-void collisione_player_proiettileN(oggetto_rana *player, int *vite)
-{
-    for (size_t i = 0; i < N_MAX_ENEMY; i++)
-    {
-        if(proiettili_nemici[i].x!= -1){
-            if((proiettili_nemici[i].x == player->x +H_FROGGER) && (proiettili_nemici[i].y >= player->y && proiettili_nemici[i].y <= player->y +H_FROGGER ))
-            {
-                player->x = X_START;
-                player->y = Y_START;
-                proiettili_nemici[i].x = -1;
-                (*vite)--;
-            }
-        }
-    }
-}
 void collisioni_proiettili_macchine()
 {
     for (size_t i = 0; i < N_VEICOLI; i++)
@@ -312,9 +282,43 @@ void collisioni_proiettili_macchine()
     }
     
 }
+
+void collisione_player_enemy(oggetto_rana *player, int* vite)
+{
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
+    {
+        if(enemy[i].x!= -1){
+            if(enemy[i].y == player->y)
+            {
+                player->x = X_START;
+                player->y = Y_START;
+                (*vite)--;
+            }
+        }
+    }
+}
+
+void collisione_player_proiettileN(oggetto_rana *player, int *vite)
+{
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
+    {
+        if(proiettili_nemici[i].x!= -1){
+            if((proiettili_nemici[i].x == player->x +H_FROGGER) && (proiettili_nemici[i].y >= player->y && proiettili_nemici[i].y <= player->y +H_FROGGER ))
+            {
+                player->x = X_START;
+                player->y = Y_START;
+                proiettili_nemici[i].x = -1;
+                (*vite)--;
+            }
+        }
+    }
+}
+
 void collisioni_game(oggetto_rana *player, int* vite)
 {
+    collisioni_proiettili_macchine();
+    collisioni_proiettili_bordi();
     collisioni_proiettile_enemy();
     collisione_player_proiettileN(player, vite);
-    collisioni_proiettili_bordi();
+    collisione_player_enemy(player, vite);
 }
