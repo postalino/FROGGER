@@ -268,7 +268,7 @@ void collisioni_proiettili_macchine()
                     {
                         for (size_t m = 1; m < 4; m++)
                         {
-                            if ((proiettili_nemici[l].x == veicoli[i].x && proiettili_nemici[l].y == veicoli[i].y + m)||(proiettili_nemici[l].x == veicoli[i].x + 13 && proiettili_nemici[l].y == veicoli[i].y + m))
+                            if ((proiettili_nemici[l].x == veicoli[i].x && proiettili_nemici[l].y == veicoli[i].y + m)||(proiettili_nemici[l].x == veicoli[i].x + 27 && proiettili_nemici[l].y == veicoli[i].y + m))
                             {
                                 proiettili_nemici[l].x = -1;
                             }

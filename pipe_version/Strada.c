@@ -18,12 +18,12 @@ void inizializza_veicoli()
             {
                 //corsia centrale sinistra
                 veicoli[i].verso = 1;
-                veicoli[i].id_sprite = ID_CAR_LEFT;
+                veicoli[i].id_sprite = rand()%3+4;
             }else
             {   
                 //corsie laterali destra
                 veicoli[i].verso = -1;
-                veicoli[i].id_sprite = ID_CAR_RIGHT;
+                veicoli[i].id_sprite = rand()%3+1;
             }
         }else
         {
@@ -31,12 +31,12 @@ void inizializza_veicoli()
             {
                 //corsia centrale destra
                 veicoli[i].verso = -1;
-                veicoli[i].id_sprite = ID_CAR_RIGHT;
+                veicoli[i].id_sprite = rand()%3+1;
             }else
             {   
                 //corsie laterali sinistra
                 veicoli[i].verso = 1;
-                veicoli[i].id_sprite = ID_CAR_LEFT;
+                veicoli[i].id_sprite = rand()%3+4;
             }
         }
         // do una x iniziale a tutti i veicoli
