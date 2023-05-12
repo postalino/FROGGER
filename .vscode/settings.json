@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "fiume.h": "c",
+        "stampa.h": "c",
+        "frogger.h": "c",
+        "collisioni.h": "c"
+    }
+}

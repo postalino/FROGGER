@@ -244,3 +244,79 @@ int tronco_taxi(int corsia, int spostamento)
     
     return 0;
 }
+
+void inizializza_posizione_tane()
+{
+    int indice_cella=0;
+    for (size_t i = 39; i < MAXX -30; i+=18)
+    {
+        tane[indice_cella].x = i;
+        tane[indice_cella].y = MAX_PRATO;
+        tane[indice_cella].id_sprite = ID_TANA;
+        tane[indice_cella].occupata = false;
+        indice_cella++;   
+    }
+    
+}
+
+int tana_occupata()
+{   
+    if(player.y == MAX_PRATO && !((player.x / L_FROGGER) % 2)){
+        for (size_t i = 0; i < N_TANE; i++)
+        {
+            if(tane[i].x == player.x)
+                tane[i].occupata = true;
+        }
+
+        player.x = X_START;
+        player.y = Y_START;
+
+        return 1;
+    }
+    return 0;
+}
+
+void fuori_area_tane ()
+{
+    if(player.y == MAX_PRATO && ((player.x / L_FROGGER) % 2))
+        {
+            vite--; //se in altezza tana non è stata occupata una tana decrementa la vita di 1 (è uscito fuori dalla)
+            player.x = X_START;
+            player.y = Y_START;
+        }
+}
+
+void print_tane_occupate()
+{
+    init_color(100, 0, 128, 0); // definizione del nuovo colore verde scuro
+    init_pair(TANA_OCCUPATA, 100, COLOR_BLUE); // palette simbolo tana occupata con il nuovo colore verde scuro
+    for (size_t i = 0; i < N_TANE; i++)
+    {
+        if(tane[i].occupata){
+            wattron(win_mappa,COLOR_PAIR(TANA_OCCUPATA));
+            print_sprite(tane[i].x, tane[i].y,TANA);
+        }
+    }
+}
+
+int check_tana(int x, int y)
+{
+    for (size_t i = 0; i < N_TANE; i++)
+    {
+        if(tane[i].x == x && (tane[i].y + H_FROGGER) == y  && tane[i].occupata)
+            return 1;
+    }
+    return 0;
+}
+
+void collisioni_tane_occupate()
+{
+    for (size_t i = 0; i < N_TANE; i++)
+    {
+        if ((player.x == tane[i].x) &&(player.y == tane[i].y) && tane[i].occupata){
+            player.x = X_START;
+            player.y = Y_START;
+            vite--;
+        }
+    }
+}

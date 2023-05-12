@@ -322,9 +322,14 @@ typedef struct tana
 pthread_mutex_t	semCurses;	// Semaforo per l'accesso alle funzioni di ncurses
 sem_t	semGioco;		// Semaforo per sincronizzare il campo con i 'giocatori'
 WINDOW *win_mappa;
+
 volatile oggetto_rana player; 
 volatile oggetto_tronco tronchi[N_CORSIE_FIUME];
 volatile int vite;
+volatile int max_time;
+volatile oggetto_tana tane[N_TANE];
+
+
 #include "Collisioni.h"
 #include "Fiume.h"
 #include "NPC.h"

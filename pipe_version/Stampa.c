@@ -318,7 +318,7 @@ void collisioni_tane_occupate(oggetto_rana *player, int *vite)
 {
     for (size_t i = 0; i < N_TANE; i++)
     {
-        if ((player->x == tane_gioco[i].x) &&(player->y == tane_gioco[i].y) && tane_gioco->occupata){
+        if ((player->x == tane_gioco[i].x) &&(player->y == tane_gioco[i].y) && tane_gioco[i].occupata){
             player->x = X_START;
             player->y = Y_START;
             (*vite)--;

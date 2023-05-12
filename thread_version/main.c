@@ -9,7 +9,7 @@ volatile int running;			// Flag di programma non terminato
 
 int main()
 {
-    pthread_t tRana, tTronchi[N_CORSIE_FIUME];		// Pid del figlio 'rana'
+    pthread_t tRana, tTronchi[N_CORSIE_FIUME],tTempo;		// Pid del figlio 'rana'
     
     //crea la finestra e attiva/disattiva i comandi richiesti
     initscr();
@@ -32,6 +32,9 @@ int main()
     {
         CREATE_THREAD(tTronchi[i], gestione_tronco,(void*)&tronchi[i]);
     }
+
+    /*  TEMPO DI GIOCO*/
+    CREATE_THREAD(tRana, tempoDiGioco, NULL);
     
 
     play_frogger();

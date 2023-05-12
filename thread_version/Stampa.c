@@ -1,16 +1,20 @@
 #include "Stampa.h"
 
-int delay_lettura = 0; //serve per gestire il momento della lettura
-int max_time = 60; //tempo max in secondi per raggiungere una tana 
-
 void play_frogger()
 {
+    max_time = 60; //tempo max in secondi per raggiungere una tana
     vite = 3;   //vite iniziali
-    
+    inizializza_posizione_tane(); //assegno ad ogni tana le cordinate e il valore di non occupata
     while (true)
     {
         //operazioni di stampa oggetti aggiornati + mappa
         pthread_mutex_lock (&semCurses);
+
+        /*   TANE     */
+        if(tana_occupata()){
+            max_time = 60;
+        }
+        fuori_area_tane(&player, &vite);
 
         /*  MAPPA   */
         wclear(win_mappa);
@@ -23,6 +27,9 @@ void play_frogger()
         init_pair(RANA,COLOR_WHITE,calcola_background(player.x,player.y));
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
+
+        /*  COLLISIONI  */
+        collisioni_tane_occupate();
 
         wrefresh(win_mappa);
         
@@ -173,8 +180,8 @@ void mappa_frogger()
         wprintw(win_mappa, "                              ");
     }
 
-    //print_barra_tempo(fd_time); //stampa barra del tempo di gioco più numero vite player
-    //print_tane_occupate(tane_gioco); 
+    print_barra_tempo(); //stampa barra del tempo di gioco più numero vite player
+    print_tane_occupate(); 
         
 }
 
@@ -194,4 +201,49 @@ void print_sprite_menu(WINDOW *name_win, int x, int y, const char *sprite[])
         mvwprintw(name_win, y + i, x, sprite[i]);
         i++;
     }
+}
+
+void print_barra_tempo()
+{
+
+    //colore scritta TIME
+    init_pair(T_MAX_WORD, COLOR_GREEN, COLOR_BLACK);     // tempo max
+    init_pair(T_MIDLE_WORD, COLOR_YELLOW, COLOR_BLACK);    // tempo medio
+    init_pair(T_MIN_WORD, COLOR_RED, COLOR_BLACK);       // tempo min
+
+    //colore barra
+    init_pair(T_MAX_BAR, COLOR_GREEN, COLOR_GREEN);     // tempo max
+    init_pair(T_MIDLE_BAR, COLOR_YELLOW, COLOR_YELLOW);   // tempo medio
+    init_pair(T_MIN_BAR, COLOR_RED, COLOR_RED);         // tempo min
+    
+    //stampa scritta TIME
+        if(max_time >30)
+            wattron(win_mappa,COLOR_PAIR(T_MAX_WORD));
+        else if(max_time >10 && max_time <= 30)
+            wattron(win_mappa,COLOR_PAIR(T_MIDLE_WORD));
+        else
+            wattron(win_mappa,COLOR_PAIR(T_MIN_WORD));
+        mvwprintw(win_mappa,MAXY-1,30,"TIME:");
+    
+    //stampa scritta VITE
+        if(vite >= 3)
+            wattron(win_mappa,COLOR_PAIR(T_MAX_WORD));
+        else if(vite == 2)
+            wattron(win_mappa,COLOR_PAIR(T_MIDLE_WORD));
+        else if(vite == 1)
+            wattron(win_mappa,COLOR_PAIR(T_MIN_WORD));
+        mvwprintw(win_mappa,MAXY-1,MAXX - 37,"VITE: %d",vite);
+
+    //stampa barra
+        if(max_time >30)
+            wattron(win_mappa,COLOR_PAIR(T_MAX_BAR));
+        else if(max_time >10 && max_time <= 30)
+            wattron(win_mappa,COLOR_PAIR(T_MIDLE_BAR));
+        else
+            wattron(win_mappa,COLOR_PAIR(T_MIN_BAR));
+
+        for (int i = 0; i < max_time; i++)
+        {
+            mvwprintw(win_mappa,MAXY-1,36+i," ");
+        }
 }

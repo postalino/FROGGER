@@ -3,4 +3,6 @@
 
 #include "Frogger.h"
 
+void* tempoDiGioco();
+
 #endif
