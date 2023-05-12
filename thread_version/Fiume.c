@@ -88,10 +88,10 @@ void* gestione_tronco(void* tronco)
         while (true)
         {
             pthread_mutex_lock (&semCurses);
-            npc_tronco->x += direzione;
-
-            if(tronco_taxi(npc_tronco->corsia,direzione)){}      //se la rana è sopra il tronco segue il suo movimento
-                //(*vite)--;   //la rana è caduta nel fiume
+             if(tronco_taxi(npc_tronco->corsia,direzione))      //se la rana è sopra il tronco segue il suo movimento
+                vite--;   //la rana è caduta nel fiume
+                
+            npc_tronco->x += direzione;           
                 
             pthread_mutex_unlock (&semCurses);
 
@@ -116,11 +116,12 @@ void* gestione_tronco(void* tronco)
         while (true)
         {
             pthread_mutex_lock (&semCurses);
+            
+
+            if(tronco_taxi(npc_tronco->corsia,direzione))      //se la rana è sopra il tronco segue il suo movimento
+                vite--;   //la rana è caduta nel fiume
             npc_tronco->x += direzione;
 
-            if(tronco_taxi(npc_tronco->corsia,direzione)){}      //se la rana è sopra il tronco segue il suo movimento
-                //(*vite)--;   //la rana è caduta nel fiume
-                
             pthread_mutex_unlock (&semCurses);
 
             if(npc_tronco->x + L_TRUNK_X2 >= MAXX -30) //cambia la direzione del tronco se tocca il bordo destro
@@ -144,11 +145,11 @@ void* gestione_tronco(void* tronco)
         while(true)
         {
             pthread_mutex_lock (&semCurses);
+
+            if(tronco_taxi(npc_tronco->corsia,direzione))      //se la rana è sopra il tronco segue il suo movimento
+                vite--;   //la rana è caduta nel fiume
+
             npc_tronco->x += direzione;
-
-            if(tronco_taxi(npc_tronco->corsia,direzione)){}      //se la rana è sopra il tronco segue il suo movimento
-                //(*vite)--;   //la rana è caduta nel fiume
-
             pthread_mutex_unlock (&semCurses);
 
             if(npc_tronco->x + L_TRUNK_X3 >= MAXX -30) //cambia la direzione del tronco se tocca il bordo destro
@@ -172,11 +173,11 @@ void* gestione_tronco(void* tronco)
         while (true)
         {
             pthread_mutex_lock (&semCurses);
-            npc_tronco->x += direzione;
 
-            if(tronco_taxi(npc_tronco->corsia,direzione)){}     //se la rana è sopra il tronco segue il suo movimento
-                //(*vite)--;   //la rana è caduta nel fiume
-                
+            if(tronco_taxi(npc_tronco->corsia,direzione))     //se la rana è sopra il tronco segue il suo movimento
+                vite--;   //la rana è caduta nel fiume
+
+            npc_tronco->x += direzione;    
             pthread_mutex_unlock (&semCurses);
 
             if(npc_tronco->x + L_TRUNK_X3 >= MAXX - 30) //cambia la direzione del tronco se tocca il bordo destro
