@@ -325,9 +325,13 @@ WINDOW *win_mappa;
 
 volatile oggetto_rana player; 
 volatile oggetto_tronco tronchi[N_CORSIE_FIUME];
+volatile oggetto_tana tane[N_TANE];
+volatile oggetto_proiettile proiettili_alleati[N_MAX_P];
+volatile oggetto_proiettile proiettili_nemici[N_MAX_P];
+volatile oggetto_rana enemy[N_MAX_ENEMY];
 volatile int vite;
 volatile int max_time;
-volatile oggetto_tana tane[N_TANE];
+volatile bool running;
 
 
 #include "Collisioni.h"

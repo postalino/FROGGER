@@ -85,7 +85,7 @@ void* gestione_tronco(void* tronco)
     {
         int direzione = -L_FROGGER;
 
-        while (true)
+        while (running)
         {
             pthread_mutex_lock (&semCurses);
              if(tronco_taxi(npc_tronco->corsia,direzione))      //se la rana è sopra il tronco segue il suo movimento
@@ -113,7 +113,7 @@ void* gestione_tronco(void* tronco)
     {
         int direzione = +L_FROGGER;
 
-        while (true)
+        while (running)
         {
             pthread_mutex_lock (&semCurses);
             
@@ -142,7 +142,7 @@ void* gestione_tronco(void* tronco)
     {
         int direzione = -L_FROGGER;
 
-        while(true)
+        while(running)
         {
             pthread_mutex_lock (&semCurses);
 
@@ -170,7 +170,7 @@ void* gestione_tronco(void* tronco)
     {
         int direzione = +L_FROGGER;
 
-        while (true)
+        while (running)
         {
             pthread_mutex_lock (&semCurses);
 

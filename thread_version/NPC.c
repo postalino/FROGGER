@@ -20,7 +20,7 @@ void* wasd_rana()
     player.y = Y_START;
     player.id_sprite = ID_FROGGER;
 
-    while (true)
+    while (running)
     {
         direzione = wgetch(win_mappa);
         pthread_mutex_lock (&semCurses);

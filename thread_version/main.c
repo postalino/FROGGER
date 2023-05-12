@@ -1,12 +1,5 @@
 #include "Frogger.h"
 
-#define INVIO 10
-#define N_SCELTE_START 4
-#define N_SCELTE_END 2
-
-volatile int running;			// Flag di programma non terminato
-/* Mutex e semaforo per la sincronizzazione tra i thread */
-
 int main()
 {
     pthread_t tRana, tTronchi[N_CORSIE_FIUME],tTempo;		// Pid del figlio 'rana'
@@ -19,7 +12,7 @@ int main()
     curs_set(0);
 
     win_mappa = crea_finestra();
-    //running = TRUE;		// Gioco non ancora finito
+    running = true;		// Gioco non ancora finito
 
     pthread_mutex_init (&semCurses, NULL); // Mutex di ncurses
     
@@ -35,6 +28,9 @@ int main()
 
     /*  TEMPO DI GIOCO*/
     CREATE_THREAD(tRana, tempoDiGioco, NULL);
+
+    /*  PROIETTILI  */
+    inizializza_proiettili();
     
 
     play_frogger();

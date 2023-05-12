@@ -4,8 +4,7 @@ void play_frogger()
 {
     max_time = 60; //tempo max in secondi per raggiungere una tana
     vite = 3;   //vite iniziali
-    inizializza_posizione_tane(); //assegno ad ogni tana le cordinate e il valore di non occupata
-    while (true)
+    while (running)
     {
         //operazioni di stampa oggetti aggiornati + mappa
         pthread_mutex_lock (&semCurses);
@@ -32,7 +31,9 @@ void play_frogger()
         collisioni_tane_occupate();
 
         wrefresh(win_mappa);
-        
+
+        game_over(); //verifica se il gioco è finito
+
         pthread_mutex_unlock (&semCurses);
 
         usleep(TIME_MAIN);
