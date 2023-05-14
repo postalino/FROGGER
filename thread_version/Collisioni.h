@@ -9,7 +9,8 @@ void* tempoDiGioco();
 void inizializza_proiettili();
 void game_over();
 
-void* gestione_proiettili_A(void*);
+void* gestione_proiettili(void*);
 void stampa_proiettili();
+void collisioni_proiettili_bordi();
 
 #endif

@@ -3,6 +3,7 @@
         "fiume.h": "c",
         "stampa.h": "c",
         "frogger.h": "c",
-        "collisioni.h": "c"
+        "collisioni.h": "c",
+        "npc.h": "c"
     }
 }

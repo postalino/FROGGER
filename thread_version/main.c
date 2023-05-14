@@ -2,7 +2,12 @@
 
 int main()
 {
-    pthread_t tRana, tTronchi[N_CORSIE_FIUME],tTempo,tVeicoli[N_VEICOLI],tProiettili_A[N_MAX_P],tEnemy[N_MAX_ENEMY];		// Pid del figlio 'rana'
+    pthread_t tRana; 
+    pthread_t tTronchi[N_CORSIE_FIUME];
+    pthread_t tTempo,tVeicoli[N_VEICOLI];
+    pthread_t tProiettili_A[N_MAX_P];
+    pthread_t tProiettili_E[N_MAX_P];
+    pthread_t tEnemy[N_MAX_ENEMY];
     
     //crea la finestra e attiva/disattiva i comandi richiesti
     initscr();
@@ -41,13 +46,14 @@ int main()
     inizializza_proiettili();
     for (size_t i = 0; i < N_MAX_P; i++)
     {
-        CREATE_THREAD(tProiettili_A[i],gestione_proiettili_A,(void*)&proiettili_alleati[i]);
+        CREATE_THREAD(tProiettili_A[i],gestione_proiettili,(void*)&proiettili_alleati[i]);
+        CREATE_THREAD(tProiettili_E[i],gestione_proiettili,(void*)&proiettili_nemici[i]);
     }
     /* ENEMY */
     inizializza_enemy();
     for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
-        //CREATE_THREAD(tEnemy[i],gestione_enemy,(void*)&enemy[i]);//??
+        CREATE_THREAD(tEnemy[i],gestione_enemy,(void*)&enemy[i]);
     }
     
     

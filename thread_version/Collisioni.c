@@ -14,7 +14,10 @@ void inizializza_proiettili()
     for (size_t i = 0; i < N_MAX_P; i++)
     {
         proiettili_alleati[i].x = -1;
+        proiettili_alleati[i].verso_proiettile = -1;
+
         proiettili_nemici[i].x = -1;
+        proiettili_nemici[i].verso_proiettile = 1;
     }   
 }
 
@@ -64,22 +67,41 @@ void collisioni_rana_veicoli()
     }
 }
 
-void* gestione_proiettili_A(void* Proiettile)
+void* gestione_proiettili(void* Proiettile)
 {
     oggetto_proiettile* P = (oggetto_proiettile*) Proiettile;
+
+    int movimento = 1;
+
     while(running)
     {
         if (P->x != -1)
         {
             pthread_mutex_lock (&semCurses);
-            P->y--;
-            if (P->y < 0)
-            {
-                P->x = -1;
-            }
+            P->y += (movimento * P->verso_proiettile);
             pthread_mutex_unlock (&semCurses);
         }
         usleep(TIME_MAIN);
+    }
+}
+
+void collisioni_proiettili_bordi()
+{
+
+    for (size_t i = 0; i < N_MAX_P; i++)
+    {
+        if (proiettili_alleati[i].y < 0 && proiettili_alleati[i].x != -1 )
+        {
+            proiettili_alleati[i].x = -1;
+        }
+    }
+
+    for (size_t i = 0; i < N_MAX_P; i++)
+    {
+        if (proiettili_nemici[i].y > (Y_START + H_FROGGER -2) && proiettili_nemici[i].x != -1 )
+        {
+            proiettili_nemici[i].x = -1;
+        }
     }
 }
 

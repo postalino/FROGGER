@@ -14,4 +14,6 @@ void inizializza_enemy();
 
 void* gestione_enemy(void* enemy);
 
+void crea_proiettile_enemy(oggetto_rana *player);
+
 #endif

@@ -33,10 +33,17 @@ void play_frogger()
         genera_enemy();
         stampa_enemy();
 
+        for (size_t i = 0; i < N_MAX_P; i++)
+        {
+            mvwprintw(win_mappa, i,0, "X: %d  Y: %d", proiettili_nemici[i].x,proiettili_nemici[i].y);
+        }
+        
+
         /*   VEICOLI  */
         stampa_veicoli();
 
         /* PROIETTILI */
+        collisioni_proiettili_bordi();
         stampa_proiettili();
 
         /*  COLLISIONI  */

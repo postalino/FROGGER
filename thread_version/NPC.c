@@ -6,7 +6,8 @@
 #define SPOSTA_SINISTRA -9
 #define SPACE 32
 
-#define TIME_SPARO 2500000
+#define TIME_SPARO_MIN 1000000
+#define RANGE_TIME_SPARO 2500000
 
 void* wasd_rana()
 {
@@ -49,7 +50,6 @@ void* wasd_rana()
                 if(proiettili_alleati[i].x  == -1){
                     proiettili_alleati[i].x = player.x + 4;
                     proiettili_alleati[i].y = player.y -1;
-                    proiettili_alleati[i].verso_proiettile = 1;
                 
                     i = N_MAX_P;
                 } 
@@ -126,20 +126,38 @@ void inizializza_enemy()
     }
     
 }
+
 void* gestione_enemy(void* enemy)
 {
     oggetto_rana* Enemy = (oggetto_rana *) enemy;
+    int time_sparo_oggetto;
     
+    srand(pthread_self());
+    time_sparo_oggetto = TIME_SPARO_MIN + rand()%RANGE_TIME_SPARO;
+
     while(running)
     {
         if(Enemy->x != -1)
         {
             pthread_mutex_lock (&semCurses);
-            Enemy->x += (L_FROGGER*tronchi[Enemy->id_tronco].verso);
+            crea_proiettile_enemy(Enemy);
             pthread_mutex_unlock (&semCurses);
         }
-        usleep(TIME);
+        usleep(time_sparo_oggetto);
     }
+}
+
+void crea_proiettile_enemy(oggetto_rana *player)
+{
+    for (int i = 0; i < N_MAX_P; i++)
+    {
+        if(proiettili_nemici[i].x  == -1){
+            proiettili_nemici[i].x = player->x + 4;
+            proiettili_nemici[i].y = player->y + H_FROGGER;
+
+            i = N_MAX_P;
+        } 
+    }   
 }
 
 void stampa_enemy()
