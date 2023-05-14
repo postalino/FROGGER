@@ -4,6 +4,8 @@ void play_frogger()
 {
     max_time = 60; //tempo max in secondi per raggiungere una tana
     vite = 3;   //vite iniziali
+    inizializza_posizione_tane();
+
     while (running)
     {
         //operazioni di stampa oggetti aggiornati + mappa
@@ -13,7 +15,7 @@ void play_frogger()
         if(tana_occupata()){
             max_time = 60;
         }
-        fuori_area_tane(&player, &vite);
+        fuori_area_tane();
 
         /*  MAPPA   */
         wclear(win_mappa);

@@ -88,9 +88,15 @@ void* gestione_tronco(void* tronco)
         while (running)
         {
             pthread_mutex_lock (&semCurses);
-             if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
+            if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
                 finemanche = 6;
+            }
+
+            for (size_t i = 0; i < N_MAX_ENEMY; i++)
+            {
+                if(enemy[i].x != -1 && enemy[i].y == npc_tronco->y)
+                    enemy[i].x += direzione; 
             }
                 
             npc_tronco->x += direzione;           
@@ -126,6 +132,13 @@ void* gestione_tronco(void* tronco)
                 vite--;   //la rana è caduta nel fiume
                 finemanche = 6;
             }
+
+            for (size_t i = 0; i < N_MAX_ENEMY; i++)
+            {
+                if(enemy[i].x != -1 && enemy[i].y == npc_tronco->y)
+                    enemy[i].x += direzione; 
+            }
+
             npc_tronco->x += direzione;
 
             pthread_mutex_unlock (&semCurses);
@@ -159,6 +172,12 @@ void* gestione_tronco(void* tronco)
                 finemanche = 6;
             }
 
+            for (size_t i = 0; i < N_MAX_ENEMY; i++)
+            {
+                if(enemy[i].x != -1 && enemy[i].y == npc_tronco->y)
+                    enemy[i].x += direzione; 
+            }
+
             npc_tronco->x += direzione;
             pthread_mutex_unlock (&semCurses);
 
@@ -186,6 +205,12 @@ void* gestione_tronco(void* tronco)
         {
             pthread_mutex_lock (&semCurses);
 
+            for (size_t i = 0; i < N_MAX_ENEMY; i++)
+            {
+                if(enemy[i].x != -1 && enemy[i].y == npc_tronco->y)
+                    enemy[i].x += direzione; 
+            }
+            
             if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
                 finemanche = 6;

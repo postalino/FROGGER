@@ -78,7 +78,6 @@ void genera_enemy()
                     if(enemy[j].x == -1){
                         enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
                         enemy[j].y = tronchi[tronco_idx].y;
-                        enemy[j].id_tronco = tronco_idx;
 
                         for (size_t k = 0; k < N_MAX_ENEMY; k++)
                         {
@@ -101,7 +100,6 @@ void genera_enemy()
                     if(enemy[j].x == -1 && tronchi[tronco_idx].id_sprite == ID_TRUNK_X3){
                         enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
                         enemy[j].y = tronchi[tronco_idx].y;
-                        enemy[j].id_tronco = tronco_idx;
 
                         for (size_t k = 0; k < N_MAX_ENEMY; k++)
                         {
@@ -131,6 +129,7 @@ void inizializza_enemy()
 void* gestione_enemy(void* enemy)
 {
     oggetto_rana* Enemy = (oggetto_rana *) enemy;
+    
     while(running)
     {
         if(Enemy->x != -1)

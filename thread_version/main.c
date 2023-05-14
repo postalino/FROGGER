@@ -47,7 +47,7 @@ int main()
     inizializza_enemy();
     for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
-        CREATE_THREAD(tEnemy[i],gestione_enemy,(void*)&enemy[i]);
+        //CREATE_THREAD(tEnemy[i],gestione_enemy,(void*)&enemy[i]);//??
     }
     
     
