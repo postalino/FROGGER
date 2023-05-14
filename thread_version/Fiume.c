@@ -88,8 +88,10 @@ void* gestione_tronco(void* tronco)
         while (running)
         {
             pthread_mutex_lock (&semCurses);
-             if(tronco_taxi(npc_tronco->corsia,direzione))      //se la rana è sopra il tronco segue il suo movimento
+             if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
+                finemanche = 6;
+            }
                 
             npc_tronco->x += direzione;           
                 
@@ -118,8 +120,10 @@ void* gestione_tronco(void* tronco)
             pthread_mutex_lock (&semCurses);
             
 
-            if(tronco_taxi(npc_tronco->corsia,direzione))      //se la rana è sopra il tronco segue il suo movimento
+            if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
+                finemanche = 6;
+            }
             npc_tronco->x += direzione;
 
             pthread_mutex_unlock (&semCurses);
@@ -146,8 +150,10 @@ void* gestione_tronco(void* tronco)
         {
             pthread_mutex_lock (&semCurses);
 
-            if(tronco_taxi(npc_tronco->corsia,direzione))      //se la rana è sopra il tronco segue il suo movimento
+            if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
+                finemanche = 6;
+            }
 
             npc_tronco->x += direzione;
             pthread_mutex_unlock (&semCurses);
@@ -174,8 +180,11 @@ void* gestione_tronco(void* tronco)
         {
             pthread_mutex_lock (&semCurses);
 
-            if(tronco_taxi(npc_tronco->corsia,direzione))     //se la rana è sopra il tronco segue il suo movimento
+            if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
+                finemanche = 6;
+            }
+                
 
             npc_tronco->x += direzione;    
             pthread_mutex_unlock (&semCurses);
@@ -283,6 +292,7 @@ void fuori_area_tane ()
             vite--; //se in altezza tana non è stata occupata una tana decrementa la vita di 1 (è uscito fuori dalla)
             player.x = X_START;
             player.y = Y_START;
+            finemanche =6;
         }
 }
 
@@ -317,6 +327,7 @@ void collisioni_tane_occupate()
             player.x = X_START;
             player.y = Y_START;
             vite--;
+            finemanche=6;
         }
     }
 }
