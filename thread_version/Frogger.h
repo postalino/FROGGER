@@ -329,6 +329,8 @@ volatile oggetto_tana tane[N_TANE];
 volatile oggetto_proiettile proiettili_alleati[N_MAX_P];
 volatile oggetto_proiettile proiettili_nemici[N_MAX_P];
 volatile oggetto_rana enemy[N_MAX_ENEMY];
+volatile oggetto_veicolo veicolo[N_VEICOLI];
+volatile int finemanche;
 volatile int vite;
 volatile int max_time;
 volatile bool running;

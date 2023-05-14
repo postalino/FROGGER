@@ -27,8 +27,12 @@ void play_frogger()
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
 
+        /*   VEICOLI  */
+        stampa_veicoli();
+
         /*  COLLISIONI  */
         collisioni_tane_occupate();
+        collisioni_rana_veicoli();
 
         wrefresh(win_mappa);
 

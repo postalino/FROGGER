@@ -3,6 +3,8 @@
 
 #include "Frogger.h"
 
+void collisioni_rana_veicoli();
+
 void* tempoDiGioco();
 void inizializza_proiettili();
 void game_over();
