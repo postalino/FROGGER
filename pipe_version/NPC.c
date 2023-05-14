@@ -6,7 +6,8 @@
 #define SPOSTA_SINISTRA -9
 #define SPACE 32
 
-#define TIME_SPARO 2500000
+#define TIME_SPARO_MIN 1000000
+#define RANGE_TIME_SPARO 2500000
 
 void wasd_rana(int fd_rana, int fd_sparo)
 {
@@ -83,10 +84,15 @@ void gestione_enemy(int fd_rana_enemy)
 {
     int sparo = 1;
 
+    int time_sparo_oggetto;
+    
+    srand(getpid());
+    time_sparo_oggetto = TIME_SPARO_MIN + rand()%RANGE_TIME_SPARO;
+
     while (true)
     {     
         write(fd_rana_enemy,&sparo , sizeof(sparo)); //scrittura spostamento
-        usleep(TIME_SPARO);
+        usleep(time_sparo_oggetto);
     } 
 }
 
