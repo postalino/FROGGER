@@ -2,7 +2,7 @@
 
 int main()
 {
-    pthread_t tRana, tTronchi[N_CORSIE_FIUME],tTempo,tVeicoli[N_VEICOLI];		// Pid del figlio 'rana'
+    pthread_t tRana, tTronchi[N_CORSIE_FIUME],tTempo,tVeicoli[N_VEICOLI],tProiettili_A[N_MAX_P];		// Pid del figlio 'rana'
     
     //crea la finestra e attiva/disattiva i comandi richiesti
     initscr();
@@ -39,6 +39,11 @@ int main()
 
     /*  PROIETTILI  */
     inizializza_proiettili();
+    for (size_t i = 0; i < N_MAX_P; i++)
+    {
+        CREATE_THREAD(tProiettili_A[i],gestione_proiettili_A,(void*)&proiettili_alleati[i]);
+    }
+    
     
 
     play_frogger();

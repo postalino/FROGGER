@@ -30,6 +30,9 @@ void play_frogger()
         /*   VEICOLI  */
         stampa_veicoli();
 
+        /* PROIETTILI */
+        stampa_proiettili();
+
         /*  COLLISIONI  */
         collisioni_tane_occupate();
         collisioni_rana_veicoli();

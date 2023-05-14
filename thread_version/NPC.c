@@ -44,7 +44,16 @@ void* wasd_rana()
                 player.x += L_FROGGER;
             break;
         case SPACE:
-            // segnale di sparo
+            for (int i = 0; i < N_MAX_P; i++)
+            {
+                if(proiettili_alleati[i].x  == -1){
+                    proiettili_alleati[i].x = player.x + 4;
+                    proiettili_alleati[i].y = player.y -1;
+                    proiettili_alleati[i].verso_proiettile = 1;
+                
+                    i = N_MAX_P;
+                } 
+            }
             break;
         }
         pthread_mutex_unlock (&semCurses);

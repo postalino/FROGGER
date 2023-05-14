@@ -9,4 +9,7 @@ void* tempoDiGioco();
 void inizializza_proiettili();
 void game_over();
 
+void* gestione_proiettili_A(void*);
+void stampa_proiettili();
+
 #endif
