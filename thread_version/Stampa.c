@@ -27,6 +27,10 @@ void play_frogger()
         wattron(win_mappa,COLOR_PAIR(RANA));
         print_sprite(player.x, player.y, FROGGER);
 
+        /*  ENEMY  */
+        genera_enemy();
+        stampa_enemy();
+
         /*   VEICOLI  */
         stampa_veicoli();
 

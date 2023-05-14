@@ -268,6 +268,7 @@ typedef struct rana
     int x;
     int y;
     int id_sprite; 
+    int id_tronco;
 }oggetto_rana;
 
 typedef struct proiettile

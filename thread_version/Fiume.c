@@ -100,10 +100,12 @@ void* gestione_tronco(void* tronco)
             if(npc_tronco->x + L_TRUNK_X2 >= MAXX - 30) //cambia la direzione del tronco se tocca il bordo destro
             {
                 direzione *= -1;
+                npc_tronco->verso *= -1;
             }
             else if(npc_tronco->x <= 30)//cambia la direzione del tronco se tocca il bordo sinistro
             {
                 direzione *= -1;
+                npc_tronco->verso *= -1;
             }
 
             usleep(TIME);
@@ -131,10 +133,12 @@ void* gestione_tronco(void* tronco)
             if(npc_tronco->x + L_TRUNK_X2 >= MAXX -30) //cambia la direzione del tronco se tocca il bordo destro
             {
                 direzione *= -1;
+                npc_tronco->verso *= -1;
             }
             else if(npc_tronco->x <= 30)//cambia la direzione del tronco se tocca il bordo sinistro
             {
                 direzione *= -1;
+                npc_tronco->verso *= -1;
             }
             
             usleep(TIME);
@@ -161,10 +165,12 @@ void* gestione_tronco(void* tronco)
             if(npc_tronco->x + L_TRUNK_X3 >= MAXX -30) //cambia la direzione del tronco se tocca il bordo destro
             {
                 direzione *= -1;
+                npc_tronco->verso *= -1;
             }
             else if(npc_tronco->x <= 30)//cambia la direzione del tronco se tocca il bordo sinistro
             {
                 direzione *= -1;
+                npc_tronco->verso *= -1;
             }
 
             usleep(TIME);
@@ -192,10 +198,12 @@ void* gestione_tronco(void* tronco)
             if(npc_tronco->x + L_TRUNK_X3 >= MAXX - 30) //cambia la direzione del tronco se tocca il bordo destro
             {
                 direzione *= -1;
+                npc_tronco->verso *= -1;
             }
             else if(npc_tronco->x <= 30)//cambia la direzione del tronco se tocca il bordo sinistro
             {
                 direzione *= -1;
+                npc_tronco->verso *= -1;
             }
     
             usleep(TIME);

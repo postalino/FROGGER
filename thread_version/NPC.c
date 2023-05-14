@@ -59,3 +59,99 @@ void* wasd_rana()
         pthread_mutex_unlock (&semCurses);
     }
 }
+
+void genera_enemy()
+{
+    int tronco_idx;
+    int traslazione;
+
+        srand(time(NULL)); 
+    
+        if((rand()%1000) <= 100){
+            tronco_idx = rand()%3;
+            traslazione = rand()%3;
+
+            if(traslazione < 2){
+
+                for (size_t j = 0; j < N_MAX_ENEMY; j++)
+                {
+                    if(enemy[j].x == -1){
+                        enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
+                        enemy[j].y = tronchi[tronco_idx].y;
+                        enemy[j].id_tronco = tronco_idx;
+
+                        for (size_t k = 0; k < N_MAX_ENEMY; k++)
+                        {
+                            if(enemy[k].x != -1 && k!=j){
+                                if(player.y == enemy[j].y || enemy[k].y == enemy[j].y){
+                                    enemy[j].x = -1;
+                                    k = N_MAX_ENEMY;
+                                }
+                            }
+                        }
+                        j = N_MAX_ENEMY;
+                        
+                    }
+                }
+                
+            }
+            else{
+                for (size_t j = 0; j < N_MAX_ENEMY; j++)
+                {
+                    if(enemy[j].x == -1 && tronchi[tronco_idx].id_sprite == ID_TRUNK_X3){
+                        enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
+                        enemy[j].y = tronchi[tronco_idx].y;
+                        enemy[j].id_tronco = tronco_idx;
+
+                        for (size_t k = 0; k < N_MAX_ENEMY; k++)
+                        {
+                            if(enemy[k].x != -1 && k!=j){
+                                if(player.y == enemy[j].y || enemy[k].y == enemy[j].y){
+                                    enemy[j].x = -1;
+                                    k = N_MAX_ENEMY;
+                                }
+                            }
+                        }
+                        j = N_MAX_ENEMY; 
+                    }
+                }
+            }
+        }
+}
+
+void inizializza_enemy()
+{
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
+    {
+        enemy[i].id_sprite=ID_ENEMY;
+        enemy[i].x = -1;
+    }
+    
+}
+void* gestione_enemy(void* enemy)
+{
+    oggetto_rana* Enemy = (oggetto_rana *) enemy;
+    while(running)
+    {
+        if(Enemy->x != -1)
+        {
+            pthread_mutex_lock (&semCurses);
+            Enemy->x += (L_FROGGER*tronchi[Enemy->id_tronco].verso);
+            pthread_mutex_unlock (&semCurses);
+        }
+        usleep(TIME);
+    }
+}
+
+void stampa_enemy()
+{   
+    init_pair(ENEMY, COLOR_YELLOW, COLOR_BLUE);
+    for (size_t i = 0; i < N_MAX_ENEMY; i++)
+    {
+        if(enemy[i].x != -1)
+        {
+            wattron(win_mappa, COLOR_PAIR(ENEMY));
+            print_sprite(enemy[i].x, enemy[i].y, FROGGER);
+        }
+    }   
+}
