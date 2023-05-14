@@ -44,11 +44,11 @@ void play_frogger()
 
         /* PROIETTILI */
         collisioni_proiettili_bordi();
+        collisioni_proiettili_macchine();
         stampa_proiettili();
 
         /*  COLLISIONI  */
-        collisioni_tane_occupate();
-        collisioni_rana_veicoli();
+        collisioni_game();
 
         wrefresh(win_mappa);
 

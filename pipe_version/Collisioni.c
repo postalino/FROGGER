@@ -148,8 +148,7 @@ void collisioni_proiettile_enemy()
                 }
             }
         }
-    }
-    
+    }  
 }
 
 void collisioni_proiettili_bordi()
