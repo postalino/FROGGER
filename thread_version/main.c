@@ -4,7 +4,8 @@ int main()
 {
     pthread_t tRana; 
     pthread_t tTronchi[N_CORSIE_FIUME];
-    pthread_t tTempo,tVeicoli[N_VEICOLI];
+    pthread_t tTempo;
+    pthread_t tVeicoli[N_VEICOLI];
     pthread_t tProiettili_A[N_MAX_P];
     pthread_t tProiettili_E[N_MAX_P];
     pthread_t tEnemy[N_MAX_ENEMY];
@@ -62,6 +63,7 @@ int main()
 
     /* Attendo la terminazione del thread */
     pthread_join (tRana, NULL);
+    pthread_join (tTempo, NULL);
     for (size_t i = 0; i < N_VEICOLI; i++)
     {
         pthread_join (tVeicoli[i], NULL);
@@ -69,7 +71,14 @@ int main()
     for (size_t i = 0; i < N_CORSIE_FIUME; i++)
     {
         pthread_join (tTronchi[i], NULL);
+        pthread_join (tEnemy[i], NULL);
     }
+    for (size_t i = 0; i < N_MAX_P; i++)
+    {
+        pthread_join (tProiettili_A[i], NULL);
+        pthread_join (tProiettili_E[i], NULL);
+    }
+    
 
     /* Elimino il mutex ed il semaforo */
     pthread_mutex_destroy (&semCurses);
