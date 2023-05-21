@@ -6,6 +6,7 @@ int vite = 3;   //vite iniziali
 
 int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo, int fd_enemy[N_MAX_ENEMY][2],int fd_fine_manche[N_VEICOLI][2])
 {
+    punti=0;
     oggetto_rana player = {X_START , Y_START, ID_FROGGER};
     int movimento_rana = 0;
     int sparo = 0;
@@ -29,6 +30,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
                 write(fd_fine_manche[i][1],&finemanche,sizeof(finemanche));
             }
             finemanche = 0;
+            punti += max_time;
             
             //se la tana viene occupata si ripristina il tempo di gioco
             max_time = 60;
@@ -205,6 +207,9 @@ void print_barra_tempo(int fd_time)
         {
             mvwprintw(win_mappa,MAXY-1,36+i," ");
         }
+        //stampa score
+    wattron(win_mappa,COLOR_PAIR(T_MAX_WORD));
+    mvwprintw(win_mappa,MAXY-2,30,"SCORE : %d", punti);
 }
 
 void mappa_frogger(int fd_time)

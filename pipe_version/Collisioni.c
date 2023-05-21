@@ -143,6 +143,7 @@ void collisioni_proiettile_enemy()
             {
                 if((proiettili_alleati[j].x == enemy[i].x +H_FROGGER) && (proiettili_alleati[j].y >= enemy[i].y && proiettili_alleati[j].y <= enemy[i].y +H_FROGGER ) )
                 {
+                    punti+= 5;
                     enemy[i].x = -1;
                     proiettili_alleati[j].x = -1;
                 }

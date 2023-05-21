@@ -311,6 +311,8 @@ oggetto_proiettile proiettili_nemici[N_MAX_P];
 oggetto_rana enemy[N_MAX_ENEMY]; 
 WINDOW *win_mappa;
 
+int punti;
+
 #include "Collisioni.h"
 #include "Fiume.h"
 #include "NPC.h"
