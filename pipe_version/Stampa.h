@@ -7,6 +7,7 @@
 int calcola_background(int x , int y);
 void print_barra_tempo(int fd_time);
 void print_sprite(int x,int y, const char *sprite[]);
+void print_sprite_menu(WINDOW *name_win, int x, int y, const char *sprite[]);
 void mappa_frogger(int fd_time);
 
 //funzioni logiche

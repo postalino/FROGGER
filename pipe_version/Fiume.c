@@ -184,14 +184,16 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
     }
 }
 
-void lettura_pipe_tronchi(oggetto_rana *npc_rana, oggetto_tronco tronchi[N_CORSIE_FIUME], int fd_tronco[N_CORSIE_FIUME][2], int *vite, oggetto_rana enemy[N_MAX_ENEMY])
+void lettura_pipe_tronchi(oggetto_rana *npc_rana, oggetto_tronco tronchi[N_CORSIE_FIUME], int fd_tronco[N_CORSIE_FIUME][2], int *vite, oggetto_rana enemy[N_MAX_ENEMY], int * tempo)
 {
     int spostamento = 0;
     for (size_t i = 0; i < N_CORSIE_FIUME; i++)
         {
             read(fd_tronco[i][0],&spostamento,sizeof(spostamento));     //leggo il tronco
-            if(tronco_taxi(npc_rana, tronchi[i], spostamento))     //se la rana è sopra il tronco segue il suo movimento
+            if(tronco_taxi(npc_rana, tronchi[i], spostamento)){     //se la rana è sopra il tronco segue il suo movimento
+                (*tempo) = 60;
                 (*vite)--;   //la rana è caduta nel fiume
+            }
             
             for (size_t j = 0; j < N_MAX_ENEMY; j++)
             {

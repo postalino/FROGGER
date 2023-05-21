@@ -341,7 +341,7 @@ int menu_fine_partita(int risultato_partita)
         wrefresh(menu_fine_partita);
 
         timeout(100);
-        choice = wgetch(menu_fine_partita);
+        choice = getch();
 
         switch (choice)
         {

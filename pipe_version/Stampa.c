@@ -59,7 +59,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         /*   TRONCO   */
         delay_lettura++; //sincronizza la lettura del tronco una ogni tempo_tronco/tempo_padre
         if(delay_lettura == TIME/TIME_MAIN){
-            lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite, enemy); // vengono aggiornati i tronchi. Se la rana è sopra uno dei tronchi viene trasportata
+            lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite, enemy, &max_time); // vengono aggiornati i tronchi. Se la rana è sopra uno dei tronchi viene trasportata
             delay_lettura = 0;
         }
 
@@ -209,7 +209,7 @@ void print_barra_tempo(int fd_time)
         }
         //stampa score
     wattron(win_mappa,COLOR_PAIR(T_MAX_WORD));
-    mvwprintw(win_mappa,MAXY-2,30,"SCORE : %d", punti);
+    mvwprintw(win_mappa,MAXY-1,MAXX-51,"SCORE : %d", punti);
 }
 
 void mappa_frogger(int fd_time)
@@ -315,6 +315,15 @@ void print_sprite(int x, int y, const char *sprite[])
     int i = 0;
     while (sprite[i] != NULL) {  // scorri l'array finché non raggiungi la fine
         mvwprintw(win_mappa, y + i, x, sprite[i]);
+        i++;
+    }
+}
+
+void print_sprite_menu(WINDOW *name_win, int x, int y, const char *sprite[])
+{
+    int i = 0;
+    while (sprite[i] != NULL) {  // scorri l'array finché non raggiungi la fine
+        mvwprintw(name_win, y + i, x, sprite[i]);
         i++;
     }
 }

@@ -90,6 +90,7 @@ void* gestione_tronco(void* tronco)
             pthread_mutex_lock (&semCurses);
             if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
+                max_time = 60;
                 finemanche = 6;
             }
 
