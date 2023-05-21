@@ -115,7 +115,7 @@ void* gestione_tronco(void* tronco)
                 npc_tronco->verso *= -1;
             }
 
-            usleep(TIME);
+            usleep(velocita_oggetti);
         } 
     }
 
@@ -155,7 +155,7 @@ void* gestione_tronco(void* tronco)
                 npc_tronco->verso *= -1;
             }
             
-            usleep(TIME);
+            usleep(velocita_oggetti);
         }
     }
     
@@ -193,7 +193,7 @@ void* gestione_tronco(void* tronco)
                 npc_tronco->verso *= -1;
             }
 
-            usleep(TIME);
+            usleep(velocita_oggetti);
         }
     }
 
@@ -232,7 +232,7 @@ void* gestione_tronco(void* tronco)
                 npc_tronco->verso *= -1;
             }
     
-            usleep(TIME);
+            usleep(velocita_oggetti);
         }
     }
 }
@@ -364,4 +364,14 @@ void collisioni_tane_occupate()
             finemanche=6;
         }
     }
+}
+
+int vittoria()
+{
+    for (size_t i = 0; i < N_TANE; i++)
+    {
+        if(!tane[i].occupata)
+            return 0;
+    }
+    return 1;  
 }

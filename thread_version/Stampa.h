@@ -17,5 +17,5 @@ int abilita_movimento_confini_mappa(int direzione);
 WINDOW* crea_finestra();
 
 //play
-void play_frogger();
+int play_frogger();
 #endif

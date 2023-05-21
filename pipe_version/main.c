@@ -322,7 +322,9 @@ void lettura_scores()
     WINDOW *punteggio;
     int MAX_DIMENSIONE_RIGA = 25;
     char riga[MAX_DIMENSIONE_RIGA];
-    int i= 0;
+    int i= 0, choice = -1;
+    bool continua = true;
+    int highlight = 0;
 
     int max_y, max_x;
     getmaxyx(stdscr, max_y, max_x); // Ottieni la dimensione dello schermo stdscr
@@ -332,7 +334,7 @@ void lettura_scores()
 
     punteggio = newwin(MAXY, MAXX+10, win_y, win_x); // Crea una finestra mappa centrata
     CHECK_WINDOW(punteggio); //verifica se a finestra e' stata creata correttamente
-
+    keypad(punteggio, true);
     // Apriamo il file in modalità di lettura
     file = fopen("scores.txt", "r");
 
@@ -341,22 +343,47 @@ void lettura_scores()
         exit(0);
     }
 
-    print_sprite_menu(punteggio,MAXX/10-15, MAXY/10-3, BEST_PLAYER);
-    print_sprite_menu(punteggio, MAXX/2 -40,MAXY/2 -9, SCORE_WIN);
-    print_sprite_menu(punteggio, MAXX/2 + 9 ,MAXY/2 -9, SCORE_WIN);
+    nodelay(punteggio, TRUE); // Imposta la modalità non bloccante per l'input da tastiera
 
-    // Leggiamo e stampiamo il contenuto del file riga per riga
-    while (fgets(riga, MAX_DIMENSIONE_RIGA, file) != NULL) {
+    do{
+        print_sprite_menu(punteggio,MAXX/10-15, MAXY/10-3, BEST_PLAYER);
+        print_sprite_menu(punteggio, MAXX/2 -40,MAXY/2 -9, SCORE_WIN);
+        print_sprite_menu(punteggio, MAXX/2 + 9 ,MAXY/2 -9, SCORE_WIN);
 
-        mvwprintw(punteggio, MAXY/2+i, MAXX/2-9,"%s", riga);
-        i+= 2;
-    }
+        // Leggiamo e stampiamo il contenuto del file riga per riga
+        while (fgets(riga, MAX_DIMENSIONE_RIGA, file) != NULL) {
 
-    mvwprintw(punteggio, MAXY/2 + 6, MAXX/2-18,"***************************************");
-    mvwprintw(punteggio, MAXY/2 + 7, MAXX/2-18,"* PREMI UN TASTO QUALSIASI PER USCIRE *");
-    mvwprintw(punteggio, MAXY/2 + 8, MAXX/2-18,"***************************************");
-    wrefresh(punteggio);
-    getchar();
+            mvwprintw(punteggio, MAXY/2+i, MAXX/2-9,"%s", riga);
+            i+= 2;
+        }
+
+        mvwprintw(punteggio, MAXY/2 + 6, MAXX/2-21,"***************************************");
+        mvwprintw(punteggio, MAXY/2 + 7, MAXX/2-21,"* ");
+        if (highlight){
+                wattron(punteggio, A_REVERSE);
+            }
+        mvwprintw(punteggio, MAXY/2 + 7, MAXX/2-19,"PREMI UN TASTO QUALSIASI PER USCIRE");
+        wattroff(punteggio, A_REVERSE);
+        mvwprintw(punteggio, MAXY/2 + 7, MAXX/2+16," *");
+        mvwprintw(punteggio, MAXY/2 + 8, MAXX/2-21,"***************************************");
+        wrefresh(punteggio);
+        
+        if(highlight)
+            highlight = 0;
+        else{
+            highlight = 1;
+        }
+
+        timeout(1);
+        choice = wgetch(punteggio);
+        if(choice != -1)
+            continua = false;
+        
+        wrefresh(punteggio);
+        if(choice == -1)
+            usleep(TIME_MAIN*3);
+    }while (continua);
+    
     wclear(punteggio);
     wrefresh(punteggio);
     
@@ -364,7 +391,6 @@ void lettura_scores()
     delwin(punteggio);
     // Chiudiamo il file
     fclose(file);
-
 }
 
 void menu_difficolta()

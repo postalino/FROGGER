@@ -23,12 +23,8 @@ void inizializza_proiettili()
 
 void game_over()
 {
-    if(max_time < 0 || vite <1)
-    {
-        pthread_mutex_lock (&semCurses);
-        running = false;
-        pthread_mutex_unlock (&semCurses);
-    }  
+    if(max_time == 0 || vite<1 || vittoria())
+            running = false;//fine partita 
 }
 
 void collisioni_rana_veicoli()

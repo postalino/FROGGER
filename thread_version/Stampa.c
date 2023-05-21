@@ -1,15 +1,18 @@
 #include "Stampa.h"
 
-void play_frogger()
+int play_frogger()
 {
+    pthread_mutex_lock (&semCurses);
     max_time = 60; //tempo max in secondi per raggiungere una tana
     vite = 3;   //vite iniziali
     inizializza_posizione_tane();
+    pthread_mutex_unlock (&semCurses);
 
-    while (running)
+    do
     {
         //operazioni di stampa oggetti aggiornati + mappa
         pthread_mutex_lock (&semCurses);
+        game_over(); //verifica se il gioco è finito
 
         /*   TANE     */
         if(tana_occupata()){
@@ -46,13 +49,13 @@ void play_frogger()
 
         wrefresh(win_mappa);
 
-        game_over(); //verifica se il gioco è finito
-
         pthread_mutex_unlock (&semCurses);
 
         usleep(TIME_MAIN);
         
-    }
+    }while (running);
+
+    return vittoria();
 }
 
 WINDOW *crea_finestra()
@@ -245,7 +248,7 @@ void print_barra_tempo()
             wattron(win_mappa,COLOR_PAIR(T_MAX_WORD));
         else if(vite == 2)
             wattron(win_mappa,COLOR_PAIR(T_MIDLE_WORD));
-        else if(vite == 1)
+        else if(vite <= 1)
             wattron(win_mappa,COLOR_PAIR(T_MIN_WORD));
         mvwprintw(win_mappa,MAXY-1,MAXX - 37,"VITE: %d",vite);
 

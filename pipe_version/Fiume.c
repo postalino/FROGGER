@@ -309,6 +309,5 @@ int vittoria()
         if(!tane_gioco[i].occupata)
             return 0;
     }
-    return 1;
-    
+    return 1;  
 }

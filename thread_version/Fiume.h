@@ -20,4 +20,7 @@ void inizializza_posizione_tane();
 void print_tane_occupate();
 void collisioni_tane_occupate();
 
+/*  VITTORIA    */
+int vittoria();
+
 #endif
