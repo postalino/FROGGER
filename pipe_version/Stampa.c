@@ -14,6 +14,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
     int finemanche = 0;
     bool play = true;
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
+    
 
     while (play)
     {
@@ -35,7 +36,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
             //se la tana viene occupata si ripristina il tempo di gioco
             max_time = 60;
         }
-        fuori_area_tane(&player, &vite);
+        fuori_area_tane(&player, &vite);        
 
         /*   RANA     */
         read(fd_rana, &movimento_rana, sizeof(movimento_rana));
@@ -58,7 +59,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         
         /*   TRONCO   */
         delay_lettura++; //sincronizza la lettura del tronco una ogni tempo_tronco/tempo_padre
-        if(delay_lettura == TIME/TIME_MAIN){
+        if(delay_lettura == velocita_oggetti/TIME_MAIN){
             lettura_pipe_tronchi(&player,tronchi,fd_tronchi, &vite, enemy, &max_time); // vengono aggiornati i tronchi. Se la rana è sopra uno dei tronchi viene trasportata
             delay_lettura = 0;
         }
@@ -105,9 +106,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         usleep(TIME_MAIN);
         wclear(win_mappa);
     }
-
-    vite = 3; //reset vite 
-    max_time = 60; //reset tempo;
+    vite = 3;
 
     return vittoria();
 }

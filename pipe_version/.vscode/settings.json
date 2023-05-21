@@ -37,6 +37,7 @@
   "C_Cpp_Runner.includePaths": [],
   "files.associations": {
     "stampa.h": "c",
-    "fiume.h": "c"
+    "fiume.h": "c",
+    "frogger.h": "c"
   }
 }

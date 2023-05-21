@@ -112,7 +112,7 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
                 direzione *= -1;
             }
 
-            usleep(TIME);
+            usleep(velocita_oggetti);
         } 
     }
 
@@ -134,7 +134,7 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
                 direzione *= -1;
             }
             
-            usleep(TIME);
+            usleep(velocita_oggetti);
         }
     }
     
@@ -156,7 +156,7 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
                 direzione *= -1;
             }
 
-            usleep(TIME);
+            usleep(velocita_oggetti);
         }
     }
 
@@ -179,7 +179,7 @@ void gestione_tronco(int fd_tronco, oggetto_tronco npc_tronco)
                 direzione *= -1;
             }
     
-            usleep(TIME);
+            usleep(velocita_oggetti);
         }
     }
 }

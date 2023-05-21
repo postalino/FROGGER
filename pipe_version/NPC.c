@@ -19,7 +19,7 @@ void wasd_rana(int fd_rana, int fd_sparo)
     while (true)
     {
         timeout(1);
-        direzione = getch();
+        direzione = wgetch(win_mappa);
 
         switch (direzione)
         {
@@ -122,7 +122,7 @@ void genera_enemy(oggetto_rana player)
 
         srand(time(NULL)); 
     
-        if((rand()%1000) <= 100){
+        if((rand()%1000) <= frequenza_enemy){
             tronco_idx = rand()%3;
             traslazione = rand()%3;
 

@@ -3,6 +3,7 @@
 #define INVIO 10
 #define SCELTE_START 4
 #define SCELTE_END 2
+#define SCELTE_DIFFICOLTA 3
 
 pid_t p_rana, p_tronco[N_CORSIE_FIUME],p_veicoli[N_VEICOLI], p_time, p_proiettile_alleati[N_MAX_P], p_enemy[N_MAX_ENEMY], p_proiettile_nemici[N_MAX_P];
 int fd_veicolo [N_VEICOLI][2];
@@ -20,6 +21,7 @@ void close_all_child();
 void cleanup();
 int menu_fine_partita(int risultato_partita);
 int menu_iniziale();
+void menu_difficolta();
 void lettura_scores();
 
 int main()
@@ -30,111 +32,146 @@ int main()
     int play_again, new_play;
     int verso, dimensione_tronco;
     int traslazioni[N_CORSIE_FIUME];
+    bool restart = false;
     
+    //default difficoltà (semplice)
+    velocita_oggetti = TIME_DEFAULT;
+    frequenza_enemy = FREQUENZA_DEFAULT;
+
+    do
+    {
     //crea la finestra e attiva/disattiva i comandi richiesti
     initscr();
     noecho();
     cbreak();
     start_color();
     curs_set(0);
-    keypad(stdscr, true);
-    
-    // creazione finestra principale centrata
-    win_mappa = crea_finestra();
-    CHECK_WINDOW(win_mappa); //verifica se a finestra e' stata creata correttamente
-    
-    //calcolo randomicamente una traslazione iniziale per avere movimenti diversi dei tronchi
-    for (int i = 0; i < N_CORSIE_FIUME; i++) {
-        traslazioni[i] = (L_FROGGER*(rand()%4));  // genero l'incremento casuale [set casuale-->(0,9,18,27)]
-        for (int j = 0; j < i; j++) {
-            if (traslazioni[j] == traslazioni[i]) {  // controllo se l'incremento è gia stato generato
-                i--;  // se sì, decrementa i per ripetere il ciclo e generarne un'altro
+
+    new_play = menu_iniziale();
+
+    if(new_play){
+        do{
+            if(restart){
+                initscr();
+                noecho();
+                cbreak();
+                start_color();
+                curs_set(0);
+                restart = false;
+            }
+
+            // creazione finestra principale centrata
+            win_mappa = crea_finestra();
+            CHECK_WINDOW(win_mappa); //verifica se a finestra e' stata creata correttamente
+            keypad(win_mappa, true);
+
+            
+            //calcolo randomicamente una traslazione iniziale per avere movimenti diversi dei tronchi
+            for (int i = 0; i < N_CORSIE_FIUME; i++) {
+                traslazioni[i] = (L_FROGGER*(rand()%4));  // genero l'incremento casuale [set casuale-->(0,9,18,27)]
+                for (int j = 0; j < i; j++) {
+                    if (traslazioni[j] == traslazioni[i]) {  // controllo se l'incremento è gia stato generato
+                        i--;  // se sì, decrementa i per ripetere il ciclo e generarne un'altro
+                        break;
+                    }
+                }
+            }
+            //inizializzo le strutture tronchi per avere la stessa coppia sia nel padre sia nel figlio
+            for (int i = 0; i < N_CORSIE_FIUME; i++)
+            {
+                //determino randomicamente il verso del tronco ( 0 -. destra | 1 -. sinistra)
+                verso = rand()%2;
+                //determino randomicamente la dimensione del tronco (0 -. x2 | 1 -. x3)
+                dimensione_tronco = rand()%2;
+                //inizializza la struttura specifica
+                inizializza_tronco(&tronchi[i], i, verso, dimensione_tronco, traslazioni[i]);
+            }
+                
+            inizializza_veicoli();
+
+            genera_processi_veicoli(fd_veicolo,p_veicoli,fd_fine_manche);
+
+            inizializza_enemy(fd_enemy, p_enemy);
+
+            //inizializzo le cordinate dei proiettili fuori mappa e creo le pipe di ogni proiettile
+            inizializza_proiettili(fd_proiettile_alleati, p_proiettile_alleati, proiettili_alleati);
+            inizializza_proiettili(fd_proiettile_nemici, p_proiettile_nemici, proiettili_nemici);
+
+            generazione_processi_tronco(fd_tronchi,p_tronco,tronchi);
+
+            CHECK_PIPE(fd_time);    //verifica se la pipe e' stata creata correttamente
+            fcntl(fd_time[0],F_SETFL, O_NONBLOCK); //imposto la pipe come non bloccante
+            CHECK_PID(p_time);  //creo processo figlio tempo di gioco
+                
+            switch (p_time)
+            {
+            case 0:
+                /* processo figlio */
+                close(fd_time[0]);  //chiusura file descriptor in lettura
+                tempoDiGioco(fd_time[1]);
+                break;
+                
+            default:
+                /* processo padre */
+                close(fd_time[1]); //chiusura file descriptor in scrittura
                 break;
             }
-        }
-    }
-    //inizializzo le strutture tronchi per avere la stessa coppia sia nel padre sia nel figlio
-    for (int i = 0; i < N_CORSIE_FIUME; i++)
-    {
-        //determino randomicamente il verso del tronco ( 0 -. destra | 1 -. sinistra)
-        verso = rand()%2;
-        //determino randomicamente la dimensione del tronco (0 -. x2 | 1 -. x3)
-        dimensione_tronco = rand()%2;
-        //inizializza la struttura specifica
-        inizializza_tronco(&tronchi[i], i, verso, dimensione_tronco, traslazioni[i]);
-    }
-        
-    inizializza_veicoli();
 
-    genera_processi_veicoli(fd_veicolo,p_veicoli,fd_fine_manche);
+            CHECK_PIPE(fd_sparo);    //verifica se la pipe e' stata creata correttamente
+            fcntl(fd_sparo[0],F_SETFL, O_NONBLOCK); //imposto la pipe come non bloccante
 
-    inizializza_enemy(fd_enemy, p_enemy);
+            CHECK_PIPE(fd_rana);    //verifica se la pipe e' stata creata correttamente
+            fcntl(fd_rana[0],F_SETFL, O_NONBLOCK); //imposto la pipe come non bloccante
+            CHECK_PID(p_rana);  //creo processo figlio rana
 
-    //inizializzo le cordinate dei proiettili fuori mappa e creo le pipe di ogni proiettile
-    inizializza_proiettili(fd_proiettile_alleati, p_proiettile_alleati, proiettili_alleati);
-    inizializza_proiettili(fd_proiettile_nemici, p_proiettile_nemici, proiettili_nemici);
+            switch (p_rana)
+            {
+            case 0:
+                /* processo figlio */
+                close(fd_rana[0]);  //chiusura file descriptor in lettura
+                close(fd_sparo[0]);  //chiusura file descriptor in lettura
+                wasd_rana(fd_rana[1], fd_sparo[1]);
+                break;
+                
+            default:
+                /* processo padre */
+                close(fd_rana[1]); //chiusura file descriptor in scrittura
+                close(fd_sparo[1]); //chiusura file descriptor in scrittura
+                break;
+            }
 
-    generazione_processi_tronco(fd_tronchi,p_tronco,tronchi);
-
-    CHECK_PIPE(fd_time);    //verifica se la pipe e' stata creata correttamente
-    fcntl(fd_time[0],F_SETFL, O_NONBLOCK); //imposto la pipe come non bloccante
-    CHECK_PID(p_time);  //creo processo figlio tempo di gioco
-        
-    switch (p_time)
-    {
-    case 0:
-        /* processo figlio */
-        close(fd_time[0]);  //chiusura file descriptor in lettura
-        tempoDiGioco(fd_time[1]);
-        break;
-        
-    default:
-        /* processo padre */
-        close(fd_time[1]); //chiusura file descriptor in scrittura
-        break;
-    }
-
-    CHECK_PIPE(fd_sparo);    //verifica se la pipe e' stata creata correttamente
-    fcntl(fd_sparo[0],F_SETFL, O_NONBLOCK); //imposto la pipe come non bloccante
-
-    CHECK_PIPE(fd_rana);    //verifica se la pipe e' stata creata correttamente
-    fcntl(fd_rana[0],F_SETFL, O_NONBLOCK); //imposto la pipe come non bloccante
-    CHECK_PID(p_rana);  //creo processo figlio rana
-
-    switch (p_rana)
-    {
-    case 0:
-        /* processo figlio */
-        close(fd_rana[0]);  //chiusura file descriptor in lettura
-        close(fd_sparo[0]);  //chiusura file descriptor in lettura
-        wasd_rana(fd_rana[1], fd_sparo[1]);
-        break;
-        
-    default:
-        /* processo padre */
-        close(fd_rana[1]); //chiusura file descriptor in scrittura
-        close(fd_sparo[1]); //chiusura file descriptor in scrittura
-        break;
-    }
-
-
-    do
-    {
-        new_play = menu_iniziale();
-
-        if(new_play){
-            do{
             //inizio gioco
             risultato_partita = play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo, fd_proiettile_alleati, fd_sparo[0], fd_enemy,fd_fine_manche);
-        
+            // quando il gioco è finito, chiamare la funzione di pulizia
+            cleanup();
+            usleep(20000);
+            endwin();
+
+            initscr();
+            noecho();
+            cbreak();
+            start_color();
+            curs_set(0);
+
             play_again = menu_fine_partita(risultato_partita);
+            if(play_again)
+                restart = true;
+            
+            usleep(20000);
+            endwin();
 
             }while(play_again);
-        } 
-    }while(new_play);
+
+            usleep(10000);
+            endwin();
+        }
+
     
     // quando il gioco è finito, chiamare la funzione di pulizia
     cleanup();
+    usleep(10000);
+    endwin();
+    }while(new_play);
 
     exit(0);
 }
@@ -208,16 +245,17 @@ int menu_iniziale()
 {
     int choice;
     int highlight = 0;
-    // creazione finestra principale centrata
-    WINDOW * menu_partita;
+    
+    WINDOW *menu_partita;
     menu_partita = crea_finestra();
     CHECK_WINDOW(menu_partita); //verifica se a finestra e' stata creata correttamente
-    
-    char *scelte[SCELTE_START] = {"NUOVA PARTITA", "DIFFICOLTA'", "BEST SCORES","EXIT"};
+    keypad(menu_partita, true);
 
+    char *scelte[SCELTE_START] = {"NUOVA PARTITA", "DIFFICOLTA'", "BEST SCORES","EXIT"};
     while (true)
     {
-        print_sprite_menu(menu_partita,MAXX/10, MAXY/10, WIN);
+        wclear(menu_partita);
+        print_sprite_menu(menu_partita,MAXX/10, MAXY/10, START);
         
         print_sprite_menu(menu_partita, MAXX/2 -35,MAXY/2 -2, R_LEFT_LOSE);
         print_sprite_menu(menu_partita, MAXX/2 + 15,MAXY/2 -1, R_RIGHT_LOSE);
@@ -237,8 +275,8 @@ int menu_iniziale()
 
         wrefresh(menu_partita);
 
-        timeout(100);
-        choice = getch();
+        timeout(0);
+        choice = wgetch(menu_partita);
 
         switch (choice)
         {
@@ -260,13 +298,13 @@ int menu_iniziale()
                 return 1;
                 break;
             case 1:
-                //menu_difficolta();
+                menu_difficolta();
                 break;
             case 2:
+                wclear(menu_partita);
                 lettura_scores();
                 break;
             case 3:
-                delwin(menu_partita);
                 return 0;
                 break;
             default:
@@ -281,9 +319,19 @@ int menu_iniziale()
 void lettura_scores()
 {
     FILE *file;
+    WINDOW *punteggio;
     int MAX_DIMENSIONE_RIGA = 25;
     char riga[MAX_DIMENSIONE_RIGA];
     int i= 0;
+
+    int max_y, max_x;
+    getmaxyx(stdscr, max_y, max_x); // Ottieni la dimensione dello schermo stdscr
+
+    int win_y = (max_y - MAXY) / 2; // Posizione Y della finestra centrata
+    int win_x = (max_x - MAXX) / 2; // Posizione X della finestra centrata
+
+    punteggio = newwin(MAXY, MAXX+10, win_y, win_x); // Crea una finestra mappa centrata
+    CHECK_WINDOW(punteggio); //verifica se a finestra e' stata creata correttamente
 
     // Apriamo il file in modalità di lettura
     file = fopen("scores.txt", "r");
@@ -293,20 +341,101 @@ void lettura_scores()
         exit(0);
     }
 
+    print_sprite_menu(punteggio,MAXX/10-15, MAXY/10-3, BEST_PLAYER);
+    print_sprite_menu(punteggio, MAXX/2 -40,MAXY/2 -9, SCORE_WIN);
+    print_sprite_menu(punteggio, MAXX/2 + 9 ,MAXY/2 -9, SCORE_WIN);
+
     // Leggiamo e stampiamo il contenuto del file riga per riga
     while (fgets(riga, MAX_DIMENSIONE_RIGA, file) != NULL) {
 
-        mvwprintw(win_mappa, MAXY/2+i, MAXX/2-9,"%s", riga);
+        mvwprintw(punteggio, MAXY/2+i, MAXX/2-9,"%s", riga);
         i+= 2;
     }
 
-    wrefresh(win_mappa);
+    mvwprintw(punteggio, MAXY/2 + 6, MAXX/2-18,"***************************************");
+    mvwprintw(punteggio, MAXY/2 + 7, MAXX/2-18,"* PREMI UN TASTO QUALSIASI PER USCIRE *");
+    mvwprintw(punteggio, MAXY/2 + 8, MAXX/2-18,"***************************************");
+    wrefresh(punteggio);
     getchar();
+    wclear(punteggio);
+    wrefresh(punteggio);
     
-
+    //cancella la finestra
+    delwin(punteggio);
     // Chiudiamo il file
     fclose(file);
 
+}
+
+void menu_difficolta()
+{
+    int choice;
+    int highlight = 0;
+    bool continua = true;
+    // creazione finestra principale centrata
+    WINDOW * selezione_difficolta;
+    selezione_difficolta = crea_finestra();
+    CHECK_WINDOW(selezione_difficolta); //verifica se a finestra e' stata creata correttamente
+    keypad(selezione_difficolta, true);
+
+    char *scelte[SCELTE_DIFFICOLTA] = {"FACILE", "MEDIA", "DIFFICILE"};
+
+    do
+    {   print_sprite_menu(selezione_difficolta,MAXX/10, MAXY/10, START);
+        print_sprite_menu(selezione_difficolta, MAXX/2 -35,MAXY/2 -2, R_LEFT_LOSE);
+        print_sprite_menu(selezione_difficolta, MAXX/2 + 15,MAXY/2 -1, R_RIGHT_LOSE);
+
+        for (size_t i = 0; i < SCELTE_DIFFICOLTA; i++)
+        {
+            if (i == highlight)
+                wattron(selezione_difficolta, A_REVERSE);
+            mvwprintw(selezione_difficolta, MAXY/2+i, MAXX/2-9, scelte[i]);
+            wattroff(selezione_difficolta, A_REVERSE);
+        }
+
+        wrefresh(selezione_difficolta);
+
+        timeout(100);
+        choice = wgetch(selezione_difficolta);
+
+        switch (choice)
+        {
+        case KEY_UP:
+            highlight--;
+            if(highlight < 0)
+                highlight = 1;
+            break;
+        case KEY_DOWN:
+            highlight++;
+            if(highlight > SCELTE_DIFFICOLTA -1 )
+                highlight = 0;
+            break;
+        case INVIO:
+            delwin(selezione_difficolta);
+            switch (highlight)
+            {
+            case 0:
+                velocita_oggetti = TIME_MAIN * 4;
+                frequenza_enemy = 100;
+                continua = false;
+                break;
+            case 1:
+                velocita_oggetti = TIME_MAIN * 3;
+                frequenza_enemy = 200;
+                continua = false;
+                break;
+            case 2:
+                velocita_oggetti = TIME_MAIN * 2;
+                frequenza_enemy = 300;
+                continua = false;
+                break;
+            default:
+                break;
+            }
+        default:
+            break;
+        }
+    }while(continua);
 }
 
 int menu_fine_partita(int risultato_partita)
@@ -317,7 +446,8 @@ int menu_fine_partita(int risultato_partita)
     WINDOW * menu_fine_partita;
     menu_fine_partita = crea_finestra();
     CHECK_WINDOW(menu_fine_partita); //verifica se a finestra e' stata creata correttamente
-    
+    keypad(menu_fine_partita,true);
+
     char *scelte[SCELTE_END] = {"MENU' PRINCIPALE", "  GIOCA ANCORA  "};
 
     while (true)
@@ -341,7 +471,7 @@ int menu_fine_partita(int risultato_partita)
         wrefresh(menu_fine_partita);
 
         timeout(100);
-        choice = getch();
+        choice = wgetch(menu_fine_partita);
 
         switch (choice)
         {
