@@ -16,6 +16,7 @@ int play_frogger()
 
         /*   TANE     */
         if(tana_occupata()){
+            punti += max_time;
             max_time = 60;
         }
         fuori_area_tane();
@@ -264,4 +265,7 @@ void print_barra_tempo()
         {
             mvwprintw(win_mappa,MAXY-1,36+i," ");
         }
+        //stampa score
+    wattron(win_mappa,COLOR_PAIR(T_MAX_WORD));
+    mvwprintw(win_mappa,MAXY-1,MAXX-51,"SCORE : %d", punti);
 }

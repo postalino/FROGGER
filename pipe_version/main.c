@@ -474,6 +474,35 @@ int menu_fine_partita(int risultato_partita)
     CHECK_WINDOW(menu_fine_partita); //verifica se a finestra e' stata creata correttamente
     keypad(menu_fine_partita,true);
 
+    if(risultato_partita) // SE VINCI REGISTRA IL TUO NOME
+    {
+        Giocatore giocatori[4];
+        print_sprite_menu(menu_fine_partita,MAXX/10, MAXY/10, WIN);
+        print_sprite_menu(menu_fine_partita, MAXX/2 -35,MAXY/2 -2, R_LEFT_LOSE);
+        print_sprite_menu(menu_fine_partita, MAXX/2 + 15,MAXY/2 -1, R_RIGHT_LOSE);
+
+        mvwprintw(menu_fine_partita, MAXY/2, MAXX/2-14,"Inserisci il tuo nickname: ");
+
+        wgetnstr(menu_fine_partita,giocatori[0].nome, MAX_NOME);
+        giocatori[0].punteggio = punti;
+
+        wclear(menu_fine_partita);
+
+        FILE* file = fopen("scores.txt","r");
+        if(file == NULL)
+        {
+            exit(1);
+        }
+
+        for (size_t i = 1; i < 4; i++)
+        {
+            fscanf(file,"%s %d\n",giocatori[i].nome,&giocatori[i].punteggio);
+        }
+
+        ordina_giocatori(giocatori,4);
+        scrivi_giocatori_file(giocatori,3,"scores.txt");
+    }
+
     char *scelte[SCELTE_END] = {"MENU' PRINCIPALE", "  GIOCA ANCORA  "};
 
     while (true)
@@ -528,4 +557,31 @@ int menu_fine_partita(int risultato_partita)
             break;
         }
     }
+}
+
+void ordina_giocatori(Giocatore* giocatori, int numGiocatori) {
+    int i, j;
+    for (i = 0; i < numGiocatori - 1; i++) {
+        for (j = 0; j < numGiocatori - i - 1; j++) {
+            if (giocatori[j].punteggio < giocatori[j+1].punteggio) {
+                Giocatore temp = giocatori[j];
+                giocatori[j] = giocatori[j+1];
+                giocatori[j+1] = temp;
+            }
+        }
+    }
+}
+
+void scrivi_giocatori_file(Giocatore* giocatori, int numGiocatori, const char* nomeFile) {
+    FILE* file = fopen(nomeFile, "w");
+    if (file == NULL) {
+        printf("Errore nell'apertura del file.\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < numGiocatori; i++) {
+        fprintf(file, "%s %d\n", giocatori[i].nome, giocatori[i].punteggio);
+    }
+
+    fclose(file);
 }

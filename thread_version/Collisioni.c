@@ -243,6 +243,7 @@ void collisioni_proiettile_enemy()
                 {
                     enemy[i].x = -1;
                     proiettili_alleati[j].x = -1;
+                    punti +=5;
                 }
             }
         }

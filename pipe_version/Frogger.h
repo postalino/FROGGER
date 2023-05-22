@@ -301,6 +301,7 @@ typedef struct tana
     bool occupata;
 }oggetto_tana;
 
+
 //ID colori oggetti e scenari
 #define PRATO 1
 #define FIUME 2
@@ -346,7 +347,16 @@ oggetto_proiettile proiettili_nemici[N_MAX_P];
 oggetto_rana enemy[N_MAX_ENEMY]; 
 WINDOW *win_mappa;
 
+//classifica punteggio
+#define MAX_NOME 50
+typedef struct {
+    char nome[MAX_NOME];
+    int punteggio;
+} Giocatore;
 int punti;
+void ordina_giocatori(Giocatore* giocatori, int numGiocatori);
+void scrivi_giocatori_file(Giocatore* giocatori, int numGiocatori, const char* nomeFile);
+
 
 #include "Collisioni.h"
 #include "Fiume.h"

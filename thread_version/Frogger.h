@@ -355,6 +355,16 @@ volatile int vite;
 volatile int max_time;
 volatile bool running;
 
+//classifica punteggio
+#define MAX_NOME 50
+typedef struct {
+    char nome[MAX_NOME];
+    int punteggio;
+} Giocatore;
+int punti;
+void ordina_giocatori(Giocatore* giocatori, int numGiocatori);
+void scrivi_giocatori_file(Giocatore* giocatori, int numGiocatori, const char* nomeFile);
+
 
 #include "Collisioni.h"
 #include "Fiume.h"
