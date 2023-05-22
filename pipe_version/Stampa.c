@@ -107,6 +107,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         wclear(win_mappa);
     }
     vite = 3;
+    max_time = 60;
 
     return vittoria();
 }

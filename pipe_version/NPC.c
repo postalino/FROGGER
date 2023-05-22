@@ -126,7 +126,7 @@ void genera_enemy(oggetto_rana player)
             tronco_idx = rand()%3;
             traslazione = rand()%3;
 
-            if(traslazione < 2){
+            if(traslazione < 2 && tronchi[tronco_idx].y != player.y){
 
                 for (size_t j = 0; j < N_MAX_ENEMY; j++)
                 {
@@ -150,25 +150,27 @@ void genera_enemy(oggetto_rana player)
                 
             }
             else{
-                for (size_t j = 0; j < N_MAX_ENEMY; j++)
-                {
-                    if(enemy[j].x == -1 && tronchi[tronco_idx].id_sprite == ID_TRUNK_X3){
-                        enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
-                        enemy[j].y = tronchi[tronco_idx].y;
+                if(tronchi[tronco_idx].y != player.y){
+                    for (size_t j = 0; j < N_MAX_ENEMY; j++)
+                    {
+                        if(enemy[j].x == -1 && tronchi[tronco_idx].id_sprite == ID_TRUNK_X3){
+                            enemy[j].x = tronchi[tronco_idx].x +(L_FROGGER*traslazione);
+                            enemy[j].y = tronchi[tronco_idx].y;
 
-                        for (size_t k = 0; k < N_MAX_ENEMY; k++)
-                        {
-                            if(enemy[k].x != -1 && k!=j){
-                                if(player.y == enemy[j].y || enemy[k].y == enemy[j].y){
-                                    enemy[j].x = -1;
-                                    k = N_MAX_ENEMY;
+                            for (size_t k = 0; k < N_MAX_ENEMY; k++)
+                            {
+                                if(enemy[k].x != -1 && k!=j){
+                                    if(player.y == enemy[j].y || enemy[k].y == enemy[j].y){
+                                        enemy[j].x = -1;
+                                        k = N_MAX_ENEMY;
+                                    }
                                 }
                             }
+                            j = N_MAX_ENEMY; 
                         }
-                        j = N_MAX_ENEMY; 
                     }
                 }
-            }
+            } 
         }
 }
 
