@@ -356,7 +356,7 @@ volatile int max_time;
 volatile bool running;
 
 //classifica punteggio
-#define MAX_NOME 50
+#define MAX_NOME 20
 typedef struct {
     char nome[MAX_NOME];
     int punteggio;

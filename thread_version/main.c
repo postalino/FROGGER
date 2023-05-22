@@ -104,6 +104,13 @@ int main()
                 risultato_partita = play_frogger();
                 // quando il gioco è finito, chiamare la funzione di pulizia
                 cleanup();
+                endwin();
+
+                initscr();
+                noecho();
+                cbreak();
+                start_color();
+                curs_set(0);
 
                 play_again = menu_fine_partita(risultato_partita);
                 if(play_again)
@@ -188,7 +195,7 @@ int menu_iniziale()
         case KEY_UP:
             highlight--;
             if(highlight < 0)
-                highlight = 1;
+                highlight = SCELTE_START -1;
             break;
         case KEY_DOWN:
             highlight++;
@@ -386,9 +393,27 @@ int menu_fine_partita(int risultato_partita)
         print_sprite_menu(menu_fine_partita, MAXX/2 -35,MAXY/2 -2, R_LEFT_LOSE);
         print_sprite_menu(menu_fine_partita, MAXX/2 + 15,MAXY/2 -1, R_RIGHT_LOSE);
 
-        mvwprintw(menu_fine_partita, MAXY/2, MAXX/2-14,"Inserisci il tuo nickname: ");
+        mvwprintw(menu_fine_partita, MAXY/2, MAXX/2-14,"Inserisci il tuo nickname:");
+        mvwprintw(menu_fine_partita, MAXY/2+1, MAXX/2-14-1," ");
+        wrefresh(menu_fine_partita);
+        
+        int i= 0,ch;
+        curs_set(1);
+        cbreak();
+        do {
+            
+            ch = wgetch(menu_fine_partita);
+            if(ch != INVIO && ((ch >= 'A' || ch <= 'Z') || (ch >= 'a' || ch <= 'a') || (ch >= '0' || ch <= '9' ) || ch == ' ')){
+                mvwprintw(menu_fine_partita, MAXY/2+1, MAXX/2-14 +i,"%c", ch);
+                giocatori[0].nome[i] = ch;
+                wrefresh(menu_fine_partita);   
+                i++;
+            }
+        } while (ch != INVIO && i < MAX_NOME-1); // Continua finché non viene premuto invio o il nome raggiunge la dimensione massima
+        giocatori[0].nome[i] = '\0';
+        wclear(menu_fine_partita);
+        curs_set(0);
 
-        wgetnstr(menu_fine_partita,giocatori[0].nome, MAX_NOME);
         giocatori[0].punteggio = punti;
 
         wclear(menu_fine_partita);

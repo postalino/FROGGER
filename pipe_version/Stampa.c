@@ -15,7 +15,6 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
     bool play = true;
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
     
-
     while (play)
     {
         //operazioni di aggiornamenti degli oggetti

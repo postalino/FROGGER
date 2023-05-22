@@ -481,22 +481,25 @@ int menu_fine_partita(int risultato_partita)
         print_sprite_menu(menu_fine_partita, MAXX/2 -35,MAXY/2 -2, R_LEFT_LOSE);
         print_sprite_menu(menu_fine_partita, MAXX/2 + 15,MAXY/2 -1, R_RIGHT_LOSE);
     
-        mvwprintw(menu_fine_partita, MAXY/2, MAXX/2-14,"Inserisci il tuo nickname: ");
-
-        int ch, i= 0;
+        mvwprintw(menu_fine_partita, MAXY/2, MAXX/2-14,"Inserisci il tuo nickname:");
+        mvwprintw(menu_fine_partita, MAXY/2+1, MAXX/2-14-1," ");
+        int i= -1,ch;
         curs_set(1);
         do {
-        wrefresh(menu_fine_partita);
-        ch = getchar();
-        wprintw(menu_fine_partita,"%c", ch);
-        giocatori[0].nome[i] = ch;
-        i++;
-        
-        } while (ch != INVIO || i < MAX_NOME); // Continua finché non viene premuta la barra spaziatrice o il tasto ESC
-
+            
+            ch = wgetch(menu_fine_partita);
+            if(ch != INVIO && ((ch >= 'A' || ch <= 'Z') || (ch >= 'a' || ch <= 'a') || (ch >= 48 || ch <= 57 ) || ch == ' ')){
+                i++;
+                giocatori[0].nome[i] = ch;
+                mvwprintw(menu_fine_partita, MAXY/2+1, MAXX/2-14 +i,"%c", ch);
+            }
+            
+            wrefresh(menu_fine_partita);
+        } while (ch != INVIO && i < MAX_NOME-1); // Continua finché non viene premuto invio o il nome raggiunge la dimensione massima
+        giocatori[0].nome[i+1] = '\0';
         wclear(menu_fine_partita);
         curs_set(0);
-        //wgetnstr(menu_fine_partita,giocatori[0].nome, MAX_NOME);
+        
         giocatori[0].punteggio = punti;
 
         wclear(menu_fine_partita);

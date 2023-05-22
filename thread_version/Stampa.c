@@ -8,6 +8,12 @@ int play_frogger()
     inizializza_posizione_tane();
     pthread_mutex_unlock (&semCurses);
 
+    tane[0].occupata = true;
+    tane[1].occupata = true;
+    tane[2].occupata = true;
+    tane[3].occupata = true;
+    tane[4].occupata = true;
+
     do
     {
         //operazioni di stampa oggetti aggiornati + mappa
