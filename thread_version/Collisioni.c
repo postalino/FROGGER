@@ -37,12 +37,10 @@ void collisioni_rana_veicoli()
             {
                 if ((player.x == veicolo[i].x + j && player.y == veicolo[i].y) || (player.x + 8 == veicolo[i].x + j && player.y == veicolo[i].y))
                 {
-                    //pthread_mutex_lock (&semCurses);
                     vite--;
-                    finemanche = 6;
+                    max_time = 60;
                     player.x = X_START;
                     player.y = Y_START;
-                    //pthread_mutex_unlock (&semCurses);
                 }
             }
         }else //hitbox camion/pullman
@@ -51,12 +49,10 @@ void collisioni_rana_veicoli()
             {
                 if ((player.x == veicolo[i].x + j && player.y == veicolo[i].y) || (player.x + 8 == veicolo[i].x + j && player.y == veicolo[i].y))
                 {
-                    //pthread_mutex_lock (&semCurses);
                     vite--;
-                    finemanche = 6;
+                    max_time = 60;
                     player.x = X_START;
                     player.y = Y_START;
-                    //pthread_mutex_unlock (&semCurses);
                 }
             }
         }
@@ -281,8 +277,19 @@ void collisione_player_enemy()
     }
 }
 
+void collisione_fine_tempo()
+{
+    if(max_time <= 0){
+        player.x = X_START;
+        player.y = Y_START;
+        max_time = 60;
+        vite--;
+    }
+}
+
 void collisioni_game()
 {
+    collisione_fine_tempo();
     collisioni_proiettili_macchine();
     collisioni_proiettiliA_proiettiliN();
     collisione_player_enemy();

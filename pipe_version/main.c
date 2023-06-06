@@ -480,7 +480,8 @@ int menu_fine_partita(int risultato_partita)
         print_sprite_menu(menu_fine_partita,MAXX/10, MAXY/10, WIN);
         print_sprite_menu(menu_fine_partita, MAXX/2 -35,MAXY/2 -2, R_LEFT_LOSE);
         print_sprite_menu(menu_fine_partita, MAXX/2 + 15,MAXY/2 -1, R_RIGHT_LOSE);
-    
+
+        mvwprintw(menu_fine_partita, MAXY/2-1, MAXX/2-14,"IL TUO SCORE E': %d",punti);
         mvwprintw(menu_fine_partita, MAXY/2, MAXX/2-14,"Inserisci il tuo nickname:");
         mvwprintw(menu_fine_partita, MAXY/2+1, MAXX/2-14-1," ");
         int i= -1,ch;
@@ -528,6 +529,8 @@ int menu_fine_partita(int risultato_partita)
         else
             print_sprite_menu(menu_fine_partita,MAXX/10, MAXY/10, LOSE);
         
+        
+        mvwprintw(menu_fine_partita, MAXY/2-3, MAXX/2-10,"IL TUO SCORE E': %d",punti);
         print_sprite_menu(menu_fine_partita, MAXX/2 -35,MAXY/2 -2, R_LEFT_LOSE);
         print_sprite_menu(menu_fine_partita, MAXX/2 + 15,MAXY/2 -1, R_RIGHT_LOSE);
 

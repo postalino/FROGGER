@@ -5,6 +5,7 @@
 
 //tempo di gioco
 void tempoDiGioco(int fd);
+void collisione_fine_tempo(int* tempo, oggetto_rana *player, int* vite );
 
 //collisioni veicolo
 int collisioni_rana_veicoli(oggetto_rana rana,oggetto_veicolo veicolo [N_VEICOLI]);
@@ -25,5 +26,5 @@ void collisioni_proiettiliA_proiettiliN();
 void collisioni_proiettile_enemy();
 void collisioni_proiettiliN_macchine();
 void collisione_player_proiettileN(oggetto_rana *player, int *vite);
-void collisioni_game(oggetto_rana *player, int* vite);
+void collisioni_game(oggetto_rana *player, int* vite, int *tempo);
 #endif

@@ -5,6 +5,7 @@
 
 //tempo di gioco
 void* tempoDiGioco();
+void collisione_fine_tempo();
 
 //collisioni veicolo
 void collisioni_rana_veicoli();

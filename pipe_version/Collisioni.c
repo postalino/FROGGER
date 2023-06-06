@@ -314,8 +314,18 @@ void collisione_player_proiettileN(oggetto_rana *player, int *vite)
     }
 }
 
-void collisioni_game(oggetto_rana *player, int* vite)
+void collisione_fine_tempo(int* tempo, oggetto_rana *player, int* vite )
 {
+    if(*tempo <= 0){
+        player->x = X_START;
+        player->y = Y_START;
+        (*tempo) = 60;
+        (*vite)--;
+    }
+}
+void collisioni_game(oggetto_rana *player, int* vite, int *tempo)
+{
+    collisione_fine_tempo(tempo,player,vite);
     collisioni_proiettili_macchine();
     collisioni_proiettili_bordi();
     collisioni_proiettile_enemy();

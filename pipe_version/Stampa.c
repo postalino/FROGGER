@@ -66,7 +66,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         /*   ENEMY     */
         genera_enemy(player);
         lettura_enemy(fd_enemy);
-        collisioni_game(&player, &vite);
+        collisioni_game(&player, &vite, &max_time);
 
         if (backup_vite != vite)
         {
@@ -98,7 +98,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         }
         collisioni_tane_occupate(&player, &vite);
 
-        if(max_time == 0 || vite<1 || vittoria())
+        if(vite<1 || vittoria())
             play = false;//fine partita
 
         wrefresh(win_mappa);

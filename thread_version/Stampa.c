@@ -4,21 +4,15 @@ int play_frogger()
 {
     pthread_mutex_lock (&semCurses);
     max_time = 60; //tempo max in secondi per raggiungere una tana
-    vite = 3;   //vite iniziali
+    vite = 10;   //vite iniziali
+    int backup_vite = 10;
     inizializza_posizione_tane();
     pthread_mutex_unlock (&semCurses);
-
-    tane[0].occupata = true;
-    tane[1].occupata = true;
-    tane[2].occupata = true;
-    tane[3].occupata = true;
-    tane[4].occupata = true;
 
     do
     {
         //operazioni di stampa oggetti aggiornati + mappa
         pthread_mutex_lock (&semCurses);
-        game_over(); //verifica se il gioco è finito
 
         /*   TANE     */
         if(tana_occupata()){
@@ -55,6 +49,13 @@ int play_frogger()
         collisioni_game();
 
         wrefresh(win_mappa);
+
+        if (backup_vite != vite){
+            finemanche=6;
+            backup_vite --;
+        }
+
+        game_over(); //verifica se il gioco è finito
 
         pthread_mutex_unlock (&semCurses);
 
