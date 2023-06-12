@@ -4,8 +4,8 @@ int play_frogger()
 {
     pthread_mutex_lock (&semCurses);
     max_time = 60; //tempo max in secondi per raggiungere una tana
-    vite = 10;   //vite iniziali
-    int backup_vite = 10;
+    vite = 3;   //vite iniziali
+    int backup_vite = 3;
     inizializza_posizione_tane();
     pthread_mutex_unlock (&semCurses);
 
@@ -51,7 +51,11 @@ int play_frogger()
         wrefresh(win_mappa);
 
         if (backup_vite != vite){
-            finemanche=6;
+            for (size_t i = 0; i < N_VEICOLI; i++)
+            {
+                finemanche[i]=1;
+            }
+            
             backup_vite --;
         }
 

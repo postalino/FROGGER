@@ -91,7 +91,6 @@ void* gestione_tronco(void* tronco)
             if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
                 max_time = 60;
-                finemanche = 6;
             }
 
             for (size_t i = 0; i < N_MAX_ENEMY; i++)
@@ -131,7 +130,6 @@ void* gestione_tronco(void* tronco)
 
             if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
-                finemanche = 6;
             }
 
             for (size_t i = 0; i < N_MAX_ENEMY; i++)
@@ -170,7 +168,6 @@ void* gestione_tronco(void* tronco)
 
             if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
-                finemanche = 6;
             }
 
             for (size_t i = 0; i < N_MAX_ENEMY; i++)
@@ -214,7 +211,6 @@ void* gestione_tronco(void* tronco)
             
             if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
-                finemanche = 6;
             }
                 
 
@@ -308,7 +304,13 @@ int tana_occupata()
         for (size_t i = 0; i < N_TANE; i++)
         {
             if(tane[i].x == player.x)
+            {
                 tane[i].occupata = true;
+                 for (size_t i = 0; i < N_VEICOLI; i++)
+                {
+                    finemanche[i]=1;
+                }
+            }
         }
 
         player.x = X_START;
@@ -326,7 +328,6 @@ void fuori_area_tane ()
             vite--; //se in altezza tana non è stata occupata una tana decrementa la vita di 1 (è uscito fuori dalla)
             player.x = X_START;
             player.y = Y_START;
-            finemanche =6;
         }
 }
 
@@ -361,7 +362,6 @@ void collisioni_tane_occupate()
             player.x = X_START;
             player.y = Y_START;
             vite--;
-            finemanche=6;
         }
     }
 }

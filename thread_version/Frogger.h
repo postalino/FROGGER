@@ -277,6 +277,7 @@ typedef struct veicolo
     int id_sprite;
     int timer;
     int verso;
+    int id;
 }oggetto_veicolo;
 
 typedef struct rana
@@ -350,7 +351,7 @@ volatile oggetto_proiettile proiettili_alleati[N_MAX_P];
 volatile oggetto_proiettile proiettili_nemici[N_MAX_P];
 volatile oggetto_rana enemy[N_MAX_ENEMY];
 volatile oggetto_veicolo veicolo[N_VEICOLI];
-volatile int finemanche;
+volatile int finemanche[N_VEICOLI];
 volatile int vite;
 volatile int max_time;
 volatile bool running;

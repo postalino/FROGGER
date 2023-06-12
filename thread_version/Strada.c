@@ -4,12 +4,16 @@ void inizializza_veicoli()
 {
     int primastrada=rand()%2;
     int cambio_corsia= ((rand()%1000)+1000);
-    finemanche=0;
+    for (size_t i = 0; i < N_VEICOLI; i++)
+        {
+            finemanche[i]=0;
+        }
+    
   
     // inizializzo le strutture del veicolo per avere la stessa copia sia nel padre sia nel figlio
     for (int i = 0; i < N_VEICOLI; i++)
     {
-        
+        veicolo[i].id = i;
         // do un timer per andare tutti sopra di una corsia ogni tot
         veicolo[i].timer = cambio_corsia;
         // do a u tutti i veicoli un verso dipende da prima strada per essere diverso ad ogni esecuzione
@@ -82,7 +86,7 @@ void* gestione_veicolo(void* veicolo)
     while (running)
     {
         usleep(TIME_MAIN);
-        if (finemanche > 0)
+        if (finemanche[veicoli->id]==1)
         {
             pthread_mutex_lock (&semCurses);
             veicoli->verso *= -1;
@@ -107,7 +111,7 @@ void* gestione_veicolo(void* veicolo)
                 veicoli->id_sprite=3;
                 break;
             }
-            finemanche --;
+            finemanche[veicoli->id]=0;
             pthread_mutex_unlock (&semCurses);
         }
         time--;
