@@ -133,7 +133,7 @@ void collisioni_proiettili_macchine()
                      {
                          for (size_t m = 0; m < 3; m++)
                          {
-                             if ((proiettili_alleati[l].x == veicolo[i].x && proiettili_alleati[l].y == veicolo[i].y + m)||(proiettili_alleati[l].x == veicolo[i].x + 13 && proiettili_alleati[l].y == veicolo[i].y + m))
+                             if ((proiettili_alleati[l].x == veicolo[i].x && proiettili_alleati[l].y == veicolo[i].y + m)||(proiettili_alleati[l].x == veicolo[i].x + 28 && proiettili_alleati[l].y == veicolo[i].y + m))
                              {
                                  proiettili_alleati[l].x = -1;
                              }

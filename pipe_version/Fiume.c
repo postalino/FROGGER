@@ -254,17 +254,19 @@ void inizializza_posizione_tane(oggetto_tana tane[N_TANE])
 
 int tana_occupata(oggetto_rana * player, oggetto_tana tane[N_TANE])
 {   
-    if(player->y == MAX_PRATO && !((player->x / L_FROGGER) % 2)){
-        for (size_t i = 0; i < N_TANE; i++)
-        {
-            if(tane[i].x == player->x)
-                tane[i].occupata = true;
+    if(player->y == MAX_PRATO){
+        if(!((player->x / L_FROGGER) % 2)){
+            for (size_t i = 0; i < N_TANE; i++)
+            {
+                if(tane[i].x == player->x)
+                    tane[i].occupata = true;
+            }
+
+            player->x = X_START;
+            player->y = Y_START;
+
+            return 1;
         }
-
-        player->x = X_START;
-        player->y = Y_START;
-
-        return 1;
     }
     return 0;
 }

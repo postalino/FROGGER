@@ -34,6 +34,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
             
             //se la tana viene occupata si ripristina il tempo di gioco
             max_time = 60;
+
         }
         fuori_area_tane(&player, &vite);        
 
@@ -77,6 +78,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
             }
             finemanche = 0;
             backup_vite--;
+            usleep(10000);
         }
 
         //operazioni di stampa oggetti aggiornati + mappa
