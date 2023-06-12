@@ -49,7 +49,7 @@ void* wasd_rana()
             {
                 if(proiettili_alleati[i].x  == -1){
                     proiettili_alleati[i].x = player.x + 4;
-                    proiettili_alleati[i].y = player.y -1;
+                    proiettili_alleati[i].y = player.y;
                 
                     i = N_MAX_P;
                 } 
