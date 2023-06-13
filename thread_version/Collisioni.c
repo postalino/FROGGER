@@ -105,43 +105,26 @@ void collisioni_proiettili_macchine()
         {
             if (veicolo[i].id_sprite == 1 || veicolo[i].id_sprite == 4) //hitbox macchina
             {
-                 for(int j=0;j<14;j++)
-                 {
-                     if (proiettili_alleati[l].x == veicolo[i].x + j && proiettili_alleati[l].y == veicolo[i].y + 3 )
-                     {
-                         proiettili_alleati[l].x = -1;
-                     }else
-                     {
-                         for (size_t m = 0; m < 3; m++)
-                         {
-                             if ((proiettili_alleati[l].x == veicolo[i].x && proiettili_alleati[l].y == veicolo[i].y + m)||(proiettili_alleati[l].x == veicolo[i].x + 13 && proiettili_alleati[l].y == veicolo[i].y + m))
-                             {
-                                 proiettili_alleati[l].x = -1;
-                             }
-                         }
-                        
-                     }
-                 }
-             }else //hitbox camion/pullman
-             {
-                 for(int j=0;j<28;j++)
-                 {
-                     if (proiettili_alleati[l].x == veicolo[i].x + j && proiettili_alleati[l].y == veicolo[i].y + 3 )
-                     {
-                         proiettili_alleati[l].x = -1;
-                     }else
-                     {
-                         for (size_t m = 0; m < 3; m++)
-                         {
-                             if ((proiettili_alleati[l].x == veicolo[i].x && proiettili_alleati[l].y == veicolo[i].y + m)||(proiettili_alleati[l].x == veicolo[i].x + 28 && proiettili_alleati[l].y == veicolo[i].y + m))
-                             {
-                                 proiettili_alleati[l].x = -1;
-                             }
-                         }
-                        
-                     }
-                 }
-             }
+                if ( (proiettili_alleati[l].x >= veicolo[i].x && proiettili_alleati[l].x <= veicolo[i].x + 13) && (proiettili_alleati[l].y == veicolo[i].y + (H_FROGGER -1)))
+                {
+                    proiettili_alleati[l].x = -1;
+                }
+                if( (proiettili_alleati[l].y >= veicolo[i].y && proiettili_alleati[l].y <= veicolo[i].y + (H_FROGGER -1)) && ((proiettili_alleati[l].x == veicolo[i].x)||(proiettili_alleati[l].x == veicolo[i].x+13)))
+                {
+                    proiettili_alleati[l].x = -1;
+                }
+            }
+            else //hitbox camion/pullman
+            {
+                if ( (proiettili_alleati[l].x >= veicolo[i].x && proiettili_alleati[l].x <= veicolo[i].x + 27) && (proiettili_alleati[l].y == veicolo[i].y + (H_FROGGER -1)))
+                {
+                    proiettili_alleati[l].x = -1;
+                }
+                if( (proiettili_alleati[l].y >= veicolo[i].y && proiettili_alleati[l].y <= veicolo[i].y + (H_FROGGER -1)) && ((proiettili_alleati[l].x == veicolo[i].x)||(proiettili_alleati[l].x == veicolo[i].x+27)))
+                {
+                    proiettili_alleati[l].x = -1;
+                }
+            }
          } 
         for (size_t l = 0; l < N_MAX_P; l++) //proiettili nemici
         {
