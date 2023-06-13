@@ -302,7 +302,7 @@ void collisione_fine_tempo(int* tempo, oggetto_rana *player, int* vite )
     if(*tempo <= 0){
         player->x = X_START;
         player->y = Y_START;
-        (*tempo) = 60;
+        (*tempo) = TEMPO_MAX;
         (*vite)--;
     }
 }

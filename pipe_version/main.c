@@ -14,7 +14,6 @@ int fd_proiettile_alleati[N_MAX_P][2];
 int fd_proiettile_nemici[N_MAX_P][2];
 int fd_sparo[2];
 int fd_enemy[N_MAX_ENEMY][2];
-int fd_fine_manche[N_VEICOLI][2];
 
 void close_all_pipes();
 void close_all_child();
@@ -89,7 +88,7 @@ int main()
                 
             inizializza_veicoli();
 
-            genera_processi_veicoli(fd_veicolo,p_veicoli,fd_fine_manche);
+            genera_processi_veicoli(fd_veicolo,p_veicoli);
 
             inizializza_enemy(fd_enemy, p_enemy);
 
@@ -141,7 +140,7 @@ int main()
             }
 
             //inizio gioco
-            risultato_partita = play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo, fd_proiettile_alleati, fd_sparo[0], fd_enemy,fd_fine_manche);
+            risultato_partita = play_frogger(fd_time[0],fd_rana[0], fd_tronchi,fd_veicolo, fd_proiettile_alleati, fd_sparo[0], fd_enemy);
             // quando il gioco è finito, chiamare la funzione di pulizia
             cleanup();
             usleep(20000);
@@ -193,8 +192,6 @@ void close_all_pipes() {
     for (int i = 0; i < N_VEICOLI; i++) {
         close(fd_veicolo[i][0]); //chiudi la lettura della pipe
         close(fd_veicolo[i][1]); //chiudi la scrittura della pipe
-        close(fd_fine_manche[i][0]);
-        close(fd_fine_manche[i][1]);
     }
 
     for (int i = 0; i < N_CORSIE_FIUME; i++) {

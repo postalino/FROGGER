@@ -3,14 +3,14 @@
 void inizializza_veicoli()
 {
     int primastrada=rand()%2;
-    int cambio_corsia= ((rand()%1000)+1000);
+    timer_cambio_corsia= ((rand()%1000)+1000);
   
     // inizializzo le strutture del veicolo per avere la stessa copia sia nel padre sia nel figlio
     for (int i = 0; i < N_VEICOLI; i++)
     {
         
         // do un timer per andare tutti sopra di una corsia ogni tot
-        veicoli[i].timer = cambio_corsia;
+        veicoli[i].timer = timer_cambio_corsia;
         // do a u tutti i veicoli un verso dipende da prima strada per essere diverso ad ogni esecuzione
         if (primastrada == 0)
         {
@@ -73,135 +73,31 @@ void inizializza_veicoli()
     }
 }
 
-void genera_processi_veicoli(int fd_veicolo[N_VEICOLI][2],pid_t pid_veicoli[N_VEICOLI], int fd_fine_manche[N_VEICOLI][2])
+void genera_processi_veicoli(int fd_veicolo[N_VEICOLI][2],pid_t pid_veicoli[N_VEICOLI])
 {
     for(int i =0;i<N_VEICOLI;i++)
     {
         CHECK_PIPE(fd_veicolo[i]);
-        CHECK_PIPE(fd_fine_manche[i]);
         CHECK_PID(pid_veicoli[i]);
         if(!pid_veicoli[i])
         {   
             close(fd_veicolo[i][0]); // chiusura in lettura
-            close(fd_fine_manche[i][1]);
-            fcntl(fd_fine_manche[i][0],F_SETFL, O_NONBLOCK);
-            gestione_veicolo(fd_veicolo[i][1],i,fd_fine_manche[i][0]);
+            fcntl(fd_veicolo[i][0],F_SETFL, O_NONBLOCK);
+            gestione_veicolo(fd_veicolo[i][1]);
         }
         close(fd_veicolo[i][1]);
-        close(fd_fine_manche[i][0]);
 
     }
 }
 
-void gestione_veicolo(int fd,int id,int fd_fine_manche)
+void gestione_veicolo(int fd)
 {
-    srand(getpid());
-    int time = veicoli[id].timer;
-    int finemanche=0;
-    while (true)
+    int spostamento = -1;
+    while(true)
     {
+        write(fd, &spostamento,sizeof(int));
         usleep(TIME_MAIN);
-        read(fd_fine_manche,&finemanche,sizeof(finemanche));
-        if (finemanche == 1)
-        {
-            veicoli[id].verso *= -1;
-            switch (veicoli[id].id_sprite)
-            {
-            case 1:
-                veicoli[id].id_sprite=4;
-                break;
-            case 2:
-                veicoli[id].id_sprite=5;
-                break;
-            case 3:
-                veicoli[id].id_sprite=6;
-                break;
-            case 4:
-                veicoli[id].id_sprite=1;
-                break;
-            case 5:
-                veicoli[id].id_sprite=2;
-                break;
-            case 6:
-                veicoli[id].id_sprite=3;
-                break;
-            }
-            finemanche =0;
-        }
-        time--;
-
-        if (veicoli[id].verso == -1)//destra
-        {
-            veicoli[id].x++;
-            write(fd, &veicoli[id],sizeof(veicoli[id]));
-        }else//sinistra
-        {
-            veicoli[id].x--;
-            write(fd, &veicoli[id],sizeof(veicoli[id]));
-        }
-
-        if(veicoli[id].x == 129 && veicoli[id].verso == -1)// veicolo arrivato a fine strada destra
-        {
-            veicoli[id].id_sprite = rand()%3+1;
-            if (time <= 0)
-            {
-                time = veicoli[id].timer;
-                switch (veicoli[id].y)
-                {
-                case STRADA_1:
-                    veicoli[id].y = STRADA_2;
-                    veicoli[id].verso *= -1;
-                    veicoli[id].id_sprite = rand()%3+4;
-                    veicoli[id].x = 129;
-                    break;
-                case STRADA_2:
-                    veicoli[id].y = STRADA_3;
-                    veicoli[id].verso *= -1;
-                    veicoli[id].id_sprite = rand()%3+4;
-                    veicoli[id].x = 129;
-                    break;
-                case STRADA_3:
-                    veicoli[id].y = STRADA_1;
-                    veicoli[id].x = 0;
-                    break;
-                }
-            }else
-            {
-                veicoli[id].x = 0;
-            }
-        }else if(veicoli[id].x == 0 && veicoli[id].verso == 1)
-        {
-            veicoli[id].id_sprite = rand()%3+4;
-            if (time <= 0)
-            {
-                
-                time = veicoli[id].timer;
-                
-                switch (veicoli[id].y)
-                {
-                case STRADA_1:
-                    veicoli[id].y = STRADA_2;
-                    veicoli[id].id_sprite = rand()%3+1;
-                    veicoli[id].x = 0;
-                    veicoli[id].verso *= -1;
-                    break;
-                case STRADA_2:
-                    veicoli[id].y = STRADA_3;
-                    veicoli[id].id_sprite = rand()%3+1;
-                    veicoli[id].x = 0;
-                    veicoli[id].verso *= -1;
-                    break;
-                case STRADA_3:
-                    veicoli[id].y = STRADA_1;
-                    veicoli[id].x = 129;
-                    break;
-                }
-            }else
-            {
-                veicoli[id].x = 129;
-            }
-        }
-    } 
+    }
 }
 
 void stampa_veicoli()
@@ -245,15 +141,108 @@ void stampa_veicoli()
     }
     
 }
+
 void aggiorna_veicoli(int fd[N_VEICOLI][2])
 {
-    oggetto_veicolo new;
+    int spostamento;
     for (size_t i = 0; i < N_VEICOLI; i++)
     {
-        read(fd[i][0],&new,sizeof(oggetto_veicolo));
-        veicoli[i].id_sprite = new.id_sprite;
-        veicoli[i].verso = new.verso;
-        veicoli[i].x = new.x;
-        veicoli[i].y = new.y;
+        read(fd[i][0],&spostamento,sizeof(int));
+        veicoli[i].timer--;
+        veicoli[i].x += spostamento*veicoli[i].verso;
+
+        if(veicoli[i].x == 129 && veicoli[i].verso == -1)// veicolo arrivato a fine strada destra
+        {
+            veicoli[i].id_sprite = rand()%3+1;
+            if (veicoli[i].timer <= 0)
+            {
+                veicoli[i].timer = timer_cambio_corsia;
+                switch (veicoli[i].y)
+                {
+                case STRADA_1:
+                    veicoli[i].y = STRADA_2;
+                    veicoli[i].verso *= -1;
+                    veicoli[i].id_sprite = rand()%3+4;
+                    veicoli[i].x = 129;
+                    break;
+                case STRADA_2:
+                    veicoli[i].y = STRADA_3;
+                    veicoli[i].verso *= -1;
+                    veicoli[i].id_sprite = rand()%3+4;
+                    veicoli[i].x = 129;
+                    break;
+                case STRADA_3:
+                    veicoli[i].y = STRADA_1;
+                    veicoli[i].x = 0;
+                    break;
+                }
+            }else
+            {
+                veicoli[i].x = 0;
+            }
+        }else if(veicoli[i].x == 0 && veicoli[i].verso == 1)
+        {
+            veicoli[i].id_sprite = rand()%3+4;
+            if (veicoli[i].timer <= 0)
+            {
+                
+                veicoli[i].timer = timer_cambio_corsia;
+                    
+                switch (veicoli[i].y)
+                {
+                case STRADA_1:
+                    veicoli[i].y = STRADA_2;
+                    veicoli[i].id_sprite = rand()%3+1;
+                    veicoli[i].x = 0;
+                    veicoli[i].verso *= -1;
+                    break;
+                case STRADA_2:
+                    veicoli[i].y = STRADA_3;
+                    veicoli[i].id_sprite = rand()%3+1;
+                    veicoli[i].x = 0;
+                    veicoli[i].verso *= -1;
+                    break;
+                case STRADA_3:
+                    veicoli[i].y = STRADA_1;
+                    veicoli[i].x = 129;
+                    break;
+                }
+            }else
+            {
+                veicoli[i].x = 129;
+            }
+        }  
     }
 }
+
+void cambio_direzione()
+{
+    for (size_t i = 0; i < N_VEICOLI; i++)
+    {
+        veicoli[i].verso *= -1;
+        switch (veicoli[i].id_sprite)
+        {
+        case 1:
+            veicoli[i].id_sprite=4;
+            break;
+        case 2:
+            veicoli[i].id_sprite=5;
+            break;
+        case 3:
+            veicoli[i].id_sprite=6;
+            break;
+        case 4:
+            veicoli[i].id_sprite=1;
+            break;
+        case 5:
+            veicoli[i].id_sprite=2;
+            break;
+        case 6:
+            veicoli[i].id_sprite=3;
+            break;
+        }
+    }
+    
+}
+
+    

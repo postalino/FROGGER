@@ -1,18 +1,18 @@
 #include "Stampa.h"
 
 int delay_lettura = 0; //serve per gestire il momento della lettura
-int max_time = 60; //tempo max in secondi per raggiungere una tana 
-int vite = 3;   //vite iniziali
+int max_time = TEMPO_MAX; //tempo max in secondi per raggiungere una tana 
+int vite = VITE_MAX;   //vite iniziali
 
-int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo, int fd_enemy[N_MAX_ENEMY][2],int fd_fine_manche[N_VEICOLI][2])
+int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int fd_veicoli[N_VEICOLI][2], int fd_proiettile_alleati[N_MAX_P][2], int fd_sparo, int fd_enemy[N_MAX_ENEMY][2])
 {
     punti=0;
     oggetto_rana player = {X_START , Y_START, ID_FROGGER};
     int movimento_rana = 0;
     int sparo = 0;
-    int backup_vite=3;
-    int finemanche = 0;
+    int backup_vite = VITE_MAX;
     bool play = true;
+
     inizializza_posizione_tane(tane_gioco); //assegno ad ogni tana le cordinate e il valore di non occupata
     
     while (play)
@@ -23,17 +23,10 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         
         /*   TANE     */
         if(tana_occupata(&player,tane_gioco)){
-
-            finemanche = 1;
-            for (size_t i = 0; i < N_VEICOLI; i++)
-            {
-                write(fd_fine_manche[i][1],&finemanche,sizeof(finemanche));
-            }
-            finemanche = 0;
             punti += max_time;
-            
+            cambio_direzione();
             //se la tana viene occupata si ripristina il tempo di gioco
-            max_time = 60;
+            max_time = TEMPO_MAX;
 
         }
         fuori_area_tane(&player, &vite);        
@@ -71,15 +64,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
 
         if (backup_vite != vite)
         {
-            finemanche = 1;
-            for (size_t i = 0; i < N_VEICOLI; i++)
-            {
-                write(fd_fine_manche[i][1],&finemanche,sizeof(finemanche));
-            }
-
-            usleep(1000);
-            aggiorna_veicoli(fd_veicoli);
-            finemanche = 0;
+            cambio_direzione();
             backup_vite--;
         }
 
@@ -96,7 +81,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         if (collisioni_rana_veicoli(player, veicoli))
         {
             vite--;
-            max_time = 60;
+            max_time = TEMPO_MAX;
             player.x = X_START;
             player.y = Y_START;
         }
@@ -109,8 +94,8 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
         usleep(TIME_MAIN);
         wclear(win_mappa);
     }
-    vite = 3;
-    max_time = 60;
+    vite = VITE_MAX;
+    max_time = TEMPO_MAX;
 
     return vittoria();
 }

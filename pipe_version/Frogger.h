@@ -321,6 +321,9 @@ typedef struct tana
 #define ENEMY 16
 #define PROIETTILE 17
 
+//macro game
+#define TEMPO_MAX 60
+#define VITE_MAX 3
 
 //delay tempi
 #define TIME_MAIN 100000 //temporizzazione aggiornamento mappa
@@ -344,7 +347,8 @@ oggetto_tana tane_gioco[N_TANE];
 oggetto_veicolo veicoli [N_VEICOLI];
 oggetto_proiettile proiettili_alleati[N_MAX_P];
 oggetto_proiettile proiettili_nemici[N_MAX_P];
-oggetto_rana enemy[N_MAX_ENEMY]; 
+oggetto_rana enemy[N_MAX_ENEMY];
+int timer_cambio_corsia; 
 WINDOW *win_mappa;
 
 //classifica punteggio
