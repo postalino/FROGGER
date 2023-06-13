@@ -130,35 +130,39 @@ void gestione_veicolo(int fd,int id,int fd_fine_manche)
         }
         time--;
 
-        if (veicoli[id].verso == -1)
+        if (veicoli[id].verso == -1)//destra
         {
             veicoli[id].x++;
             write(fd, &veicoli[id],sizeof(veicoli[id]));
-        }else
+        }else//sinistra
         {
             veicoli[id].x--;
             write(fd, &veicoli[id],sizeof(veicoli[id]));
         }
 
-        if(veicoli[id].x == 129 && veicoli[id].verso == -1)
+        if(veicoli[id].x == 129 && veicoli[id].verso == -1)// veicolo arrivato a fine strada destra
         {
             veicoli[id].id_sprite = rand()%3+1;
             if (time <= 0)
             {
-                veicoli[id].x = 129;
-                veicoli[id].verso *= -1;
                 time = veicoli[id].timer;
-                veicoli[id].id_sprite = rand()%3+4;
                 switch (veicoli[id].y)
                 {
                 case STRADA_1:
                     veicoli[id].y = STRADA_2;
+                    veicoli[id].verso *= -1;
+                    veicoli[id].id_sprite = rand()%3+4;
+                    veicoli[id].x = 129;
                     break;
                 case STRADA_2:
                     veicoli[id].y = STRADA_3;
+                    veicoli[id].verso *= -1;
+                    veicoli[id].id_sprite = rand()%3+4;
+                    veicoli[id].x = 129;
                     break;
                 case STRADA_3:
                     veicoli[id].y = STRADA_1;
+                    veicoli[id].x = 0;
                     break;
                 }
             }else
@@ -170,20 +174,26 @@ void gestione_veicolo(int fd,int id,int fd_fine_manche)
             veicoli[id].id_sprite = rand()%3+4;
             if (time <= 0)
             {
-                veicoli[id].x = 29;
-                veicoli[id].verso *= -1;
+                
                 time = veicoli[id].timer;
-                veicoli[id].id_sprite = rand()%3+1;
+                
                 switch (veicoli[id].y)
                 {
                 case STRADA_1:
                     veicoli[id].y = STRADA_2;
+                    veicoli[id].id_sprite = rand()%3+1;
+                    veicoli[id].x = 0;
+                    veicoli[id].verso *= -1;
                     break;
                 case STRADA_2:
                     veicoli[id].y = STRADA_3;
+                    veicoli[id].id_sprite = rand()%3+1;
+                    veicoli[id].x = 0;
+                    veicoli[id].verso *= -1;
                     break;
                 case STRADA_3:
                     veicoli[id].y = STRADA_1;
+                    veicoli[id].x = 129;
                     break;
                 }
             }else

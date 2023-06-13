@@ -76,9 +76,11 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
             {
                 write(fd_fine_manche[i][1],&finemanche,sizeof(finemanche));
             }
+
+            usleep(1000);
+            aggiorna_veicoli(fd_veicoli);
             finemanche = 0;
             backup_vite--;
-            usleep(10000);
         }
 
         //operazioni di stampa oggetti aggiornati + mappa

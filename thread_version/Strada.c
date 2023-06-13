@@ -134,20 +134,26 @@ void* gestione_veicolo(void* veicolo)
             veicoli->id_sprite = rand()%3+1;
             if (time <= 0)
             {
-                veicoli->x = 129;
-                veicoli->verso *= -1;
+                
                 time = veicoli->timer;
-                veicoli->id_sprite = rand()%3+4;
+                
                 switch (veicoli->y)
                 {
                 case STRADA_1:
                     veicoli->y = STRADA_2;
+                    veicoli->x = 129;
+                    veicoli->verso *= -1;
+                    veicoli->id_sprite = rand()%3+4;
                     break;
                 case STRADA_2:
                     veicoli->y = STRADA_3;
+                    veicoli->x = 129;
+                    veicoli->verso *= -1;
+                    veicoli->id_sprite = rand()%3+4;
                     break;
                 case STRADA_3:
                     veicoli->y = STRADA_1;
+                    veicoli->x = 0;
                     break;
                 }
             }else
@@ -161,20 +167,24 @@ void* gestione_veicolo(void* veicolo)
             veicoli->id_sprite = rand()%3+4;
             if (time <= 0)
             {
-                veicoli->x = 29;
-                veicoli->verso *= -1;
                 time = veicoli->timer;
-                veicoli->id_sprite = rand()%3+1;
                 switch (veicoli->y)
                 {
                 case STRADA_1:
                     veicoli->y = STRADA_2;
+                    veicoli->x = 0;
+                    veicoli->verso *= -1;
+                    veicoli->id_sprite = rand()%3+1;
                     break;
                 case STRADA_2:
                     veicoli->y = STRADA_3;
+                    veicoli->x = 0;
+                    veicoli->verso *= -1;
+                    veicoli->id_sprite = rand()%3+1;
                     break;
                 case STRADA_3:
                     veicoli->y = STRADA_1;
+                    veicoli->x = 129;
                     break;
                 }
             }else
