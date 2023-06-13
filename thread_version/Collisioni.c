@@ -103,8 +103,8 @@ void collisioni_proiettili_macchine()
     {
         for (size_t l = 0; l < N_MAX_P; l++) // proiettili alleati
         {
-              if (veicolo[i].id_sprite == 1 || veicolo[i].id_sprite == 4) //hitbox macchina
-             {
+            if (veicolo[i].id_sprite == 1 || veicolo[i].id_sprite == 4) //hitbox macchina
+            {
                  for(int j=0;j<14;j++)
                  {
                      if (proiettili_alleati[l].x == veicolo[i].x + j && proiettili_alleati[l].y == veicolo[i].y + 3 )
