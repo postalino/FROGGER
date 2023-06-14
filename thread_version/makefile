@@ -1,5 +1,5 @@
 Frogger: main.o Collisioni.o Fiume.o NPC.o Stampa.o Strada.o
-	gcc main.o Collisioni.o Fiume.o NPC.o Stampa.o Strada.o -lncurses -lpthread
+	gcc main.o Collisioni.o Fiume.o NPC.o Stampa.o Strada.o -o FROGGER -lncurses -lpthread
 
 main.o: main.c Frogger.h
 	gcc -c main.c 

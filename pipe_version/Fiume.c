@@ -295,7 +295,7 @@ int check_tana(int x, int y)
 
 void fuori_area_tane (oggetto_rana * player, int *vite, int * tempo)
 {
-    if((player->y == MAX_PRATO && ((player->x / L_FROGGER) % 2)) || collisione_tana_occupata(player))
+    if(player->y == MAX_PRATO && ((player->x / L_FROGGER) % 2))
         {
             (*vite)--; //se in altezza tana non è stata occupata una tana decrementa la vita di 1 (è uscito fuori dalla)
             (*tempo) = TEMPO_MAX;

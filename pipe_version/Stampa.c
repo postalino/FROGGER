@@ -85,7 +85,6 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
             player.x = X_START;
             player.y = Y_START;
         }
-        collisioni_tane_occupate(&player, &vite);
 
         if(vite<1 || vittoria())
             play = false;//fine partita
@@ -313,17 +312,5 @@ void print_sprite_menu(WINDOW *name_win, int x, int y, const char *sprite[])
     while (sprite[i] != NULL) {  // scorri l'array finché non raggiungi la fine
         mvwprintw(name_win, y + i, x, sprite[i]);
         i++;
-    }
-}
-
-void collisioni_tane_occupate(oggetto_rana *player, int *vite)
-{
-    for (size_t i = 0; i < N_TANE; i++)
-    {
-        if ((player->x == tane_gioco[i].x) &&(player->y == tane_gioco[i].y) && tane_gioco[i].occupata){
-            player->x = X_START;
-            player->y = Y_START;
-            (*vite)--;
-        }
     }
 }

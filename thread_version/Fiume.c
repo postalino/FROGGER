@@ -303,20 +303,18 @@ int tana_occupata()
     if(player.y == MAX_PRATO && !((player.x / L_FROGGER) % 2)){
         for (size_t i = 0; i < N_TANE; i++)
         {
-            if(tane[i].x == player.x)
+            if(tane[i].x == player.x && tane[i].occupata == false)
             {
                 tane[i].occupata = true;
-                 for (size_t i = 0; i < N_VEICOLI; i++)
+                for (size_t i = 0; i < N_VEICOLI; i++)
                 {
                     finemanche[i]=1;
                 }
+                player.x = X_START;
+                player.y = Y_START;
+                return 1;
             }
         }
-
-        player.x = X_START;
-        player.y = Y_START;
-
-        return 1;
     }
     return 0;
 }

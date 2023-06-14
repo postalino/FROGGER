@@ -234,7 +234,7 @@ void collisioni_proiettili_macchine()
     
 }
 
-void collisione_player_enemy(oggetto_rana *player, int* vite)
+void collisione_player_enemy(oggetto_rana *player, int* vite, int * tempo)
 {
     for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
@@ -243,13 +243,14 @@ void collisione_player_enemy(oggetto_rana *player, int* vite)
             {
                 player->x = X_START;
                 player->y = Y_START;
+                (*tempo) = TEMPO_MAX;
                 (*vite)--;
             }
         }
     }
 }
 
-void collisione_player_proiettileN(oggetto_rana *player, int *vite)
+void collisione_player_proiettileN(oggetto_rana *player, int *vite, int * tempo)
 {
     for (size_t i = 0; i < N_MAX_ENEMY; i++)
     {
@@ -260,6 +261,7 @@ void collisione_player_proiettileN(oggetto_rana *player, int *vite)
                 player->y = Y_START;
                 proiettili_nemici[i].x = -1;
                 (*vite)--;
+                (*tempo) = TEMPO_MAX;
             }
         }
     }
@@ -275,22 +277,29 @@ void collisione_fine_tempo(int* tempo, oggetto_rana *player, int* vite )
     }
 }
 
-int collisione_tana_occupata(oggetto_rana * player)
+void collisione_tana_occupata(oggetto_rana * player, int *vite, int * tempo)
 {
-    for (size_t i = 0; i < N_TANE; i++)
-    {
-        if (player->y == tane_gioco[i].y && player->x == tane_gioco[i].x && tane_gioco[i].occupata == true)
-            return 1;
+    if(player->y == MAX_PRATO){
+        for (size_t i = 0; i < N_TANE; i++)
+        {
+            if (player->x == tane_gioco[i].x && tane_gioco[i].occupata == true)
+            {
+                (*vite)--; //se in altezza tana non è stata occupata una tana decrementa la vita di 1 (è uscito fuori dalla)
+                (*tempo) = TEMPO_MAX;
+                player->x = X_START;
+                player->y = Y_START;
+            }
+        }
     }
-    return 0;
 }
 
 void collisioni_game(oggetto_rana *player, int* vite, int *tempo)
 {
     collisione_fine_tempo(tempo,player,vite);
+    collisione_tana_occupata(player, vite,tempo);
     collisioni_proiettili_macchine();
     collisioni_proiettili_bordi();
     collisioni_proiettile_enemy();
-    collisione_player_proiettileN(player, vite);
-    collisione_player_enemy(player, vite);
+    collisione_player_proiettileN(player, vite, tempo);
+    collisione_player_enemy(player, vite, tempo);
 }

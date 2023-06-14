@@ -21,6 +21,9 @@ void game_over();
 //collisione player con rana nemica
 void collisione_player_enemy();
 
+//collisione con tane
+void collisione_tana_occupata();
+
 //collisioni proiettili
 void collisioni_proiettili_bordi();
 void collisioni_proiettili_macchine();

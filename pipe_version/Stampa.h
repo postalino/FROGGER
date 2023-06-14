@@ -12,7 +12,6 @@ void mappa_frogger(int fd_time);
 
 //funzioni logiche
 int abilita_movimento_confini_mappa(oggetto_rana npc, int direzione);
-void collisioni_tane_occupate(oggetto_rana *player, int *vite);
 
 //creazione finestra di gioco
 WINDOW* crea_finestra();

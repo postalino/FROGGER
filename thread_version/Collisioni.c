@@ -204,6 +204,7 @@ void collisione_player_proiettileN()
                 player.x = X_START;
                 player.y = Y_START;
                 proiettili_nemici[i].x = -1;
+                max_time = TEMPO_MAX;
                 vite--;
             }
         }
@@ -219,6 +220,7 @@ void collisione_player_enemy()
             {
                 player.x = X_START;
                 player.y = Y_START;
+                max_time = TEMPO_MAX;
                 vite--;
             }
         }
@@ -235,9 +237,26 @@ void collisione_fine_tempo()
     }
 }
 
+void collisione_tana_occupata()
+{
+    if(player.y == MAX_PRATO){
+        for (size_t i = 0; i < N_TANE; i++)
+        {
+            if (player.x == tane[i].x && tane[i].occupata == true)
+            {
+                player.x = X_START;
+                player.y = Y_START;
+                max_time = TEMPO_MAX;
+                vite--;
+            }
+        }
+    }
+}
+
 void collisioni_game()
 {
     collisione_fine_tempo();
+    collisione_tana_occupata();
     collisioni_proiettili_macchine();
     collisioni_proiettiliA_proiettiliN();
     collisione_player_enemy();
