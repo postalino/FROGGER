@@ -18,7 +18,7 @@ void inizializza_posizione_tane(oggetto_tana tane[N_TANE]);
 int tana_occupata(oggetto_rana * player, oggetto_tana tane[N_TANE]);
 void print_tane_occupate(oggetto_tana tana[N_TANE]);
 int check_tana(int x, int y);
-void fuori_area_tane (oggetto_rana * player, int *vite);
+void fuori_area_tane (oggetto_rana * player, int *vite, int * tempo);
 
 /*  VITTORIA    */
 int vittoria();

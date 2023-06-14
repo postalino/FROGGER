@@ -90,7 +90,7 @@ int check_v(int strada,int id, int n_X)
                 {
                     for (size_t l = 0; l < 14; l++)
                     {
-                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 13)
+                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 14)
                         {
                             return 1;
                         }
@@ -99,7 +99,7 @@ int check_v(int strada,int id, int n_X)
                 {
                     for (size_t l = 0; l < 14; l++)
                     {
-                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 27)
+                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 28)
                         {
                             return 1;
                         }
@@ -111,7 +111,7 @@ int check_v(int strada,int id, int n_X)
                 {
                     for (size_t l = 0; l < 28; l++)
                     {
-                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 13)
+                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 14)
                         {
                             return 1;
                         }
@@ -120,7 +120,7 @@ int check_v(int strada,int id, int n_X)
                 {
                     for (size_t l = 0; l < 28; l++)
                     {
-                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 27)
+                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 28)
                         {
                             return 1;
                         }

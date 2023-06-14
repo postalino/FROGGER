@@ -29,7 +29,7 @@ int play_frogger(int fd_time,int fd_rana, int fd_tronchi[N_CORSIE_FIUME][2],int 
             max_time = TEMPO_MAX;
 
         }
-        fuori_area_tane(&player, &vite);        
+        fuori_area_tane(&player, &vite, &max_time);        
 
         /*   RANA     */
         read(fd_rana, &movimento_rana, sizeof(movimento_rana));

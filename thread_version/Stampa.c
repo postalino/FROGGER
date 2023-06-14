@@ -3,9 +3,9 @@
 int play_frogger()
 {
     pthread_mutex_lock (&semCurses);
-    max_time = 60; //tempo max in secondi per raggiungere una tana
-    vite = 3;   //vite iniziali
-    int backup_vite = 3;
+    max_time = TEMPO_MAX; //tempo max in secondi per raggiungere una tana
+    vite = VITE_MAX;   //vite iniziali
+    int backup_vite = VITE_MAX;
     inizializza_posizione_tane();
     pthread_mutex_unlock (&semCurses);
 
@@ -17,7 +17,7 @@ int play_frogger()
         /*   TANE     */
         if(tana_occupata()){
             punti += max_time;
-            max_time = 60;
+            max_time = TEMPO_MAX;
         }
         fuori_area_tane();
 

@@ -294,13 +294,14 @@ int check_tana(int x, int y)
     return 0;
 }
 
-void fuori_area_tane (oggetto_rana * player, int *vite)
+void fuori_area_tane (oggetto_rana * player, int *vite, int * tempo)
 {
     if(player->y == MAX_PRATO && ((player->x / L_FROGGER) % 2))
         {
             (*vite)--; //se in altezza tana non è stata occupata una tana decrementa la vita di 1 (è uscito fuori dalla)
             player->x = X_START;
             player->y = Y_START;
+            (*tempo) = TEMPO_MAX;
         }
 }
 

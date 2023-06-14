@@ -90,7 +90,7 @@ void* gestione_tronco(void* tronco)
             pthread_mutex_lock (&semCurses);
             if(tronco_taxi(npc_tronco->corsia,direzione)){     //se la rana è sopra il tronco segue il suo movimento
                 vite--;   //la rana è caduta nel fiume
-                max_time = 60;
+                max_time = TEMPO_MAX;
             }
 
             for (size_t i = 0; i < N_MAX_ENEMY; i++)
@@ -328,6 +328,7 @@ void fuori_area_tane ()
             vite--; //se in altezza tana non è stata occupata una tana decrementa la vita di 1 (è uscito fuori dalla)
             player.x = X_START;
             player.y = Y_START;
+            max_time = TEMPO_MAX;
         }
 }
 

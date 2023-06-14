@@ -323,7 +323,7 @@ typedef struct tana
 
 //macro game
 #define TEMPO_MAX 60
-#define VITE_MAX 3
+#define VITE_MAX 10
 
 //delay tempi
 #define TIME_MAIN 100000 //temporizzazione aggiornamento mappa

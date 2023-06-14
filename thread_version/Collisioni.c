@@ -38,7 +38,7 @@ void collisioni_rana_veicoli()
                 if ((player.x == veicolo[i].x + j && player.y == veicolo[i].y) || (player.x + 8 == veicolo[i].x + j && player.y == veicolo[i].y))
                 {
                     vite--;
-                    max_time = 60;
+                    max_time = TEMPO_MAX;
                     player.x = X_START;
                     player.y = Y_START;
                 }
@@ -50,7 +50,7 @@ void collisioni_rana_veicoli()
                 if ((player.x == veicolo[i].x + j && player.y == veicolo[i].y) || (player.x + 8 == veicolo[i].x + j && player.y == veicolo[i].y))
                 {
                     vite--;
-                    max_time = 60;
+                    max_time = TEMPO_MAX;
                     player.x = X_START;
                     player.y = Y_START;
                 }
@@ -230,7 +230,7 @@ void collisione_fine_tempo()
     if(max_time <= 0){
         player.x = X_START;
         player.y = Y_START;
-        max_time = 60;
+        max_time = TEMPO_MAX;
         vite--;
     }
 }
