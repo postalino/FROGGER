@@ -141,7 +141,7 @@ void collisioni_proiettile_enemy()
         if(enemy[i].x != -1){
             for (size_t j = 0; j < N_MAX_P; j++)
             {
-                if((proiettili_alleati[j].x == enemy[i].x +H_FROGGER) && (proiettili_alleati[j].y >= enemy[i].y && proiettili_alleati[j].y <= enemy[i].y +H_FROGGER ) )
+                if((proiettili_alleati[j].x >= enemy[i].x && proiettili_alleati[j].x < enemy[i].x +L_FROGGER) && (proiettili_alleati[j].y >= enemy[i].y && proiettili_alleati[j].y <= enemy[i].y +H_FROGGER ) )
                 {
                     punti+= 5;
                     enemy[i].x = -1;
