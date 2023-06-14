@@ -3,7 +3,7 @@
 void inizializza_veicoli()
 {
     int primastrada=rand()%2;
-    int cambio_corsia= ((rand()%1000)+1000);
+    int cambio_corsia= ((rand()%100)+100);
     for (size_t i = 0; i < N_VEICOLI; i++)
         {
             finemanche[i]=0;
@@ -78,13 +78,13 @@ void inizializza_veicoli()
     }
 }
 
-int check_v(int strada,int id, int n_X)
+int check_v(int strada,int sprite, int n_X)
 {
     for (size_t i = 0; i < N_VEICOLI; i++)
     {
         if(veicolo[i].y == strada)
         {
-            if(veicolo[id].id_sprite == 1 || veicolo[id].id_sprite == 4) //veicolo da check è macchina
+            if(sprite == 1 || sprite == 4) //veicolo da check è macchina
             {
                 if(veicolo[i].id_sprite == 1 || veicolo[i].id_sprite == 4)  //veicolo è macchina
                 {
@@ -182,68 +182,94 @@ void* gestione_veicolo(void* veicolo)
             pthread_mutex_unlock (&semCurses);
         }
 
-        if(veicoli->x == 129 && veicoli->verso == -1)
+        if(veicoli->x >= FINESTRADA && veicoli->verso == -1)
         {
             pthread_mutex_lock (&semCurses);
-            veicoli->id_sprite = rand()%3+1;
             if (time <= 0)
-            {
-                
-                time = veicoli->timer;
-                
+            {   
                 switch (veicoli->y)
                 {
                 case STRADA_1:
-                    veicoli->y = STRADA_2;
-                    veicoli->x = 129;
-                    veicoli->verso *= -1;
                     veicoli->id_sprite = rand()%3+4;
+                    if (check_v(STRADA_2,veicoli->id_sprite,FINESTRADA)==0)
+                    {
+                        veicoli->y = STRADA_2;
+                        veicoli->x = FINESTRADA;
+                        veicoli->verso *= -1;
+                        time = veicoli->timer;
+                    }
                     break;
                 case STRADA_2:
-                    veicoli->y = STRADA_3;
-                    veicoli->x = 129;
-                    veicoli->verso *= -1;
                     veicoli->id_sprite = rand()%3+4;
+                    if(check_v(STRADA_3,veicoli->id_sprite,FINESTRADA)==0)
+                    {
+                        veicoli->y = STRADA_3;
+                        veicoli->x = FINESTRADA;
+                        veicoli->verso *= -1;
+                        time = veicoli->timer;
+                    }
                     break;
                 case STRADA_3:
-                    veicoli->y = STRADA_1;
-                    veicoli->x = 0;
+                    veicoli->id_sprite = rand()%3+1;
+                    if(check_v(STRADA_1,veicoli->id_sprite,INIZIOSTRADA)==0)
+                    {
+                        veicoli->y = STRADA_1;
+                        veicoli->x = INIZIOSTRADA;
+                        time = veicoli->timer;
+                    }
                     break;
                 }
             }else
             {
-                veicoli->x = 0;
+                veicoli->id_sprite = rand()%3+1;
+                if (check_v(veicoli->y,veicoli->id_sprite,INIZIOSTRADA)==0)
+                {
+                    veicoli->x = INIZIOSTRADA;
+                }
             }
             pthread_mutex_unlock (&semCurses);
-        }else if(veicoli->x == 0 && veicoli->verso == 1)
+        }else if(veicoli->x <= INIZIOSTRADA && veicoli->verso == 1)
         {
             pthread_mutex_lock (&semCurses);
-            veicoli->id_sprite = rand()%3+4;
             if (time <= 0)
             {
                 time = veicoli->timer;
                 switch (veicoli->y)
                 {
                 case STRADA_1:
-                    veicoli->y = STRADA_2;
-                    veicoli->x = 0;
-                    veicoli->verso *= -1;
                     veicoli->id_sprite = rand()%3+1;
+                    if(check_v(STRADA_2,veicoli->id_sprite,INIZIOSTRADA)==0)
+                    {
+                        veicoli->y = STRADA_2;
+                        veicoli->x = INIZIOSTRADA;
+                        veicoli->verso *= -1;
+                    }
                     break;
                 case STRADA_2:
-                    veicoli->y = STRADA_3;
-                    veicoli->x = 0;
-                    veicoli->verso *= -1;
                     veicoli->id_sprite = rand()%3+1;
+                    if(check_v(STRADA_3,veicoli->id_sprite,INIZIOSTRADA)==0)
+                    {
+                        veicoli->y = STRADA_3;
+                        veicoli->x = INIZIOSTRADA;
+                        veicoli->verso *= -1;
+                    }   
                     break;
                 case STRADA_3:
-                    veicoli->y = STRADA_1;
-                    veicoli->x = 129;
+                    veicoli->id_sprite = rand()%3+4;
+                    if(check_v(STRADA_1,veicoli->id_sprite,FINESTRADA)==0)
+                    {
+                        veicoli->y = STRADA_1;
+                        veicoli->x = FINESTRADA;
+                    }
                     break;
                 }
             }else
             {
-                veicoli->x = 129;
+                veicoli->id_sprite = rand()%3+4;
+                if(check_v(veicoli->y,veicoli->id_sprite,FINESTRADA)==0)
+                {
+                    veicoli->x = FINESTRADA;
+                }
             }
             pthread_mutex_unlock (&semCurses);
         }
@@ -286,8 +312,8 @@ void stampa_veicoli()
     for (size_t i = 0; i < 12; i++)
     {
         wattron(win_mappa,COLOR_PAIR(VEICOLO));
-        mvwprintw(win_mappa,24+i,0,"                              ");
-        mvwprintw(win_mappa,24+i,129,"                               ");
+        mvwprintw(win_mappa,24+i,INIZIOSTRADA,"                              ");
+        mvwprintw(win_mappa,24+i,FINESTRADA,"                               ");
     }
     
 }

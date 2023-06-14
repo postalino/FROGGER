@@ -207,84 +207,92 @@ void aggiorna_veicoli(int fd[N_VEICOLI][2])
 
         if(veicoli[i].x >= FINESTRADA && veicoli[i].verso == -1)
         {
+            veicoli[i].id_sprite = rand()%3+1;
             if(veicoli[i].timer > 0 && check_v(veicoli[i].y,i,INIZIOSTRADA) == 0)
             {
-                veicoli[i].id_sprite = rand()%3+1;
+                
                 veicoli[i].x = INIZIOSTRADA;
             }else
             {
                 switch (veicoli[i].y)
                 {
                 case STRADA_1:
+                    veicoli[i].id_sprite = rand()%3+4;
                     if(check_v(STRADA_2,i,FINESTRADA) == 0)
                     {
                         veicoli[i].timer = timer_cambio_corsia;
                         veicoli[i].x = FINESTRADA;
                         veicoli[i].y = STRADA_2;
                         veicoli[i].verso *= -1;
-                        veicoli[i].id_sprite = rand()%3+4;
+                        
                     }
                     break;
                 case STRADA_2:
+                    veicoli[i].id_sprite = rand()%3+4;
                     if(check_v(STRADA_3,i,FINESTRADA) == 0)
                     {
                         veicoli[i].timer = timer_cambio_corsia;
                         veicoli[i].x = FINESTRADA;
                         veicoli[i].y = STRADA_3;
                         veicoli[i].verso *= -1;
-                        veicoli[i].id_sprite = rand()%3+4;
+                        
                     }
                     
                     break;
                 case STRADA_3:
+                    veicoli[i].id_sprite = rand()%3+1;
                     if(check_v(STRADA_1,i,INIZIOSTRADA) == 0)
                     {
                         veicoli[i].timer = timer_cambio_corsia;
                         veicoli[i].x = INIZIOSTRADA;
                         veicoli[i].y = STRADA_1;
-                        veicoli[i].id_sprite = rand()%3+1;
+                        
                     }
                     break;
                 }
             }
         }
-        else if(veicoli[i].x <= 0 && veicoli[i].verso == 1)
+        else if(veicoli[i].x <= INIZIOSTRADA && veicoli[i].verso == 1)
         {
+            veicoli[i].id_sprite = rand()%3+4;
             if(veicoli[i].timer > 0 && check_v(veicoli[i].y,i,FINESTRADA) == 0)
             {
-                veicoli[i].id_sprite = rand()%3+4;
+                
                 veicoli[i].x = FINESTRADA;
             }else
             {
                 switch (veicoli[i].y)
                 {
                 case STRADA_1:
+                    veicoli[i].id_sprite = rand()%3+1;
                     if(check_v(STRADA_2,i,INIZIOSTRADA) == 0)
                     {
                         veicoli[i].timer = timer_cambio_corsia;
                         veicoli[i].x = INIZIOSTRADA;
                         veicoli[i].y = STRADA_2;
                         veicoli[i].verso *= -1;
-                        veicoli[i].id_sprite = rand()%3+1;
+                        
                     }
                     break;
                 case STRADA_2:
+                    veicoli[i].id_sprite = rand()%3+1;
                     if(check_v(STRADA_3,i,INIZIOSTRADA) == 0)
                     {
                         veicoli[i].timer = timer_cambio_corsia;
                         veicoli[i].x = INIZIOSTRADA;
                         veicoli[i].y = STRADA_3;
                         veicoli[i].verso *= -1;
-                        veicoli[i].id_sprite = rand()%3+1;
+                        
                     }
                     break;
                 case STRADA_3:
+                    veicoli[i].id_sprite = rand()%3+4;
                     if(check_v(STRADA_3,i,FINESTRADA) == 0)
                     {
                         veicoli[i].timer = timer_cambio_corsia;
                         veicoli[i].x = FINESTRADA;
                         veicoli[i].y = STRADA_1;
-                        veicoli[i].id_sprite = rand()%3+4;
+                        
                     }
                     break;
                 }
