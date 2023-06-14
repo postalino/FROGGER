@@ -8,6 +8,9 @@
 #define STRADA_2 28
 #define STRADA_3 32
 
+#define FINESTRADA 129
+#define INIZIOSTRADA 0
+
 //prototipo funzione per generare i 6 diversi processi dei 6 veicoli
 void genera_processi_veicoli(int[N_VEICOLI][2],pid_t[N_VEICOLI]);
 
