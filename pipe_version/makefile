@@ -1,5 +1,5 @@
 Frogger: main.o Collisioni.o Fiume.o NPC.o Stampa.o Strada.o
-	gcc main.o Collisioni.o Fiume.o NPC.o Stampa.o Strada.o -o FROGGER.out -lncurses -lpthread
+	gcc main.o Collisioni.o Fiume.o NPC.o Stampa.o Strada.o -o FROGGER -lncurses -lpthread
 
 main.o: main.c Frogger.h
 	gcc -c main.c 
@@ -21,5 +21,5 @@ strada.o: Strada.c Strada.h Frogger.h
 
 clean: 
 	rm *.o
-	rm *.out
+	rm FROGGER
 	echo "pulizia effettuata.."
