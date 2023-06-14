@@ -141,6 +141,7 @@ void stampa_veicoli()
     }
     
 }
+
 int check_v(int strada,int id, int n_X)
 {
     for (size_t i = 0; i < N_VEICOLI; i++)
@@ -193,7 +194,6 @@ int check_v(int strada,int id, int n_X)
         }
     }
     return 0;
-    
 }
 
 void aggiorna_veicoli(int fd[N_VEICOLI][2])

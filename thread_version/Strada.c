@@ -78,6 +78,60 @@ void inizializza_veicoli()
     }
 }
 
+int check_v(int strada,int id, int n_X)
+{
+    for (size_t i = 0; i < N_VEICOLI; i++)
+    {
+        if(veicolo[i].y == strada)
+        {
+            if(veicolo[id].id_sprite == 1 || veicolo[id].id_sprite == 4) //veicolo da check è macchina
+            {
+                if(veicolo[i].id_sprite == 1 || veicolo[i].id_sprite == 4)  //veicolo è macchina
+                {
+                    for (size_t l = 0; l < 14; l++)
+                    {
+                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 13)
+                        {
+                            return 1;
+                        }
+                    }
+                }else //veicolo è camion/bus
+                {
+                    for (size_t l = 0; l < 14; l++)
+                    {
+                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 27)
+                        {
+                            return 1;
+                        }
+                    }
+                }
+            }else //veicolo da check è camion/bus
+            {
+                if(veicolo[i].id_sprite == 1 || veicolo[i].id_sprite == 4)  //veicolo è macchina
+                {
+                    for (size_t l = 0; l < 28; l++)
+                    {
+                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 13)
+                        {
+                            return 1;
+                        }
+                    }
+                }else //veicolo è camion/bus
+                {
+                    for (size_t l = 0; l < 28; l++)
+                    {
+                        if(n_X + l >= veicolo[i].x && n_X + l <= veicolo[i].x + 27)
+                        {
+                            return 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+
 void* gestione_veicolo(void* veicolo)
 {
     oggetto_veicolo* veicoli = (oggetto_veicolo *) veicolo;

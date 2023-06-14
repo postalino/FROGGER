@@ -20,6 +20,8 @@ void stampa_veicoli();
 
 void gestione_veicolo(int fd);
 
+int check_v(int strada,int id, int n_X);
+
 void aggiorna_veicoli(int fd[N_VEICOLI][2]);
 
 void cambio_direzione();
