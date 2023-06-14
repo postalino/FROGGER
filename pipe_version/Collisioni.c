@@ -274,6 +274,17 @@ void collisione_fine_tempo(int* tempo, oggetto_rana *player, int* vite )
         (*vite)--;
     }
 }
+
+int collisione_tana_occupata(oggetto_rana * player)
+{
+    for (size_t i = 0; i < N_TANE; i++)
+    {
+        if (player->y == tane_gioco[i].y && player->x == tane_gioco[i].x && tane_gioco[i].occupata == true)
+            return 1;
+    }
+    return 0;
+}
+
 void collisioni_game(oggetto_rana *player, int* vite, int *tempo)
 {
     collisione_fine_tempo(tempo,player,vite);

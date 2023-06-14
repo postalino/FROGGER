@@ -258,14 +258,13 @@ int tana_occupata(oggetto_rana * player, oggetto_tana tane[N_TANE])
         if(!((player->x / L_FROGGER) % 2)){
             for (size_t i = 0; i < N_TANE; i++)
             {
-                if(tane[i].x == player->x)
+                if(tane[i].x == player->x && tane[i].occupata == false){
+                    player->x = X_START;
+                    player->y = Y_START;
                     tane[i].occupata = true;
+                    return 1;
+                }
             }
-
-            player->x = X_START;
-            player->y = Y_START;
-
-            return 1;
         }
     }
     return 0;
@@ -296,12 +295,12 @@ int check_tana(int x, int y)
 
 void fuori_area_tane (oggetto_rana * player, int *vite, int * tempo)
 {
-    if(player->y == MAX_PRATO && ((player->x / L_FROGGER) % 2))
+    if((player->y == MAX_PRATO && ((player->x / L_FROGGER) % 2)) || collisione_tana_occupata(player))
         {
             (*vite)--; //se in altezza tana non è stata occupata una tana decrementa la vita di 1 (è uscito fuori dalla)
+            (*tempo) = TEMPO_MAX;
             player->x = X_START;
             player->y = Y_START;
-            (*tempo) = TEMPO_MAX;
         }
 }
 

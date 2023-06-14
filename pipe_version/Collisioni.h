@@ -7,6 +7,9 @@
 void tempoDiGioco(int fd);
 void collisione_fine_tempo(int* tempo, oggetto_rana *player, int* vite );
 
+//collisioni con tane
+int collisione_tana_occupata(oggetto_rana * player);
+
 //collisioni veicolo
 int collisioni_rana_veicoli(oggetto_rana rana,oggetto_veicolo veicolo [N_VEICOLI]);
 
